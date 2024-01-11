@@ -32,5 +32,4 @@ public class CategoryDetail extends BaseEntity {
     @OneToMany(mappedBy = "categoryDetail", cascade = CascadeType.ALL)
     private List<GrowRoomCategory> growRoomCategoryList = new ArrayList<>();
 
-
 }

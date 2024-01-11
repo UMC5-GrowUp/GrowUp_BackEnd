@@ -29,5 +29,4 @@ public class Liked extends BaseEntity {
     @JoinColumn(name = "growroomId")
     private GrowRoom growRoom;
 
-
 }

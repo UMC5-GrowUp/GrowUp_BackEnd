@@ -37,7 +37,4 @@ public class PinComment extends BaseEntity {
     @JoinColumn(name = "pinId")
     private Pin pin;
 
-
-
-
 }

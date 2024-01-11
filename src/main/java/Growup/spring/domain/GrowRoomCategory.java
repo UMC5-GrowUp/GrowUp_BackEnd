@@ -36,6 +36,4 @@ public class GrowRoomCategory extends BaseEntity {
     @JoinColumn(name = "category_detailId")
     private CategoryDetail categoryDetail;
 
-
-
 }

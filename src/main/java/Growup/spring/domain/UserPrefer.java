@@ -35,6 +35,4 @@ public class UserPrefer extends BaseEntity {
     @JoinColumn(name = "preferId")
     private Prefer prefer;
 
-
-
 }

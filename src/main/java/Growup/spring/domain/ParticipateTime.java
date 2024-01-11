@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+
 public class ParticipateTime extends BaseEntity {
 
     @Id

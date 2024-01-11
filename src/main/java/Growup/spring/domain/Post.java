@@ -38,7 +38,4 @@ public class Post extends BaseEntity {
     private GrowRoom growRoom;
 
 
-
-
-
 }

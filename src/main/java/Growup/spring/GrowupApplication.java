@@ -10,4 +10,5 @@ public class GrowupApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GrowupApplication.class, args);
 	}
+
 }

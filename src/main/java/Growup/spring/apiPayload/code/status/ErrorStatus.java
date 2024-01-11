@@ -16,6 +16,7 @@ public enum ErrorStatus implements BaseErrorCode {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다.");
 
 
+
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

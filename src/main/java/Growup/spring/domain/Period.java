@@ -28,5 +28,4 @@ public class Period extends BaseEntity {
     @OneToOne(mappedBy = "period")
     private GrowRoom growRoom;
 
-
 }

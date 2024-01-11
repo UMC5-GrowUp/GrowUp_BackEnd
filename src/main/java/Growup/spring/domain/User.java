@@ -56,7 +56,4 @@ public class User extends BaseEntity {
     private List<Liked> likeList = new ArrayList<>();
 
 
-
-
-
 }

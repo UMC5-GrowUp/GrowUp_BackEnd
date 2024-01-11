@@ -29,6 +29,4 @@ public class Category extends BaseEntity {
     private List<CategoryDetail> categoryDetailList = new ArrayList<>();
 
 
-
-
 }

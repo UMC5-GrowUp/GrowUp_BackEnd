@@ -42,7 +42,4 @@ public class Pin extends BaseEntity {
     @OneToMany(mappedBy = "pin", cascade = CascadeType.ALL)
     private List<PinComment> pinCommentList = new ArrayList<>();
 
-
-
-
 }
