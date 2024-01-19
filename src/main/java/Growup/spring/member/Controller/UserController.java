@@ -15,13 +15,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/wego/users")
+@RequestMapping("/growup/users")
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -74,7 +75,7 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/email/request")
-    public ApiResponse<SuccessStatus> sendEmailAuth(@RequestBody @Valid EmailDtoReq.emailAuthReq request) {
+    public ApiResponse<SuccessStatus> sendEmailAuth(@RequestBody @Valid EmailDtoReq.emailAuthReq request) throws MessagingException {
         userService.sendEmailAuth(request);
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
