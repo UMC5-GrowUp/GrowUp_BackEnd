@@ -5,6 +5,8 @@ import Growup.spring.email.dto.EmailDtoReq;
 import Growup.spring.member.dto.UserDtoReq;
 import Growup.spring.member.dto.UserDtoRes;
 
+import javax.mail.MessagingException;
+
 public interface UserService {
 
     User signUp(UserDtoReq.userRegisterReq request);
@@ -15,7 +17,7 @@ public interface UserService {
 
     User pwRestore(UserDtoReq.passwordRestoreReq request,Long userId);
 
-    void sendEmailAuth(EmailDtoReq.emailAuthReq request);
+    void sendEmailAuth(EmailDtoReq.emailAuthReq request) throws MessagingException;
 
     void verifyEmail(String certificationNumber, String email);
 }

@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -138,12 +139,12 @@ public class UserServiceImpl implements UserService {
 
     //이메일 인증 전송
     @Override
-    public void sendEmailAuth(EmailDtoReq.emailAuthReq request){
+    public void sendEmailAuth(EmailDtoReq.emailAuthReq request) throws MessagingException {
 
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new UserHandler(ErrorStatus.USER_NOT_FOUND));
-        String title = "이메일 인증안내";
+        String text = "회원가입";
 
-        emailService.sendMail(request.getEmail(),title);
+        emailService.sendMail(request.getEmail(),text);
     }
     @Override
     //이메일 인증이 유효한지 검사
