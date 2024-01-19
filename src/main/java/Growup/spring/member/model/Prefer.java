@@ -1,6 +1,4 @@
-package Growup.spring.domain;
-
-
+package Growup.spring.member.model;
 
 import Growup.spring.constant.entity.BaseEntity;
 import lombok.*;
@@ -11,6 +9,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 @Getter
 @DynamicUpdate
@@ -18,17 +17,16 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CategoryDetail extends BaseEntity {
+public class Prefer extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId")
-    private Category category;
+    @Column(nullable = false, length = 40)
+    private String Field;
 
-    @OneToMany(mappedBy = "categoryDetail", cascade = CascadeType.ALL)
-    private List<GrowRoomCategory> growRoomCategoryList = new ArrayList<>();
+    @OneToMany(mappedBy = "prefer", cascade = CascadeType.ALL)
+    private List<UserPrefer> userPreferList = new ArrayList<>();
 
 }

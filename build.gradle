@@ -33,6 +33,16 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
 	implementation 'io.springfox:springfox-swagger2:2.9.2'
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+
+	//naver- mail
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 tasks.named('bootBuildImage') {

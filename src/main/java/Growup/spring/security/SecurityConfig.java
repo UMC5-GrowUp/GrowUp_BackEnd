@@ -1,0 +1,75 @@
+package Growup.spring.security;
+
+import Growup.spring.security.handler.CustomAccessDeniedHandler;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+@Slf4j
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+
+    private final JwtProvider jwtProvider;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+
+        http.csrf().disable();
+        http.httpBasic().disable()
+
+                .authorizeRequests()// 요청에 대한 사용권한 체크
+                .antMatchers("/growup/users/password-restore").hasRole("USER")
+                .antMatchers("/growup/users/token").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/growup/users/**").permitAll()
+                .antMatchers("/growup/users/admin/**").hasRole("ADMIN")
+                .antMatchers("/growup/**").hasAnyRole("USER", "ADMIN")
+                .anyRequest().permitAll()
+
+                .and()
+
+                .httpBasic(Customizer.withDefaults())
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler())//인가 핸들링(권한)
+
+                .and()
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class); //ExceptionHandlerFilter필터를 앞에둬서 필터에서 예외처리
+
+        // 세션을 사용하지 않기 때문에 STATELESS로 설정
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    }
+    JwtAuthenticationFilter jwtAuthenticationFilter(){
+        return new JwtAuthenticationFilter(jwtProvider);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+    @Bean // 추가 빈으로 등록
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new CustomAccessDeniedHandler();
+    }
+
+    //BCcryt 암호화
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+
