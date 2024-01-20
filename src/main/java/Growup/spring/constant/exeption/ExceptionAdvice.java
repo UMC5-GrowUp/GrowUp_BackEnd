@@ -17,10 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -45,11 +42,13 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
         List<String> errors = e.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> Optional.ofNullable(fieldError.getDefaultMessage()).orElse(""))
-                .collect(Collectors.toList());
+                .findFirst() // 첫 번째 필드 에러만 가져오기
+                .map(Collections::singletonList) // List로 변환
+                .orElse(Collections.emptyList()); // 비어있는 경우 빈 리스트 반환
 
         String errorMessage = String.join(", ", errors);
 
-        return handleExceptionInternalArgs(e,HttpHeaders.EMPTY,ErrorStatus.valueOf("_BAD_REQUEST"),request,errorMessage);
+        return handleExceptionInternalArgs(e, HttpHeaders.EMPTY, ErrorStatus.valueOf("_BAD_REQUEST"), request, errorMessage);
     }
 
 

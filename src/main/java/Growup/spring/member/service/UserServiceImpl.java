@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +37,8 @@ public class UserServiceImpl implements UserService {
     public final RedisUtil redisUtil;
     public final EmailService emailService;
 
+
+    //회원가입
     @Override
     public User signUp(UserDtoReq.userRegisterReq request){
 
@@ -64,6 +65,16 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(newUser);
     }
 
+    //회원가입 인증완료 확인
+    @Override
+    public void signUpAuth(String certificationNumber,String email){
+        //인증이 유효한지
+        User user = verifyEmail(certificationNumber, email);
+        //인증완료시 활성화
+        user.setStatus(UserState.valueOf("ACTIVE"));
+    }
+
+    //로그인
     @Override
     public UserDtoRes.userLoginRes login(UserDtoReq.userLoginReq request) {
         //해당 Email로 아이디 찾기 - 아이디 불일치
@@ -111,7 +122,14 @@ public class UserServiceImpl implements UserService {
         return newAccessToken;
     }
 
-    //비밀번호 찾기 - 인증번호 요청
+
+    //비밀번호 재설정 인증완료 확인 후-accessToken 발급
+    @Override
+    public String passworAuthdToken(String certificationNumber,String email){
+        User user = verifyEmail(certificationNumber, email);
+
+        return jwtProvider.createAccessToken(user.getId(),String.valueOf(user.getRole()));
+    }
 
     @Override
     //패스워드 재설정
@@ -139,16 +157,15 @@ public class UserServiceImpl implements UserService {
 
     //이메일 인증 전송
     @Override
-    public void sendEmailAuth(EmailDtoReq.emailAuthReq request) throws MessagingException {
+    public void sendEmailAuth(EmailDtoReq.emailAuthReq request,String text){
 
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new UserHandler(ErrorStatus.USER_NOT_FOUND));
-        String text = "회원가입";
-
         emailService.sendMail(request.getEmail(),text);
     }
+
     @Override
-    //이메일 인증이 유효한지 검사
-    public void verifyEmail(String certificationNumber, String email) {
+    //이메일 인증이 유효
+    public User verifyEmail(String certificationNumber, String email) {
 
         User user = userRepository.findByEmail(email).orElseThrow(()-> new UserHandler(ErrorStatus.USER_NOT_FOUND));
 
@@ -156,7 +173,8 @@ public class UserServiceImpl implements UserService {
         if(!certificationNumber.equals(authCode)){
             throw new EmailHandler(ErrorStatus.EMAIL_VERIFY_ERROR);
         }
-        user.setStatus(UserState.valueOf("ACTIVE"));
+
+        return user;
     }
 
     // 비밀번호 정규식 확인 함수
@@ -175,5 +193,19 @@ public class UserServiceImpl implements UserService {
         if (!matcher.matches()){
             throw new UserHandler(ErrorStatus.USER_EMAIL_ERROR);
         }
+    }
+
+    //로그아웃
+    public void logout(String accessToken) {
+        Long userId = jwtProvider.getUserPkInToken(accessToken);
+
+        Long expiration = jwtProvider.getExpiration(accessToken);
+
+        System.out.println(expiration);
+
+        redisUtil.deleteData("RT:" + userId);
+        System.out.println(expiration/1000L);
+        redisUtil.setDataExpire(accessToken,"logout",expiration/1000L);
+
     }
 }

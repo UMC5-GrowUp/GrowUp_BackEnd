@@ -29,8 +29,8 @@ public class JwtProvider {
     private String secretKey;
 
     // 토큰 유효시간 30분
-    public static final long TOKEN_VALID_TIME = 1000L * 60 *5 ; // 5분
-    //public static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 164; // 일주일
+    public static final long TOKEN_VALID_TIME = 1000L * 60 * 5; // 5분(밀리초)
+    public static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 144; // 일주일(밀리초)
     public static final long REFRESH_TOKEN_VALID_TIME_IN_REDIS = 60 * 60 * 24 * 7; // 일주일 (초)
 
     private final JpaUserDetailsService jpaUserDetailsService;
@@ -43,13 +43,12 @@ public class JwtProvider {
 
     // JWT access 토큰 생성
     public String createAccessToken(Long userPk, String roles) {
-        Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam("type", "accessToken")
                 .claim("userId",userPk) // 정보 저장
                 .claim("roles",roles)
-                .setIssuedAt(now) // 토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + TOKEN_VALID_TIME)) // set Expire Time
+                .setIssuedAt(new Date(System.currentTimeMillis())) // 토큰 발행 시간 정보
+                .setExpiration(new Date(System.currentTimeMillis()+ TOKEN_VALID_TIME)) // set Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey)  // 사용할 암호화 알고리즘과
                 // signature 에 들어갈 secret값 세팅
                 .compact();
@@ -57,12 +56,11 @@ public class JwtProvider {
 
     // JWT refresh 토큰 생성
     public String createRefreshToken(Long userPk) {
-        Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam("type", "refreshToken")
                 .claim("userId",userPk) // 정보 저장
-                .setIssuedAt(now) // 토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + 1000L * 60 * 5)) // set Expire Time
+                .setIssuedAt(new Date(System.currentTimeMillis())) // 토큰 발행 시간 정보
+                .setExpiration(new Date(System.currentTimeMillis()+ REFRESH_TOKEN_VALID_TIME)) // set Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey)  // 사용할 암호화 알고리즘과
                 // signature 에 들어갈 secret값 세팅
                 .compact();
@@ -85,7 +83,6 @@ public class JwtProvider {
         String userPk = String.valueOf(getUserPkInToken(token)); //long -> string으로 형변환
 
         UserDetails userDetails = jpaUserDetailsService.loadUserByUsername(userPk);
-        System.out.println(userDetails);
 
        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
@@ -107,4 +104,12 @@ public class JwtProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
+    //redis에 저장할 남은 시간
+    public Long getExpiration(String Token) {
+        Date expiration = extractAllClaims(Token).getExpiration();
+        long now = new Date().getTime();
+        System.out.println(now);
+        System.out.println(expiration.getTime());
+        return expiration.getTime() - now;
+    }
 }

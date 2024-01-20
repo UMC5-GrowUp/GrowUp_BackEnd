@@ -11,4 +11,6 @@ public class EmailDtoReq {
         @NotBlank
         private String email;
     }
+
+
 }
