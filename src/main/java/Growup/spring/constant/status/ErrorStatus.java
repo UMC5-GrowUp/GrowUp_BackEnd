@@ -42,6 +42,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NO_SUCH_ALGORITHM(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR5001", "알고리즘 사용 불가능합니다."),
     EMAIL_VERIFY_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR5002", "인증이 만료됐습니다."),
+    EMAIL_SEND_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR5003", "메일 전송이 실패되었습니다."),
+
     ;
 
 

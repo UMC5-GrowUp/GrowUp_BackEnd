@@ -23,6 +23,7 @@ import java.nio.file.AccessDeniedException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
+    private final RedisUtil redisUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -32,14 +33,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 기간이 유효한 토큰인지 확인.
         if (token != null) {
             jwtProvider.validateToken(token); //토큰이 유효한지를 검사함.
-            // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
-            Authentication authentication = jwtProvider.getAuthentication(token);
-            System.out.println(authentication);
-            if (authentication == null) {
-                throw new AccessDeniedException("");
+            String logout = redisUtil.getData(token);
+            if (logout == null) {
+                // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
+                Authentication authentication = jwtProvider.getAuthentication(token);
+                // SecurityContext 에 Authentication 객체를 저장합니다.
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-            // SecurityContext 에 Authentication 객체를 저장합니다.
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            //블랙리스트
+            request.setAttribute("exception", "로그아웃 되었습니다. 재 로그인하세요.");
+
         }
         filterChain.doFilter(request, response);
     }

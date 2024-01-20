@@ -11,13 +11,17 @@ public interface UserService {
 
     User signUp(UserDtoReq.userRegisterReq request);
 
+    void signUpAuth(String certificationNumber,String email);
+
     UserDtoRes.userLoginRes login(UserDtoReq.userLoginReq request);
 
     String inVaildToken(String refreshToken);
+    String passworAuthdToken(String certificationNumber,String email);
 
     User pwRestore(UserDtoReq.passwordRestoreReq request,Long userId);
 
-    void sendEmailAuth(EmailDtoReq.emailAuthReq request) throws MessagingException;
+    void sendEmailAuth(EmailDtoReq.emailAuthReq request,String text) throws MessagingException;
 
-    void verifyEmail(String certificationNumber, String email);
+    User verifyEmail(String certificationNumber, String email);
+
 }

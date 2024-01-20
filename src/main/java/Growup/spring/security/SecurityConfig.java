@@ -1,6 +1,7 @@
 package Growup.spring.security;
 
 import Growup.spring.security.handler.CustomAccessDeniedHandler;
+import Growup.spring.security.handler.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,6 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     private final JwtProvider jwtProvider;
+    private final RedisUtil redisUtil;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -35,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()// 요청에 대한 사용권한 체크
                 .antMatchers("/growup/users/password-restore").hasRole("USER")
                 .antMatchers("/growup/users/token").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/growup/users/logout").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/growup/users/**").permitAll()
                 .antMatchers("/growup/users/admin/**").hasRole("ADMIN")
                 .antMatchers("/growup/**").hasAnyRole("USER", "ADMIN")
@@ -45,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic(Customizer.withDefaults())
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())//인가 핸들링(권한)
+                .authenticationEntryPoint(authenticationEntryPoint())
 
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -54,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
     JwtAuthenticationFilter jwtAuthenticationFilter(){
-        return new JwtAuthenticationFilter(jwtProvider);
+        return new JwtAuthenticationFilter(jwtProvider,redisUtil);
     }
 
     @Bean
@@ -66,6 +71,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomAccessDeniedHandler();
     }
 
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint(){return new CustomAuthenticationEntryPoint();
+    }
     //BCcryt 암호화
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

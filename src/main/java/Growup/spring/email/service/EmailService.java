@@ -30,13 +30,20 @@ public class EmailService {
     private String email;
 
 
-    public void sendMail(String email, String text) throws MessagingException {
+    public void sendMail(String email, String text){
         String authNum = getCertificationNumber();
 
         String title = "이메일 인증안내";
         String DOMAIN_NAME = "http://localhost:8080";
+
+        String url;
+        if (text.equals("비밀번호 재설정")){
+            url = "password-verify";
+        }else
+            url = "verify";
+
         //html 형식
-        String content = generateEmailContent (text,authNum,email,DOMAIN_NAME);
+        String content = generateEmailContent(text, authNum, email, DOMAIN_NAME, url);
         MimeMessage emailForm = createEmailForm(email, title, content);
 
         mailSender.send(emailForm);
@@ -44,14 +51,18 @@ public class EmailService {
     }
 
 
-    private MimeMessage createEmailForm(String toEmail, String title, String content) throws MessagingException {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-        helper.setTo(toEmail);
-        helper.setSubject(title);
-        helper.setText(content, true);  // HTML 형식으로 설정
-        helper.setFrom(email);
-        return mimeMessage;
+    private MimeMessage createEmailForm(String toEmail, String title, String content) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setTo(toEmail);
+            helper.setSubject(title);
+            helper.setText(content, true);  // HTML 형식으로 설정
+            helper.setFrom(email);
+            return mimeMessage;
+        }catch (MessagingException e){
+            throw new EmailHandler(ErrorStatus.EMAIL_SEND_ERROR);
+        }
     }
 
 
@@ -74,7 +85,7 @@ public class EmailService {
     }
 
     //html 형식
-    private String generateEmailContent(String text, String authNum, String email, String domainName) {
+    private String generateEmailContent(String text, String authNum, String email, String domainName,String  url) {
         return String.format(
                 "<!DOCTYPE html>" +
                         "<html>" +
@@ -94,7 +105,7 @@ public class EmailService {
                         "		감사합니다." +
                         "	</p>" +
                         "	<a style=\"color: #FFF; text-decoration: none; text-align: center;\"" +
-                        "	href=\"%s/growup/users/email/verify?certificationNumber=%s&email=%s\" target=\"_blank\">" +
+                        "	href=\"%s/growup/users/email/%s?certificationNumber=%s&email=%s\" target=\"_blank\">" +
                         "		<p" +
                         "			style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #02b875; line-height: 45px; vertical-align: middle; font-size: 16px;\">" +
                         "			메일 인증</p>" +
@@ -103,7 +114,7 @@ public class EmailService {
                         " </div>" +
                         "</body>" +
                         "</html>",
-                email,text, domainName, authNum, email
+                email,text, domainName, url, authNum, email
         );
     }
 }
