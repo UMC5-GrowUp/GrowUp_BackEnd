@@ -1,10 +1,8 @@
-package Growup.spring.member.dto;
+package Growup.spring.User.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -21,6 +19,7 @@ public class UserDtoReq {
         private String nickName;
         private String email;
         private String password;
+        private String passwordCheck;
 
 
     }
@@ -40,4 +39,34 @@ public class UserDtoReq {
         @NotBlank
         private String passwordCheck;
     }
+
+    @Getter
+    @Setter
+    public static class nicknameDuplicationReq{
+        @NotBlank
+        private String nickName;
+
+    }
+
+    @Getter
+    @Setter
+    public static class currentPasswordCheckReq{
+        @NotBlank
+        private String currentPwd;
+    }
+
+    @Getter
+    @Setter
+    public static class withdrawReq{
+        @NotBlank
+        private String currentPwd;
+    }
+
+    @Getter
+    @Setter
+    public static class photoChangeReq{
+        @NotBlank
+        private String photoUrl;
+    }
+
 }

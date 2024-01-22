@@ -1,10 +1,10 @@
-package Growup.spring.member.model;
+package Growup.spring.User.model;
 
 
 
 import Growup.spring.domain.*;
-import Growup.spring.member.model.Enum.UserRole;
-import Growup.spring.member.model.Enum.UserState;
+import Growup.spring.User.model.Enum.UserRole;
+import Growup.spring.User.model.Enum.UserState;
 import Growup.spring.constant.entity.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -40,6 +40,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String nickName;
 
+    private String photoUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'NONACTIVE'")
     public UserState status;
@@ -62,6 +64,19 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Liked> likeList = new ArrayList<>();
+
+    @PreUpdate
+    public void preUpdate() {
+        // WITHDRAW 상태에서만 실행
+        if (UserState.WITHDRAW.equals(this.status)) {
+            this.createdAt = null; // 또는 다른 원하는 값으로 설정 가능
+            this.updatedAt = null;
+            this.setNickName(null);
+            this.setName("탈퇴계정");
+            this.setPassword("");
+            this.setNickName("");
+        }
+    }
 
 
 }

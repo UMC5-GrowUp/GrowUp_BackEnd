@@ -1,7 +1,7 @@
 package Growup.spring.security;
 
-import Growup.spring.member.model.User;
-import Growup.spring.member.repository.UserRepository;
+import Growup.spring.User.model.User;
+import Growup.spring.User.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

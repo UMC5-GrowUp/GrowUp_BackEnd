@@ -1,4 +1,4 @@
-package Growup.spring.member.dto;
+package Growup.spring.User.dto;
 
 import lombok.*;
 
@@ -36,6 +36,30 @@ public class UserDtoRes {
     public static class passwordRestoreRes{
         private Long userId;
         private LocalDateTime createdAt;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class infoRes{
+        private Long userId;
+        private String nickName;
+        private String email;
+        private String photoUrl;
+
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class photoChangeRes{
+        private Long userId;
+        private String photoUrl;
+
     }
 
 
