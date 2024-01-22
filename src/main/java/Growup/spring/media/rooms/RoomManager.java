@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author Ivan Gracia (izanmail@gmail.com)
  * @since 4.3.1
+ * @modifyBy Jihwan Kim (fighter0628@gmail.com)
  */
 public class RoomManager {
 
