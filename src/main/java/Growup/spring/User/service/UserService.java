@@ -4,6 +4,7 @@ import Growup.spring.User.model.User;
 import Growup.spring.email.dto.EmailDtoReq;
 import Growup.spring.User.dto.UserDtoReq;
 import Growup.spring.User.dto.UserDtoRes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 
@@ -33,9 +34,10 @@ public interface UserService {
 
     UserDtoRes.infoRes info(Long userId);
 
-    User photoChange(UserDtoReq.photoChangeReq request, Long userId);
-
+    User photoChange(MultipartFile photoImage, Long userId);
     void changeNickname(String nickName,Long userId);
+
+
 
 
 

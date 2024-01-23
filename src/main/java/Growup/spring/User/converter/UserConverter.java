@@ -20,7 +20,7 @@ public class UserConverter {
     public static UserDtoRes.userRegisterRes userDtoRes(User user){
         return UserDtoRes.userRegisterRes.builder()
                 .userId(user.getId())
-                .createdAt(LocalDateTime.now())
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 
@@ -30,7 +30,7 @@ public class UserConverter {
                 .userId(user.getId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .createdAt(LocalDateTime.now())
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 

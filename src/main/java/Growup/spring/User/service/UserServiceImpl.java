@@ -1,12 +1,12 @@
 package Growup.spring.User.service;
 
+import Growup.spring.config.S3Uploader;
 import Growup.spring.constant.handler.EmailHandler;
 import Growup.spring.constant.handler.JwtHandler;
 import Growup.spring.constant.status.ErrorStatus;
 import Growup.spring.constant.handler.UserHandler;
 import Growup.spring.User.converter.UserConverter;
 import Growup.spring.User.model.Enum.UserState;
-import Growup.spring.email.dto.EmailDtoReq;
 import Growup.spring.email.service.EmailService;
 import Growup.spring.User.repository.UserRepository;
 import Growup.spring.security.JwtProvider;
@@ -19,7 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +38,7 @@ public class UserServiceImpl implements UserService {
     public final JwtProvider jwtProvider;
     public final RedisUtil redisUtil;
     public final EmailService emailService;
+    public final S3Uploader s3Uploader;
 
 
     //회원가입
@@ -209,7 +212,7 @@ public class UserServiceImpl implements UserService {
         validateEmail(email);
 
         User user = userRepository.findById(userId).orElseThrow(()->new UserHandler(ErrorStatus.USER_NOT_FOUND));
-        
+
         user.setEmail(email);
 
         userRepository.save(user);
@@ -241,7 +244,7 @@ public class UserServiceImpl implements UserService {
 
         //기존 비밀번호와 일치한지 확인
         if (!passwordEncoder.matches(currentPwd, user.getPassword())) {
-            throw new UserHandler(ErrorStatus.USER_ID_PASSWORD_FOUND);
+            throw new UserHandler(ErrorStatus.USER_PASSWORD_NONEQULE);
         }
         user.setStatus(UserState.WITHDRAW);
 
@@ -257,12 +260,20 @@ public class UserServiceImpl implements UserService {
 
     //프로필 이미지 변경
     @Override
-    public User photoChange(UserDtoReq.photoChangeReq request, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(()->new UserHandler(ErrorStatus.USER_NOT_FOUND));
+    public User photoChange(MultipartFile photoImage, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
 
-        user.setPhotoUrl(request.getPhotoUrl());
+        String fileName = "";
+        if (photoImage != null) {
+            try {
+                fileName = s3Uploader.upload(photoImage, "profileImage");
+            } catch (IOException e) {
+                throw new UserHandler(ErrorStatus.FILE_CHANGE_ERROR);
+            }
+            user.setPhotoUrl(fileName);
+        }
 
-        return user;
+        return userRepository.save(user);
     }
 
     //닉네임 변경

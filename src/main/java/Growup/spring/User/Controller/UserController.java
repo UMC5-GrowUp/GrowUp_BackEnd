@@ -15,6 +15,7 @@ import Growup.spring.User.dto.UserDtoRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -32,7 +33,7 @@ public class UserController {
      * 24.01.19 작성자 : 정주현
      * 회원가입
     */
-    @PostMapping("signup")
+    @PostMapping("/signup")
     public ApiResponse<UserDtoRes.userRegisterRes> signUp(@RequestBody @Valid UserDtoReq.userRegisterReq request) {
         User user = userService.signUp(request);
         return ApiResponse.onSuccess(UserConverter.userDtoRes(user));
@@ -137,7 +138,7 @@ public class UserController {
      * 닉네임 변경
      */
     @PatchMapping("/nickname-change")
-    public ApiResponse<SuccessStatus> changeNickname(@RequestBody UserDtoReq.nicknameDuplicationReq request){
+    public ApiResponse<SuccessStatus> changeNickname(@RequestBody @Valid UserDtoReq.nicknameDuplicationReq request){
         Long userId = jwtProvider.getUserID();
         userService.changeNickname(request.getNickName(),userId);
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
@@ -149,7 +150,7 @@ public class UserController {
      * 이메일 변경
      */
     @PatchMapping("/email-change")
-    public ApiResponse<SuccessStatus> emailChange(@RequestBody EmailDtoReq.emailChangeReq request){
+    public ApiResponse<SuccessStatus> emailChange(@RequestBody @Valid EmailDtoReq.emailChangeReq request){
         Long userId = jwtProvider.getUserID();
         userService.emailChange(request.getEmail(),userId);
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
@@ -160,7 +161,7 @@ public class UserController {
      * 현재 비밀번호 확인 후 - 인증 발송
      */
     @PostMapping("/password-check")
-    public ApiResponse<SuccessStatus> currentPasswordCheckReq(@RequestBody UserDtoReq.currentPasswordCheckReq request){
+    public ApiResponse<SuccessStatus> currentPasswordCheckReq(@RequestBody @Valid UserDtoReq.currentPasswordCheckReq request){
         Long userId = jwtProvider.getUserID();
         userService.cureentPasswordCheckReq(userId,request);
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
@@ -181,9 +182,9 @@ public class UserController {
      * 프로필 사진 변경
      */
     @PostMapping("/photo-change")
-    public ApiResponse<UserDtoRes.photoChangeRes> photoChange(UserDtoReq.photoChangeReq request){
+    public ApiResponse<UserDtoRes.photoChangeRes> photoChange(@RequestPart MultipartFile photoImage){
         Long userId = jwtProvider.getUserID();
-        User user =userService.photoChange(request,userId);
+        User user =userService.photoChange(photoImage,userId);
         return ApiResponse.onSuccess(UserConverter.photoChangeRes(user));
     }
 
@@ -192,7 +193,7 @@ public class UserController {
      * 회원탈퇴
      */
     @PatchMapping("/withdraw")
-    public ApiResponse<SuccessStatus> withdraw(@RequestBody UserDtoReq.withdrawReq request){
+    public ApiResponse<SuccessStatus> withdraw(@RequestBody @Valid UserDtoReq.withdrawReq request){
         Long userId = jwtProvider.getUserID();
         userService.withdraw(userId,request.getCurrentPwd());
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);

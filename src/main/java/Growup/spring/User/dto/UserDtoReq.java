@@ -43,8 +43,8 @@ public class UserDtoReq {
     @Getter
     @Setter
     public static class nicknameDuplicationReq{
-        @NotBlank
-        private String nickName;
+        @Size(message = "닉네임은 2글자 이상, 10글자 이하입니다.", min= 2, max = 10)
+          private String nickName;
 
     }
 
@@ -62,11 +62,5 @@ public class UserDtoReq {
         private String currentPwd;
     }
 
-    @Getter
-    @Setter
-    public static class photoChangeReq{
-        @NotBlank
-        private String photoUrl;
-    }
 
 }
