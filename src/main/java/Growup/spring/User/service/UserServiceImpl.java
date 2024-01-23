@@ -1,25 +1,27 @@
-package Growup.spring.member.service;
+package Growup.spring.User.service;
 
+import Growup.spring.config.S3Uploader;
 import Growup.spring.constant.handler.EmailHandler;
 import Growup.spring.constant.handler.JwtHandler;
 import Growup.spring.constant.status.ErrorStatus;
 import Growup.spring.constant.handler.UserHandler;
-import Growup.spring.member.converter.UserConverter;
-import Growup.spring.member.model.Enum.UserState;
-import Growup.spring.email.dto.EmailDtoReq;
+import Growup.spring.User.converter.UserConverter;
+import Growup.spring.User.model.Enum.UserState;
 import Growup.spring.email.service.EmailService;
-import Growup.spring.member.repository.UserRepository;
+import Growup.spring.User.repository.UserRepository;
 import Growup.spring.security.JwtProvider;
 import Growup.spring.security.RedisUtil;
-import Growup.spring.member.dto.UserDtoReq;
-import Growup.spring.member.model.User;
-import Growup.spring.member.dto.UserDtoRes;
+import Growup.spring.User.dto.UserDtoReq;
+import Growup.spring.User.model.User;
+import Growup.spring.User.dto.UserDtoRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,27 +38,32 @@ public class UserServiceImpl implements UserService {
     public final JwtProvider jwtProvider;
     public final RedisUtil redisUtil;
     public final EmailService emailService;
+    public final S3Uploader s3Uploader;
 
 
     //회원가입
     @Override
     public User signUp(UserDtoReq.userRegisterReq request){
 
+        // 닉네임 중복 확인
+        checkNickDuplication(request.getNickName());
+
         // 이메일 형식 확인
         validateEmail(request.getEmail());
 
-        // 닉네임 중복 확인
-        if (userRepository.existsByNickName(request.getNickName())){
-            throw new UserHandler(ErrorStatus.USER_NICKNAME_ERROR);
-        }
-
-        // 이메일 중복 확인
-        if (userRepository.existsByEmail(request.getEmail())) {
+        // 이메일 중복 확인( 활동회원인지, 미인증 회원인지)
+        if (userRepository.existsByEmailAndStatus(request.getEmail(),UserState.ACTIVE)||
+                (userRepository.existsByEmailAndStatus(request.getEmail(),UserState.NONACTIVE))){
             throw new UserHandler(ErrorStatus.USER_EMAIL_DUPLICATE);
         }
 
         //비밀번호 정규화 확인
         validatePassword(request.getPassword());
+
+        // 두 비밀번호 일치성 확인
+        if(!request.getPassword().equals(request.getPasswordCheck())){
+            throw new UserHandler(ErrorStatus.USER_PASSWORD_NONEQULE);
+        }
         //비밀번호 암호화
         request.setPassword(passwordEncoder.encode(request.getPassword()));
 
@@ -78,11 +85,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDtoRes.userLoginRes login(UserDtoReq.userLoginReq request) {
         //해당 Email로 아이디 찾기 - 아이디 불일치
-        User user = userRepository.findByEmail(request.getEmail())
+        User user = userRepository.findByEmailAndStatus(request.getEmail(), UserState.ACTIVE)
+                .or(() -> userRepository.findByEmailAndStatus(request.getEmail(), UserState.NONACTIVE))
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_ID_PASSWORD_FOUND));
 
         // 인증 확인
-        if(user.getStatus() == UserState.valueOf("NONACTIVE")){
+        if(user.getStatus() == UserState.NONACTIVE){
             throw new EmailHandler(ErrorStatus._UNAUTHORIZED);
         }
 
@@ -97,6 +105,7 @@ public class UserServiceImpl implements UserService {
 
         // RefreshToken을 redis에 저장
         redisUtil.setDataExpire("RT:" + user.getId(), refreshToken, jwtProvider.REFRESH_TOKEN_VALID_TIME_IN_REDIS);
+
 
         return UserConverter.userLoginRes(user,accessToken,refreshToken);
     }
@@ -151,23 +160,29 @@ public class UserServiceImpl implements UserService {
         //비밀번호 암호화 (저장)
         request.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPassword(request.getPassword());
-        userRepository.save(user);
-        return user;
+        return userRepository.save(user);
     }
 
     //이메일 인증 전송
     @Override
-    public void sendEmailAuth(EmailDtoReq.emailAuthReq request,String text){
+    public void sendEmailAuth(String email,String text){
 
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new UserHandler(ErrorStatus.USER_NOT_FOUND));
-        emailService.sendMail(request.getEmail(),text);
+        User user = userRepository.findByEmailAndStatus(email,UserState.ACTIVE)
+                .or(()->userRepository.findByEmailAndStatus(email,UserState.NONACTIVE))
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        // ACTIVE 또는 NONACTIVE 상태인 경우에만 이메일 전송
+        emailService.sendMail(email, text);
+
     }
 
     @Override
     //이메일 인증이 유효
     public User verifyEmail(String certificationNumber, String email) {
 
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+        User user = userRepository.findByEmailAndStatus(email, UserState.ACTIVE)
+                .or(()->userRepository.findByEmailAndStatus(email, UserState.NONACTIVE))
+                .orElseThrow(()-> new UserHandler(ErrorStatus.USER_NOT_FOUND));
 
         String authCode = redisUtil.getData("AuthCode_"+email);
         if(!certificationNumber.equals(authCode)){
@@ -175,6 +190,105 @@ public class UserServiceImpl implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    //로그아웃
+    public void logout(String accessToken) {
+        Long userId = jwtProvider.getUserPkInToken(accessToken);
+
+        Long expiration = jwtProvider.getExpiration(accessToken);
+
+        redisUtil.deleteData("RT:" + userId);
+
+        redisUtil.setDataExpire(accessToken,"logout",expiration/1000L);
+
+    }
+
+    @Override
+    //이메일 변경
+    public void emailChange(String email,Long userId){
+        //이메일 유효성 검사
+        validateEmail(email);
+
+        User user = userRepository.findById(userId).orElseThrow(()->new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        user.setEmail(email);
+
+        userRepository.save(user);
+    }
+
+    //현재비밀번호 같은지 체크후 인증번호 발송
+    @Override
+    public void cureentPasswordCheckReq(Long userId, UserDtoReq.currentPasswordCheckReq request) {
+        User user = userRepository.findById(userId).orElseThrow(()->new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        //비밀번호 정규화 확인
+        validatePassword(request.getCurrentPwd());
+
+        //기존 비밀번호와 일치한지 확인
+        if (!passwordEncoder.matches(request.getCurrentPwd(), user.getPassword())) {
+            throw new UserHandler(ErrorStatus.USER_PASSWORD_NONEQULE);
+        }
+
+        String email = user.getEmail();
+        String text = "인증";
+        sendEmailAuth(email,text);
+
+    }
+
+    //회원탈퇴
+    @Override
+    public void withdraw(Long userId, String currentPwd) {
+        User user = userRepository.findById(userId).orElseThrow(()->new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        //기존 비밀번호와 일치한지 확인
+        if (!passwordEncoder.matches(currentPwd, user.getPassword())) {
+            throw new UserHandler(ErrorStatus.USER_PASSWORD_NONEQULE);
+        }
+        user.setStatus(UserState.WITHDRAW);
+
+        userRepository.save(user);
+    }
+
+    //마이페이지(닉넴,이멜,이미지) 조회
+    @Override
+    public UserDtoRes.infoRes info(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(()->new UserHandler(ErrorStatus.USER_NOT_FOUND));
+        return UserConverter.info(user);
+    }
+
+    //프로필 이미지 변경
+    @Override
+    public User photoChange(MultipartFile photoImage, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        String fileName = "";
+        if (photoImage != null) {
+            try {
+                fileName = s3Uploader.upload(photoImage, "profileImage");
+            } catch (IOException e) {
+                throw new UserHandler(ErrorStatus.FILE_CHANGE_ERROR);
+            }
+            user.setPhotoUrl(fileName);
+        }
+
+        return userRepository.save(user);
+    }
+
+    //닉네임 변경
+    @Override
+    public void changeNickname(String nickName,Long userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(()-> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        //닉네임 중복확인
+        checkNickDuplication(nickName);
+
+        user.setNickName(nickName);
+
+        userRepository.save(user);
+
     }
 
     // 비밀번호 정규식 확인 함수
@@ -195,17 +309,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    //로그아웃
-    public void logout(String accessToken) {
-        Long userId = jwtProvider.getUserPkInToken(accessToken);
-
-        Long expiration = jwtProvider.getExpiration(accessToken);
-
-        System.out.println(expiration);
-
-        redisUtil.deleteData("RT:" + userId);
-        System.out.println(expiration/1000L);
-        redisUtil.setDataExpire(accessToken,"logout",expiration/1000L);
-
+    // 닉네임 중복 확인
+    public void checkNickDuplication(String nickName){
+        if (userRepository.existsByNickName(nickName)){
+            throw new UserHandler(ErrorStatus.USER_NICKNAME_ERROR);
+        }
     }
+
+
 }

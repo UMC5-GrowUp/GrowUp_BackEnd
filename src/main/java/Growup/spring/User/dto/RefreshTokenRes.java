@@ -1,4 +1,4 @@
-package Growup.spring.member.dto;
+package Growup.spring.User.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 @Getter
 public class RefreshTokenRes {
-    private String accessToken;
+    private String newAccessToken;
 }

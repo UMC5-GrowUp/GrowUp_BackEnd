@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/growup/users/password-restore").hasRole("USER")
                 .antMatchers("/growup/users/token").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/growup/users/logout").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/growup/users/token-reissue").hasRole("USER")
                 .antMatchers("/growup/users/**").permitAll()
                 .antMatchers("/growup/users/admin/**").hasRole("ADMIN")
                 .antMatchers("/growup/**").hasAnyRole("USER", "ADMIN")
@@ -53,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class); //ExceptionHandlerFilter필터를 앞에둬서 필터에서 예외처리
+                .addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationFilter.class); //ExceptionHandlerFilter필터를 앞에둬서 필터에서 예외처리
 
         // 세션을 사용하지 않기 때문에 STATELESS로 설정
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -74,6 +75,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint(){return new CustomAuthenticationEntryPoint();
     }
+
+    @Bean
+    public ExceptionHandlerFilter exceptionHandlerFilter(){return new ExceptionHandlerFilter();}
+
     //BCcryt 암호화
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

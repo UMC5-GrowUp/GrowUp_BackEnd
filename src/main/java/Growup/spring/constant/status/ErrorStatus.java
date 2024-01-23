@@ -20,11 +20,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자가 없습니다."),
     USER_ID_PASSWORD_FOUND(HttpStatus.BAD_REQUEST, "USER4002", "아이디 또는 비밀번호가 잘못되었습니다."),
-    USER_PASSWORD_ERROR(HttpStatus.BAD_REQUEST, "USER4003", "패스워드를 확인하세요.(최소8자,최대20자,영문자,숫자 모두 포함되어야 합니다."),
+    USER_NICKNAME_ERROR(HttpStatus.BAD_REQUEST, "USER4003", "이미 사용중인 닉네임 입니다."),
     USER_EMAIL_ERROR(HttpStatus.BAD_REQUEST, "USER4004" , "이메일 형식이 아닙니다."),
-    USER_EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "USER4005", "이미 등록된 이메일 입니다."),
-    USER_NICKNAME_ERROR(HttpStatus.BAD_REQUEST, "USER4005", "이미 사용중인 닉네임 입니다."),
-    USER_PHONE_DUPLICATE(HttpStatus.BAD_REQUEST, "USER4006", "이미 등록된 휴대폰 번호 입니다."),
+    USER_EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "USER4005", "이미 사용중인 이메일 입니다."),
+    USER_PASSWORD_ERROR(HttpStatus.BAD_REQUEST, "USER4006", "패스워드를 확인하세요.(최소8자,최대20자,영문자,숫자 모두 포함되어야 합니다."),
     USER_PASSWORD_NONEQULE(HttpStatus.BAD_REQUEST, "USER4007", "비밀번호가 일치하지 않습니다."),
     USER_PASSWORD_EXIST(HttpStatus.BAD_REQUEST, "USER4008", "이전 비밀번호와 일치합니다."),
 
@@ -43,6 +42,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NO_SUCH_ALGORITHM(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR5001", "알고리즘 사용 불가능합니다."),
     EMAIL_VERIFY_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR5002", "인증이 만료됐습니다."),
     EMAIL_SEND_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR5003", "메일 전송이 실패되었습니다."),
+    FILE_CHANGE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR5004", "파일 전환이 실패되었습니다."),
 
     ;
 

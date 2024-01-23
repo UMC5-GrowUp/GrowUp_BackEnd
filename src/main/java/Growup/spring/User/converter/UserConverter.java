@@ -1,9 +1,9 @@
-package Growup.spring.member.converter;
+package Growup.spring.User.converter;
 
-import Growup.spring.member.dto.RefreshTokenRes;
-import Growup.spring.member.dto.UserDtoReq;
-import Growup.spring.member.dto.UserDtoRes;
-import Growup.spring.member.model.User;
+import Growup.spring.User.dto.RefreshTokenRes;
+import Growup.spring.User.dto.UserDtoReq;
+import Growup.spring.User.dto.UserDtoRes;
+import Growup.spring.User.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class UserConverter {
     public static UserDtoRes.userRegisterRes userDtoRes(User user){
         return UserDtoRes.userRegisterRes.builder()
                 .userId(user.getId())
-                .createdAt(LocalDateTime.now())
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 
@@ -30,14 +30,14 @@ public class UserConverter {
                 .userId(user.getId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .createdAt(LocalDateTime.now())
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 
     //accessToken 재발급 응답
     public static RefreshTokenRes refreshTokenRes(String acceesToken){
         return RefreshTokenRes.builder()
-                .accessToken(acceesToken)
+                .newAccessToken(acceesToken)
                 .build();
     }
 
@@ -56,6 +56,22 @@ public class UserConverter {
                 .email(request.getEmail())
                 .password(request.getPassword())
                 .nickName(request.getNickName())
+                .build();
+    }
+
+    public static UserDtoRes.infoRes info(User user){
+        return UserDtoRes.infoRes.builder()
+                .userId(user.getId())
+                .nickName(user.getNickName())
+                .email(user.getEmail())
+                .photoUrl(user.getPhotoUrl())
+                .build();
+    }
+
+    public static UserDtoRes.photoChangeRes photoChangeRes(User user){
+        return UserDtoRes.photoChangeRes.builder()
+                .userId(user.getId())
+                .photoUrl(user.getPhotoUrl())
                 .build();
     }
 }

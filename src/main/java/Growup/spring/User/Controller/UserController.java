@@ -1,22 +1,21 @@
-package Growup.spring.member.Controller;
+package Growup.spring.User.Controller;
 
 import Growup.spring.constant.ApiResponse;
 import Growup.spring.constant.status.SuccessStatus;
 import Growup.spring.email.converter.EmailConverter;
 import Growup.spring.email.dto.EmailDtoRes;
-import Growup.spring.member.converter.UserConverter;
-import Growup.spring.member.model.User;
+import Growup.spring.User.converter.UserConverter;
+import Growup.spring.User.model.User;
 import Growup.spring.email.dto.EmailDtoReq;
-import Growup.spring.email.service.EmailService;
 import Growup.spring.security.JwtProvider;
-import Growup.spring.member.service.UserServiceImpl;
-import Growup.spring.member.dto.RefreshTokenRes;
-import Growup.spring.member.dto.UserDtoReq;
-import Growup.spring.member.dto.UserDtoRes;
-import com.google.protobuf.Api;
+import Growup.spring.User.service.UserServiceImpl;
+import Growup.spring.User.dto.RefreshTokenRes;
+import Growup.spring.User.dto.UserDtoReq;
+import Growup.spring.User.dto.UserDtoRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -29,14 +28,12 @@ public class UserController {
 
     private final UserServiceImpl userService;
     private final JwtProvider jwtProvider;
-    private final EmailService emailService;
 
     /**
      * 24.01.19 작성자 : 정주현
      * 회원가입
     */
-    @ResponseBody
-    @PostMapping("")
+    @PostMapping("/signup")
     public ApiResponse<UserDtoRes.userRegisterRes> signUp(@RequestBody @Valid UserDtoReq.userRegisterReq request) {
         User user = userService.signUp(request);
         return ApiResponse.onSuccess(UserConverter.userDtoRes(user));
@@ -46,11 +43,10 @@ public class UserController {
      * 24.01.20 작성자 : 정주현
      * 이메일 인증요청
      */
-    @ResponseBody
     @PostMapping("/auth")
     public ApiResponse<SuccessStatus> sendEmailAuth(@RequestBody @Valid EmailDtoReq.emailAuthReq request) {
-        String text = "회원가입";
-        userService.sendEmailAuth(request,text);
+        String text = "인증";
+        userService.sendEmailAuth(request.getEmail(),text);
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
 
@@ -58,38 +54,36 @@ public class UserController {
      * 24.01.19 작성자 : 정주현
      * 로그인
      */
-    @ResponseBody
     @PostMapping("/login")
     public ApiResponse<UserDtoRes.userLoginRes> login(@RequestBody @Valid UserDtoReq.userLoginReq request) {
         return ApiResponse.onSuccess(userService.login(request));
     }
+
     /**
      * 24.01.19 작성자 : 정주현
      * AccessToken(만료) 재발급
      */
-    @PostMapping("/token")
-    public ApiResponse<RefreshTokenRes> login(@RequestHeader("Authorization") String refreshToken) {
+    @PostMapping("/token-reissue")
+    public ApiResponse<RefreshTokenRes> reissue(@RequestHeader("Authorization") String refreshToken) {
         String accessToken = userService.inVaildToken(refreshToken);
        return ApiResponse.onSuccess(UserConverter.refreshTokenRes(accessToken));
     }
 
     /**
      * 24.01.20 작성자 : 정주현
-     * 이메일 인증요청(비밀번호 재설정)
+     * 이메일 인증요청(비밀번호 재설정)(이메일로)(회원가입시)
      */
-    @ResponseBody
     @PostMapping("/password-auth")
     public ApiResponse<SuccessStatus> sendEmailAuthToPassword(@RequestBody @Valid EmailDtoReq.emailAuthReq request) {
         String text = "비밀번호 재설정";
-        userService.sendEmailAuth(request,text);
+        userService.sendEmailAuth(request.getEmail(),text);
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
 
     /**
      * 24.01.19 작성자 : 정주현
-     * 비밀번호 재설정
+     * 비밀번호 재설정(회원가입시)
      */
-    @ResponseBody
     @PatchMapping("/password-restore")
     public ApiResponse<UserDtoRes.passwordRestoreRes> passwordRestore(@RequestBody @Valid UserDtoReq.passwordRestoreReq request){
         Long userId= jwtProvider.getUserID();
@@ -102,7 +96,7 @@ public class UserController {
      * 비밀번호 재설정 이메일 인증링크 확인(accessToken 발급)
      */
     @GetMapping("/email/password-verify")
-    public ApiResponse<EmailDtoRes.emailAuthRes> authTokwn(@RequestParam(name = "certificationNumber") String certificationNumber,
+    public ApiResponse<EmailDtoRes.emailAuthRes> authToken(@RequestParam(name = "certificationNumber") String certificationNumber,
                                                            @RequestParam(name = "email") String email){
         String accessToken = userService.passworAuthdToken(certificationNumber,email);
         return ApiResponse.onSuccess(EmailConverter.passwordAuthTokenRes(accessToken));
@@ -129,4 +123,80 @@ public class UserController {
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
 
+    /**
+     * 24.01.21 작성자 : 정주현
+     * 닉네임 중복 확인
+    @PostMapping("/exist-nickname")
+    public ApiResponse<SuccessStatus> checkNickDuplication(@RequestBody UserDtoReq.nicknameDuplicationReq request){
+        userService.checkNickDuplication(request.getNickName());
+        return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
+    }
+     */
+
+    /**
+     * 24.01.21 작성자 : 정주현
+     * 닉네임 변경
+     */
+    @PatchMapping("/nickname-change")
+    public ApiResponse<SuccessStatus> changeNickname(@RequestBody @Valid UserDtoReq.nicknameDuplicationReq request){
+        Long userId = jwtProvider.getUserID();
+        userService.changeNickname(request.getNickName(),userId);
+        return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
+    }
+
+
+    /**
+     * 24.01.22 작성자 : 정주현
+     * 이메일 변경
+     */
+    @PatchMapping("/email-change")
+    public ApiResponse<SuccessStatus> emailChange(@RequestBody @Valid EmailDtoReq.emailChangeReq request){
+        Long userId = jwtProvider.getUserID();
+        userService.emailChange(request.getEmail(),userId);
+        return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
+    }
+
+    /**
+     * 24.01.22 작성자 : 정주현
+     * 현재 비밀번호 확인 후 - 인증 발송
+     */
+    @PostMapping("/password-check")
+    public ApiResponse<SuccessStatus> currentPasswordCheckReq(@RequestBody @Valid UserDtoReq.currentPasswordCheckReq request){
+        Long userId = jwtProvider.getUserID();
+        userService.cureentPasswordCheckReq(userId,request);
+        return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
+    }
+
+    /**
+     * 24.01.22 작성자 : 정주현
+     * 내 정보 조회
+     */
+    @GetMapping("/info")
+    public ApiResponse<UserDtoRes.infoRes> info(@RequestHeader("Authorization") String accessToken){
+        Long userId = jwtProvider.getUserPkInToken(accessToken);
+        return ApiResponse.onSuccess(userService.info(userId));
+    }
+
+    /**
+     * 24.01.22 작성자 : 정주현
+     * 프로필 사진 변경
+     */
+    @PostMapping("/photo-change")
+    public ApiResponse<UserDtoRes.photoChangeRes> photoChange(@RequestPart MultipartFile photoImage){
+        Long userId = jwtProvider.getUserID();
+        User user =userService.photoChange(photoImage,userId);
+        return ApiResponse.onSuccess(UserConverter.photoChangeRes(user));
+    }
+
+    /**
+     * 24.01.22 작성자 : 정주현
+     * 회원탈퇴
+     */
+    @PatchMapping("/withdraw")
+    public ApiResponse<SuccessStatus> withdraw(@RequestBody @Valid UserDtoReq.withdrawReq request){
+        Long userId = jwtProvider.getUserID();
+        userService.withdraw(userId,request.getCurrentPwd());
+        return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
+    }
 }
+

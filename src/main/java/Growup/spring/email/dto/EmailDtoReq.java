@@ -12,5 +12,12 @@ public class EmailDtoReq {
         private String email;
     }
 
+    @Getter
+    public static class emailChangeReq{
+        @NotBlank
+        private String email;
+    }
+
+
 
 }
