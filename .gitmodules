@@ -1,3 +1,0 @@
-[submodule "src/main/resources/submodule-config"]
-	path = src/main/resources/submodule-config
-	url = https://github.com/Jungjuhyeon/submodule-config.git
