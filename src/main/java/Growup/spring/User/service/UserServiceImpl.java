@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
 
     //비밀번호 재설정 인증완료 확인 후-accessToken 발급
     @Override
-    public String passworAuthdToken(String certificationNumber,String email){
+    public String passworeAuthdToken(String certificationNumber,String email){
         User user = verifyEmail(certificationNumber, email);
 
         return jwtProvider.createAccessToken(user.getId(),String.valueOf(user.getRole()));
@@ -220,7 +220,7 @@ public class UserServiceImpl implements UserService {
 
     //현재비밀번호 같은지 체크후 인증번호 발송
     @Override
-    public void cureentPasswordCheckReq(Long userId, UserDtoReq.currentPasswordCheckReq request) {
+    public void currentPasswordCheckReq(Long userId, UserDtoReq.currentPasswordCheckReq request) {
         User user = userRepository.findById(userId).orElseThrow(()->new UserHandler(ErrorStatus.USER_NOT_FOUND));
 
         //비밀번호 정규화 확인

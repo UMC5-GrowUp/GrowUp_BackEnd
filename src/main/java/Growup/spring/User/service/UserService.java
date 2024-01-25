@@ -17,7 +17,7 @@ public interface UserService {
     UserDtoRes.userLoginRes login(UserDtoReq.userLoginReq request);
 
     String inVaildToken(String refreshToken);
-    String passworAuthdToken(String certificationNumber,String email);
+    String passworeAuthdToken(String certificationNumber,String email);
 
     User pwRestore(UserDtoReq.passwordRestoreReq request,Long userId);
 
@@ -28,7 +28,7 @@ public interface UserService {
     void logout(String accessToken);
 
     void emailChange(String email,Long userId);
-    void cureentPasswordCheckReq(Long userId, UserDtoReq.currentPasswordCheckReq request);
+    void currentPasswordCheckReq(Long userId, UserDtoReq.currentPasswordCheckReq request);
 
     void withdraw(Long userId, String currentPwd);
 
