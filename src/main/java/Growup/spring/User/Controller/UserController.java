@@ -98,7 +98,7 @@ public class UserController {
     @GetMapping("/email/password-verify")
     public ApiResponse<EmailDtoRes.emailAuthRes> authToken(@RequestParam(name = "certificationNumber") String certificationNumber,
                                                            @RequestParam(name = "email") String email){
-        String accessToken = userService.passworAuthdToken(certificationNumber,email);
+        String accessToken = userService.passworeAuthdToken(certificationNumber,email);
         return ApiResponse.onSuccess(EmailConverter.passwordAuthTokenRes(accessToken));
     }
 
@@ -163,7 +163,7 @@ public class UserController {
     @PostMapping("/password-check")
     public ApiResponse<SuccessStatus> currentPasswordCheckReq(@RequestBody @Valid UserDtoReq.currentPasswordCheckReq request){
         Long userId = jwtProvider.getUserID();
-        userService.cureentPasswordCheckReq(userId,request);
+        userService.currentPasswordCheckReq(userId,request);
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
 
@@ -181,7 +181,7 @@ public class UserController {
      * 24.01.22 작성자 : 정주현
      * 프로필 사진 변경
      */
-    @PostMapping("/photo-change")
+    @PatchMapping("/photo-change")
     public ApiResponse<UserDtoRes.photoChangeRes> photoChange(@RequestPart MultipartFile photoImage){
         Long userId = jwtProvider.getUserID();
         User user =userService.photoChange(photoImage,userId);

@@ -34,7 +34,7 @@ public class EmailService {
         String authNum = getCertificationNumber();
 
         String title = "이메일 인증안내";
-        String DOMAIN_NAME = "http://localhost:8080";
+        String DOMAIN_NAME = "https://dev.jojoumc.shop";
 
         String url;
         if (text.equals("비밀번호 재설정")){
