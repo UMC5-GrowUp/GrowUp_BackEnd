@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
 
     //비밀번호 재설정 인증완료 확인 후-accessToken 발급
     @Override
-    public String passworeAuthdToken(String certificationNumber,String email){
+    public String passwordAuthdToken(String certificationNumber,String email){
         User user = verifyEmail(certificationNumber, email);
 
         return jwtProvider.createAccessToken(user.getId(),String.valueOf(user.getRole()));
@@ -293,7 +293,7 @@ public class UserServiceImpl implements UserService {
 
     // 비밀번호 정규식 확인 함수
     private void validatePassword(String password) {
-        Pattern pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$");
+        Pattern pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,20}$");
         Matcher matcher = pattern.matcher(password);
         if (!matcher.matches()) {
             throw new UserHandler(ErrorStatus.USER_PASSWORD_ERROR);
