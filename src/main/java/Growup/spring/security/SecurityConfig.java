@@ -34,29 +34,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtProvider jwtProvider;
     private final RedisUtil redisUtil;
 
-    CorsConfigurationSource corsConfigurationSource() {
-        return request -> {
-            CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedHeaders(Collections.singletonList("*"));
-            config.setAllowedMethods(Collections.singletonList("*"));
-            config.setAllowedOriginPatterns(new ArrayList<String>() {{
-                add("https://dev.jojoumc.shop");
-                add("http://localhost:3000");
-            }});
-            config.setAllowCredentials(true);
-            return config;
-        };
-    }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
 
         http.csrf().disable();
+        http.cors().disable();
+
         http.httpBasic().disable()
 
                 .authorizeRequests()// 요청에 대한 사용권한 체크
+
                 .antMatchers("/growup/users/password-restore").hasRole("USER")
                 .antMatchers("/growup/users/token").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/growup/users/logout").hasAnyRole("USER", "ADMIN")
