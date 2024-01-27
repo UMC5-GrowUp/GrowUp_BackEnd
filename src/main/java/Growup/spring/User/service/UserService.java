@@ -17,7 +17,7 @@ public interface UserService {
     UserDtoRes.userLoginRes login(UserDtoReq.userLoginReq request);
 
     String inVaildToken(String refreshToken);
-    String passworeAuthdToken(String certificationNumber,String email);
+    String passwordAuthdToken(String certificationNumber,String email);
 
     User pwRestore(UserDtoReq.passwordRestoreReq request,Long userId);
 

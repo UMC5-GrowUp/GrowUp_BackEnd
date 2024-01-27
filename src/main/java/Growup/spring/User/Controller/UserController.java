@@ -98,7 +98,7 @@ public class UserController {
     @GetMapping("/email/password-verify")
     public ApiResponse<EmailDtoRes.emailAuthRes> authToken(@RequestParam(name = "certificationNumber") String certificationNumber,
                                                            @RequestParam(name = "email") String email){
-        String accessToken = userService.passworeAuthdToken(certificationNumber,email);
+        String accessToken = userService.passwordAuthdToken(certificationNumber,email);
         return ApiResponse.onSuccess(EmailConverter.passwordAuthTokenRes(accessToken));
     }
 
