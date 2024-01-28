@@ -308,6 +308,7 @@ public class UserServiceImpl implements UserService {
             throw new UserHandler(ErrorStatus.USER_EMAIL_ERROR);
         }
     }
+
     // 닉네임 중복 확인
     public void checkNickDuplication(String nickName){
         if (userRepository.existsByNickName(nickName)){
