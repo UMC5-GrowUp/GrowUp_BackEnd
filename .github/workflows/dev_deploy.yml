@@ -54,8 +54,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
-          application_name: dev-growup
-          environment_name: Dev-growup-env
+          application_name: dev-grow
+          environment_name: Dev-grow-env
           version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
