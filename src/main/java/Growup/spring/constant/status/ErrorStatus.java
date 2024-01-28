@@ -23,7 +23,7 @@ public enum ErrorStatus implements BaseErrorCode {
     USER_NICKNAME_ERROR(HttpStatus.BAD_REQUEST, "USER4003", "이미 사용중인 닉네임 입니다."),
     USER_EMAIL_ERROR(HttpStatus.BAD_REQUEST, "USER4004" , "이메일 형식이 아닙니다."),
     USER_EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "USER4005", "이미 사용중인 이메일 입니다."),
-    USER_PASSWORD_ERROR(HttpStatus.BAD_REQUEST, "USER4006", "패스워드를 확인하세요.(최소8자,최대20자,영문자,숫자 모두 포함되어야 합니다."),
+    USER_PASSWORD_ERROR(HttpStatus.BAD_REQUEST, "USER4006", "패스워드를 확인하세요.(최소8자,최대20자,영문자,숫자,특수문자 모두 포함되어야 합니다."),
     USER_PASSWORD_NONEQULE(HttpStatus.BAD_REQUEST, "USER4007", "비밀번호가 일치하지 않습니다."),
     USER_PASSWORD_EXIST(HttpStatus.BAD_REQUEST, "USER4008", "이전 비밀번호와 일치합니다."),
 

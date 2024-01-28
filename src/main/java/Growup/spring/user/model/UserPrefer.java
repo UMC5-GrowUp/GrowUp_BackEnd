@@ -1,4 +1,4 @@
-package Growup.spring.User.model;
+package Growup.spring.user.model;
 
 
 

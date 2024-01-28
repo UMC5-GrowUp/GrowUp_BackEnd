@@ -1,10 +1,10 @@
-package Growup.spring.User.model;
+package Growup.spring.user.model;
 
 
 
 import Growup.spring.domain.*;
-import Growup.spring.User.model.Enum.UserRole;
-import Growup.spring.User.model.Enum.UserState;
+import Growup.spring.user.model.Enum.UserRole;
+import Growup.spring.user.model.Enum.UserState;
 import Growup.spring.constant.entity.BaseEntity;
 import Growup.spring.growRoom.domain.GrowRoom;
 import Growup.spring.growRoom.domain.Pin;

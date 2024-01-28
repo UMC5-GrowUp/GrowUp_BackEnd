@@ -1,6 +1,6 @@
 package Growup.spring.growRoom.domain;
 
-import Growup.spring.User.model.User;
+import Growup.spring.user.model.User;
 import Growup.spring.constant.entity.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;

@@ -1,7 +1,7 @@
-package Growup.spring.User.repository;
+package Growup.spring.user.repository;
 
-import Growup.spring.User.model.Enum.UserState;
-import Growup.spring.User.model.User;
+import Growup.spring.user.model.Enum.UserState;
+import Growup.spring.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmailAndStatus(String email,UserState status);
 
     boolean existsByEmailAndStatus(String email, UserState status);
-
-    boolean existsByEmail(String email);
 
 
     boolean existsByNickName(String NickName);

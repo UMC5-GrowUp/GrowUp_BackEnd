@@ -1,4 +1,4 @@
-package Growup.spring.User.dto;
+package Growup.spring.user.dto;
 
 import lombok.Getter;
 import lombok.Setter;

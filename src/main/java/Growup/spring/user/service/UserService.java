@@ -1,12 +1,9 @@
-package Growup.spring.User.service;
+package Growup.spring.user.service;
 
-import Growup.spring.User.model.User;
-import Growup.spring.email.dto.EmailDtoReq;
-import Growup.spring.User.dto.UserDtoReq;
-import Growup.spring.User.dto.UserDtoRes;
+import Growup.spring.user.model.User;
+import Growup.spring.user.dto.UserDtoReq;
+import Growup.spring.user.dto.UserDtoRes;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.mail.MessagingException;
 
 public interface UserService {
 
@@ -17,7 +14,7 @@ public interface UserService {
     UserDtoRes.userLoginRes login(UserDtoReq.userLoginReq request);
 
     String inVaildToken(String refreshToken);
-    String passwordAuthdToken(String certificationNumber,String email);
+    String passwordAuthToken(String certificationNumber,String email);
 
     User pwRestore(UserDtoReq.passwordRestoreReq request,Long userId);
 
