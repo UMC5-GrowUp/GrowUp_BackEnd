@@ -1,6 +1,6 @@
 package Growup.spring.growRoom.dto;
 
-import Growup.spring.User.model.User;
+import Growup.spring.user.model.User;
 import Growup.spring.growRoom.domain.GrowRoom;
 import Growup.spring.growRoom.domain.Post;
 import Growup.spring.growRoom.domain.component.GrowRoomCategory;

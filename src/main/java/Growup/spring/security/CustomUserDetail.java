@@ -1,6 +1,6 @@
 package Growup.spring.security;
 
-import Growup.spring.User.model.User;
+import Growup.spring.user.model.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

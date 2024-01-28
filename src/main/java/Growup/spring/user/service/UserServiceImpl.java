@@ -1,19 +1,19 @@
-package Growup.spring.User.service;
+package Growup.spring.user.service;
 
 import Growup.spring.config.S3Uploader;
 import Growup.spring.constant.handler.EmailHandler;
 import Growup.spring.constant.handler.JwtHandler;
 import Growup.spring.constant.status.ErrorStatus;
 import Growup.spring.constant.handler.UserHandler;
-import Growup.spring.User.converter.UserConverter;
-import Growup.spring.User.model.Enum.UserState;
+import Growup.spring.user.converter.UserConverter;
+import Growup.spring.user.model.Enum.UserState;
 import Growup.spring.email.service.EmailService;
-import Growup.spring.User.repository.UserRepository;
+import Growup.spring.user.repository.UserRepository;
 import Growup.spring.security.JwtProvider;
 import Growup.spring.security.RedisUtil;
-import Growup.spring.User.dto.UserDtoReq;
-import Growup.spring.User.model.User;
-import Growup.spring.User.dto.UserDtoRes;
+import Growup.spring.user.dto.UserDtoReq;
+import Growup.spring.user.model.User;
+import Growup.spring.user.dto.UserDtoRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
 
     //비밀번호 재설정 인증완료 확인 후-accessToken 발급
     @Override
-    public String passwordAuthdToken(String certificationNumber,String email){
+    public String passwordAuthToken(String certificationNumber,String email){
         User user = verifyEmail(certificationNumber, email);
 
         return jwtProvider.createAccessToken(user.getId(),String.valueOf(user.getRole()));

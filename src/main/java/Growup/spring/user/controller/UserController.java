@@ -1,17 +1,17 @@
-package Growup.spring.User.Controller;
+package Growup.spring.user.controller;
 
 import Growup.spring.constant.ApiResponse;
 import Growup.spring.constant.status.SuccessStatus;
 import Growup.spring.email.converter.EmailConverter;
 import Growup.spring.email.dto.EmailDtoRes;
-import Growup.spring.User.converter.UserConverter;
-import Growup.spring.User.model.User;
+import Growup.spring.user.converter.UserConverter;
+import Growup.spring.user.model.User;
 import Growup.spring.email.dto.EmailDtoReq;
 import Growup.spring.security.JwtProvider;
-import Growup.spring.User.service.UserServiceImpl;
-import Growup.spring.User.dto.RefreshTokenRes;
-import Growup.spring.User.dto.UserDtoReq;
-import Growup.spring.User.dto.UserDtoRes;
+import Growup.spring.user.service.UserServiceImpl;
+import Growup.spring.user.dto.RefreshTokenRes;
+import Growup.spring.user.dto.UserDtoReq;
+import Growup.spring.user.dto.UserDtoRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -98,7 +98,7 @@ public class UserController {
     @GetMapping("/email/password-verify")
     public ApiResponse<EmailDtoRes.emailAuthRes> authToken(@RequestParam(name = "certificationNumber") String certificationNumber,
                                                            @RequestParam(name = "email") String email){
-        String accessToken = userService.passwordAuthdToken(certificationNumber,email);
+        String accessToken = userService.passwordAuthToken(certificationNumber,email);
         return ApiResponse.onSuccess(EmailConverter.passwordAuthTokenRes(accessToken));
     }
 

@@ -1,14 +1,12 @@
-package Growup.spring.User.converter;
+package Growup.spring.user.converter;
 
-import Growup.spring.User.dto.RefreshTokenRes;
-import Growup.spring.User.dto.UserDtoReq;
-import Growup.spring.User.dto.UserDtoRes;
-import Growup.spring.User.model.User;
+import Growup.spring.user.dto.RefreshTokenRes;
+import Growup.spring.user.dto.UserDtoReq;
+import Growup.spring.user.dto.UserDtoRes;
+import Growup.spring.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Slf4j
 @Component
