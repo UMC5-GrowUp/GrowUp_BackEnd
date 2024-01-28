@@ -1,6 +1,4 @@
-package Growup.spring.domain;
-
-
+package Growup.spring.growRoom.domain.component;
 
 import Growup.spring.constant.entity.BaseEntity;
 import lombok.*;
@@ -18,14 +16,19 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Category extends BaseEntity {
+public class CategoryDetail extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<CategoryDetail> categoryDetailList = new ArrayList<>();
+    @Column(name = "name", nullable = false)
+    private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryId")
+    private Category category;
 
+    @OneToMany(mappedBy = "categoryDetail", cascade = CascadeType.ALL)
+    private List<GrowRoomCategory> growRoomCategoryList = new ArrayList<>(3);
 }

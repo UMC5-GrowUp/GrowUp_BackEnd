@@ -1,11 +1,11 @@
-package Growup.spring.domain;
+package Growup.spring.growRoom.domain;
 
-
-
+import Growup.spring.User.model.User;
 import Growup.spring.constant.entity.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,18 +15,23 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-
-public class Number extends BaseEntity {
+public class PinComment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 40)
-    private Integer number;
+    private String comment;
 
-    @OneToOne(mappedBy = "number")
-    private GrowRoom growRoom;
+    @Column(nullable = false, length = 40)
+    private String status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pinId")
+    private Pin pin;
 }

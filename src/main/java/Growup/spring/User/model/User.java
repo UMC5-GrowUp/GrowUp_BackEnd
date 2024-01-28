@@ -6,6 +6,8 @@ import Growup.spring.domain.*;
 import Growup.spring.User.model.Enum.UserRole;
 import Growup.spring.User.model.Enum.UserState;
 import Growup.spring.constant.entity.BaseEntity;
+import Growup.spring.growRoom.domain.GrowRoom;
+import Growup.spring.growRoom.domain.Pin;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -40,6 +42,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String nickName;
 
+    @Column(nullable = true, length = 200)
     private String photoUrl;
 
     @Enumerated(EnumType.STRING)

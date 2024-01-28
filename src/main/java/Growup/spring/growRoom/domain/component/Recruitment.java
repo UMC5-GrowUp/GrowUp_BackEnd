@@ -1,34 +1,29 @@
-package Growup.spring.domain;
-
-
+package Growup.spring.growRoom.domain.component;
 
 import Growup.spring.constant.entity.BaseEntity;
+import Growup.spring.growRoom.domain.GrowRoom;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @DynamicUpdate
 @DynamicInsert
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CategoryDetail extends BaseEntity {
-
+public class Recruitment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId")
-    private Category category;
+    @Column(nullable = false, length = 40)
+    private String field;
 
-    @OneToMany(mappedBy = "categoryDetail", cascade = CascadeType.ALL)
-    private List<GrowRoomCategory> growRoomCategoryList = new ArrayList<>();
-
+    @OneToOne(mappedBy = "recruitment")
+    private GrowRoom growRoom;
 }

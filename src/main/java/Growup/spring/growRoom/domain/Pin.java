@@ -1,9 +1,9 @@
-package Growup.spring.domain;
+package Growup.spring.growRoom.domain;
 
 
 
-import Growup.spring.constant.entity.BaseEntity;
 import Growup.spring.User.model.User;
+import Growup.spring.constant.entity.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -41,5 +41,4 @@ public class Pin extends BaseEntity {
 
     @OneToMany(mappedBy = "pin", cascade = CascadeType.ALL)
     private List<PinComment> pinCommentList = new ArrayList<>();
-
 }
