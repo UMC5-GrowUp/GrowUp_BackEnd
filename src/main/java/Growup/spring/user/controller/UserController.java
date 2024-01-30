@@ -124,14 +124,15 @@ public class UserController {
     }
 
     /**
-     * 24.01.21 작성자 : 정주현
+     * 24.01.31 작성자 : 정주현
      * 닉네임 중복 확인
+     */
     @PostMapping("/exist-nickname")
-    public ApiResponse<SuccessStatus> checkNickDuplication(@RequestBody UserDtoReq.nicknameDuplicationReq request){
+    public ApiResponse<SuccessStatus> checkNickDuplication(@RequestBody @Valid UserDtoReq.nicknameDuplicationReq request){
         userService.checkNickDuplication(request.getNickName());
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
-     */
+
 
     /**
      * 24.01.21 작성자 : 정주현
@@ -182,7 +183,7 @@ public class UserController {
      * 프로필 사진 변경
      */
     @PatchMapping("/photo-change")
-    public ApiResponse<UserDtoRes.photoChangeRes> photoChange(@RequestPart MultipartFile photoImage){
+    public ApiResponse<UserDtoRes.photoChangeRes> photoChange(@RequestPart @Valid MultipartFile photoImage){
         Long userId = jwtProvider.getUserID();
         User user =userService.photoChange(photoImage,userId);
         return ApiResponse.onSuccess(UserConverter.photoChangeRes(user));
