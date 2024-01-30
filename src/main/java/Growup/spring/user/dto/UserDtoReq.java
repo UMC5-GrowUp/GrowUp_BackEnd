@@ -44,7 +44,7 @@ public class UserDtoReq {
     @Setter
     public static class nicknameDuplicationReq{
         @Size(message = "닉네임은 2글자 이상, 10글자 이하입니다.", min= 2, max = 10)
-          private String nickName;
+        private String nickName;
 
     }
 
