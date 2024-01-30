@@ -1,14 +1,16 @@
 package Growup.spring.growRoom.service;
 
-import Growup.spring.growRoom.domain.GrowRoom;
+
 import Growup.spring.growRoom.dto.AddGrowRoomRequest;
 import Growup.spring.growRoom.dto.UpdateGrowRoomRequest;
+import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.repository.GrowRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+
 
 @RequiredArgsConstructor
 @Service

@@ -1,12 +1,14 @@
 package Growup.spring.growRoom.domain.component;
 
 import Growup.spring.constant.entity.BaseEntity;
-import Growup.spring.growRoom.domain.GrowRoom;
+import Growup.spring.growRoom.model.GrowRoom;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +27,6 @@ public class Period extends BaseEntity {
     @Column(nullable = false, length = 40)
     private String period;
 
-    @OneToOne(mappedBy = "period")
-    private GrowRoom growRoom;
+    @OneToMany(mappedBy = "period", cascade = CascadeType.ALL)
+    private List<GrowRoom> growRoomList = new ArrayList<>();
 }

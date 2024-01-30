@@ -1,6 +1,7 @@
 package Growup.spring.growRoom.domain;
 
 import Growup.spring.constant.entity.BaseEntity;
+import Growup.spring.growRoom.model.GrowRoom;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -29,7 +30,7 @@ public class Post extends BaseEntity {
     @Column(nullable = false, length = 40)
     private String status;
 
-    @OneToOne(mappedBy = "post")
+    @OneToOne(mappedBy = "post",cascade = CascadeType.ALL)
     private GrowRoom growRoom;
 
     @Builder    // 빌더 패턴으로 객체 생성

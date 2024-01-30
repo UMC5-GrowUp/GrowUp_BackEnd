@@ -1,12 +1,12 @@
 package Growup.spring.growRoom.dto;
 
-import Growup.spring.user.model.User;
-import Growup.spring.growRoom.domain.GrowRoom;
 import Growup.spring.growRoom.domain.Post;
 import Growup.spring.growRoom.domain.component.GrowRoomCategory;
 import Growup.spring.growRoom.domain.component.Number;
 import Growup.spring.growRoom.domain.component.Period;
 import Growup.spring.growRoom.domain.component.Recruitment;
+import Growup.spring.growRoom.model.GrowRoom;
+import Growup.spring.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,9 +1,10 @@
 package Growup.spring.growRoom.controller;
 
-import Growup.spring.growRoom.domain.GrowRoom;
+
 import Growup.spring.growRoom.dto.AddGrowRoomRequest;
 import Growup.spring.growRoom.dto.GrowRoomResponse;
 import Growup.spring.growRoom.dto.UpdateGrowRoomRequest;
+import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.service.GrowRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,14 +1,14 @@
-package Growup.spring.growRoom.domain.component;
+package Growup.spring.liked.model;
+
 
 import Growup.spring.constant.entity.BaseEntity;
 import Growup.spring.growRoom.model.GrowRoom;
+import Growup.spring.user.model.User;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -18,17 +18,20 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-
-public class Number extends BaseEntity {
+public class Liked extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 40)
-    private Integer number;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
 
-    @OneToMany(mappedBy = "number", cascade = CascadeType.ALL)
-    private List<GrowRoom> growRoomList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "growroomId")
+    private GrowRoom growRoom;
+
+
 
 }

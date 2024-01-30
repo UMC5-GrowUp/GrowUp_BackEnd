@@ -1,6 +1,6 @@
 package Growup.spring.growRoom.dto;
 
-import Growup.spring.growRoom.domain.GrowRoom;
+import Growup.spring.growRoom.model.GrowRoom;
 import lombok.Getter;
 
 
