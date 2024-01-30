@@ -3,6 +3,7 @@ package Growup.spring.user.model;
 
 
 import Growup.spring.domain.*;
+import Growup.spring.todoList.model.TodoList;
 import Growup.spring.user.model.Enum.UserRole;
 import Growup.spring.user.model.Enum.UserState;
 import Growup.spring.constant.entity.BaseEntity;
@@ -53,7 +54,7 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'ROLE_USER'")
     public UserRole role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL )
     private List<UserPrefer> userPreferList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -67,6 +68,10 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Liked> likeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<TodoList> todoLists = new ArrayList<>();
+
 
     @PreUpdate
     public void preUpdate() {
