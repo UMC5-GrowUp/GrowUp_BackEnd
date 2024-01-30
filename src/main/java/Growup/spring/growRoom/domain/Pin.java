@@ -1,14 +1,16 @@
-package Growup.spring.domain;
+package Growup.spring.growRoom.domain;
 
 
 
-import Growup.spring.constant.entity.BaseEntity;
 import Growup.spring.user.model.User;
-import Growup.spring.growRoom.domain.GrowRoom;
+import Growup.spring.constant.entity.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,11 +19,17 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Liked extends BaseEntity {
+public class Pin extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 40)
+    private String comment;
+
+    @Column(nullable = false, length = 40)
+    private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
@@ -31,4 +39,6 @@ public class Liked extends BaseEntity {
     @JoinColumn(name = "growroomId")
     private GrowRoom growRoom;
 
+    @OneToMany(mappedBy = "pin", cascade = CascadeType.ALL)
+    private List<PinComment> pinCommentList = new ArrayList<>();
 }

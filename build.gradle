@@ -33,6 +33,30 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
 	implementation 'io.springfox:springfox-swagger2:2.9.2'
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+
+	//naver- mail
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	//kurento
+	implementation 'org.kurento:kurento-client:6.18.0'
+	implementation 'org.kurento:kurento-utils-js:6.18.0'
+	testImplementation 'org.kurento:kurento-jsonrpc-server:6.18.0'
+
+	//gson
+	implementation 'com.google.code.gson:gson:2.9.0'
+
+	//websocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	//aws
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 }
 
 tasks.named('bootBuildImage') {
