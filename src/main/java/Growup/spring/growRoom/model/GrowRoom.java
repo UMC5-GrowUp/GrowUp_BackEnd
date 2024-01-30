@@ -1,14 +1,16 @@
-package Growup.spring.growRoom.domain;
+package Growup.spring.growRoom.model;
 
 
-import Growup.spring.user.model.User;
-import Growup.spring.domain.Liked;
-import Growup.spring.domain.Participate;
 import Growup.spring.constant.entity.BaseEntity;
+import Growup.spring.growRoom.domain.Pin;
+import Growup.spring.growRoom.domain.Post;
 import Growup.spring.growRoom.domain.component.GrowRoomCategory;
 import Growup.spring.growRoom.domain.component.Number;
 import Growup.spring.growRoom.domain.component.Period;
 import Growup.spring.growRoom.domain.component.Recruitment;
+import Growup.spring.liked.model.Liked;
+import Growup.spring.participate.model.Participate;
+import Growup.spring.user.model.User;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -51,18 +53,17 @@ public class GrowRoom extends BaseEntity {
     private List<Pin> pinList = new ArrayList<>();
 
     @OneToMany(mappedBy = "growRoom", cascade = CascadeType.ALL)
-    private List<Liked> likeList = new ArrayList<>();
+    private List<Liked> likedList = new ArrayList<>();
 
-
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruitmentId")
     private Recruitment recruitment;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "numberId")
     private Number number;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "periodId")
     private Period period;
 
@@ -73,6 +74,7 @@ public class GrowRoom extends BaseEntity {
     //이거 맞는지 모름 post의 component
     private String title;
     private String content;
+
 
     @Builder    // 빌더 패턴으로 객체 생성
     public GrowRoom(Recruitment recruitment, Number number, Period period, String title, String content) {

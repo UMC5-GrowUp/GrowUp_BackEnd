@@ -44,6 +44,21 @@ public enum ErrorStatus implements BaseErrorCode {
     EMAIL_SEND_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR5003", "메일 전송이 실패되었습니다."),
     FILE_CHANGE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR5004", "파일 전환이 실패되었습니다."),
 
+
+    //liked error
+    LIKED_NOT_FOUND(HttpStatus.NOT_FOUND,"Liked4001","liked에 해당 아이디가 없습니다."),
+
+
+    //growroom error
+    GROWROOM_NOT_FOUND(HttpStatus.UNAUTHORIZED,"GROWROOM4001","GrowRoom이 없습니다."),
+    GROWROOM_NOT_HOT(HttpStatus.BAD_REQUEST,"GROWRROM4002","인기글이 아닙니다."),
+
+
+
+    //participate error
+    PARTICIPATE_NOT_FOUND(HttpStatus.UNAUTHORIZED,"PARTICIPATE4001","Participate가 없습니다."),
+    PARTICIPATE_NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "PARTICIPATE4100","방장만 좋아요가 가능 합니다.")
+
     ;
 
 
