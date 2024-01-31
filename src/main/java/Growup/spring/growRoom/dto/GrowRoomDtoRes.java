@@ -4,6 +4,8 @@ import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.component.GrowRoomCategory;
 import lombok.Getter;
 
+import java.util.List;
+
 
 @Getter
 public class GrowRoomDtoRes {
@@ -18,9 +20,10 @@ public class GrowRoomDtoRes {
     private final String period;
 
     // category - 최대 3개
-//    private final Long categoryListDetail1;
-//    private final Long categoryListDetail2;
-//    private final Long categoryListDetail3;
+//    private final String categoryDetail_name;
+    private final String categoryListDetail0;
+    private final String categoryListDetail1;
+    private final String categoryListDetail2;
 
     // post
     private final String title;
@@ -33,30 +36,28 @@ public class GrowRoomDtoRes {
         this.number = growRoom.getNumber().getNumber();
         this.period = growRoom.getPeriod().getPeriod();
 
-        // 초기화를 제거하고, 변수를 항상 초기화하는 것을 보장
-//        this.categoryListDetail1 = getCategoryDetailId(growRoom, 0);
-//        this.categoryListDetail2 = getCategoryDetailId(growRoom, 1);
-//        this.categoryListDetail3 = getCategoryDetailId(growRoom, 2);
+        // GrowRoomCategory를 리스트화 해서 categoryDetail을 출력하는 로직 - null 예외
+        List<GrowRoomCategory> growRoomCategoryList = growRoom.getGrowRoomCategoryList();
+
+        if (!growRoomCategoryList.isEmpty()) {
+            this.categoryListDetail0 = growRoomCategoryList.get(0).getCategoryDetail().getName();
+        } else {
+            this.categoryListDetail0 = null;
+        }
+
+        if (growRoomCategoryList.size() > 1) {
+            this.categoryListDetail1 = growRoomCategoryList.get(1).getCategoryDetail().getName();
+        } else {
+            this.categoryListDetail1 = null;
+        }
+
+        if (growRoomCategoryList.size() > 2) {
+            this.categoryListDetail2 = growRoomCategoryList.get(2).getCategoryDetail().getName();
+        } else {
+            this.categoryListDetail2 = null;
+        }
 
         this.title = growRoom.getPost().getTitle();
         this.content = growRoom.getPost().getTitle();
     }
-
-    // 반복되는 로직을 재사용, 그 결과에 따라 null 값을 반환
-//    private Long getCategoryDetailId(GrowRoom growRoom, int index) {
-//        while (growRoom.getGrowRoomCategoryList() != null) {
-//            return growRoom.getGrowRoomCategoryList().get(index).getCategoryDetail().getId();
-//        }
-//        return null;
-//    }
-//    private Long getCategoryDetailId(GrowRoom growRoom, int index) {
-//        if (growRoom.getGrowRoomCategoryList() != null) {
-//            for (GrowRoomCategory growRoomCategory : growRoom.getGrowRoomCategoryList()) {
-//                return growRoomCategory.getCategoryDetail().getId();
-//            }
-//        }
-//        return null;
-//    }
-
-//    private Long getCategoryDetailId
 }

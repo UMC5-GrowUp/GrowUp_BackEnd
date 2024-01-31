@@ -15,7 +15,6 @@ public class UpdateGrowRoomDtoReq {
     //growroom
     private Long recruitmentId; //모집 구분
     private Long numberId;  //모집 인원
-    //모집 기간 X
     private Long periodId;  //진행기간
 
     // category

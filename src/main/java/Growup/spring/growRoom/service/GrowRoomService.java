@@ -1,5 +1,6 @@
 package Growup.spring.growRoom.service;
 
+import Growup.spring.growRoom.converter.CategoryDetailConverter;
 import Growup.spring.growRoom.model.component.Number;
 import Growup.spring.growRoom.repository.*;
 import Growup.spring.participate.service.ParticipateService;
@@ -20,7 +21,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-package java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -29,11 +29,13 @@ public class GrowRoomService {
     private final JwtProvider jwtProvider;  // 토큰 발급을 위함
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-    private final GrowRoomCategoryRepository growRoomCategoryRepository;
+    public final GrowRoomCategoryRepository growRoomCategoryRepository;
     private final CategoryDetailRepository categoryDetailRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final NumberRepository numberRepository;
     private final PeriodRepository periodRepository;
+    public final GrowRoomCategoryService growRoomCategoryService;
+    private final CategoryDetailConverter categoryDetailConverter;
 
 
     // 그로우룸 글 목록 조회
@@ -69,19 +71,14 @@ public class GrowRoomService {
         growRoom.setPeriod(periodRepository.findById(request.getPeriodId())
                 .orElseThrow());
 
-        private List<GrowRoomCategory> growRoomCategories = new ArrayList<>();
+        List<CategoryDetail> categoryDetails = new ArrayList<>();
+        categoryDetails = categoryDetailConverter.convertToCategoryDetails(request.getCategoryDetailIds());
 
-        public GrowRoomService growRoomCategoryDetail (Optional < CategoryDetail > growRoomCategoryDetail) {
-            // growRoomCategoryDetail이 존재하면 GrowRoomCategory를 생성하고 리스트에 추가
-            growRoomCategoryDetail.isPersent(detail -> {
-                if (growRoomCategories.size() < 3) { // 최대 3개까지만 저장
-                    growRoomCategories.add(new GrowRoomCategoryBuilder().categoryDetail(detail).build());
-                }
-            });
-            return this;
-        }
+        // 카테고리 리스트 저장, growRoom에 지정
+        growRoom.setGrowRoomCategoryList(growRoomCategoryService.save(growRoom, categoryDetails));
+
+        return growRoom;
     }
-
 
     // 그로우룸{id} 조회
     public GrowRoom findById(Long id) {

@@ -2,9 +2,12 @@ package Growup.spring.growRoom.dto;
 
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.Post;
+import Growup.spring.growRoom.model.component.CategoryDetail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,9 +20,7 @@ public class AddGrowRoomDtoReq {
     private Long periodId;  //진행기간
 
     // category
-    private Long categoryDetailId1;
-    private Long categoryDetailId2;
-    private Long categoryDetailId3;
+    private List<Long> categoryDetailIds;
 
     // post
     private String title;
