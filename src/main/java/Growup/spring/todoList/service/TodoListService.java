@@ -14,4 +14,6 @@ public interface TodoListService {
     TodoList todoListEnroll(TodoDtoListReq.todoEnrollReq request,Long userId);
 
     List<TodoDtoListRes.todoSearchRes>  todoListSearch(Long userId);
+
+    void modifyservice(Long todoListId);
 }

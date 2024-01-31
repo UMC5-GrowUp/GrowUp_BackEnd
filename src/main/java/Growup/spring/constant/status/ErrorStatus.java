@@ -16,7 +16,7 @@ public enum ErrorStatus implements BaseErrorCode {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
 
-    // User Error
+    // User Error(4001~
 
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자가 없습니다."),
     USER_ID_PASSWORD_FOUND(HttpStatus.BAD_REQUEST, "USER4002", "아이디 또는 비밀번호가 잘못되었습니다."),
@@ -29,7 +29,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
 
 
-    //JWT Error
+    //JWT Error(4100~
     JWT_EMPTY(HttpStatus.UNAUTHORIZED,"JWT4100","JWT 토큰을 넣어주세요."),
     JWT_INVALID(HttpStatus.UNAUTHORIZED,"JWT4101","다시 로그인 해주세요."),
     JWT_EXPIRED(HttpStatus.UNAUTHORIZED,"JWT4102","토큰이 만료되었습니다."),
@@ -45,19 +45,22 @@ public enum ErrorStatus implements BaseErrorCode {
     FILE_CHANGE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR5004", "파일 전환이 실패되었습니다."),
 
 
-    //liked error
+    //liked error -> 번호 수정하길 그리고 대문자
     LIKED_NOT_FOUND(HttpStatus.NOT_FOUND,"Liked4001","liked에 해당 아이디가 없습니다."),
 
 
-    //growroom error
+    //growroom error -> 번호 수정하길 또한 https 상태 확인 UNAUTHORIZED 이는 인증에 관한 에러
     GROWROOM_NOT_FOUND(HttpStatus.UNAUTHORIZED,"GROWROOM4001","GrowRoom이 없습니다."),
     GROWROOM_NOT_HOT(HttpStatus.BAD_REQUEST,"GROWRROM4002","인기글이 아닙니다."),
 
 
 
-    //participate error
+    //participate error error -> 번호 수정하길  또한 https 상태 확인 UNAUTHORIZED 이는 인증에 관한 에러
     PARTICIPATE_NOT_FOUND(HttpStatus.UNAUTHORIZED,"PARTICIPATE4001","Participate가 없습니다."),
-    PARTICIPATE_NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "PARTICIPATE4100","방장만 좋아요가 가능 합니다.")
+    PARTICIPATE_NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "PARTICIPATE4100","방장만 좋아요가 가능 합니다."),
+
+    //todolist 관련 에러코드(4041~
+    TODOLIST_NOT_FOUND(HttpStatus.BAD_REQUEST, "TODOLIST4041", "등록되지 않은 todolist 입니다.")
 
     ;
 

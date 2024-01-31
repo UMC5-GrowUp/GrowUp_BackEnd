@@ -1,10 +1,12 @@
 package Growup.spring.todoList.service;
 
+import Growup.spring.constant.handler.TodoListHandler;
 import Growup.spring.constant.handler.UserHandler;
 import Growup.spring.constant.status.ErrorStatus;
 import Growup.spring.todoList.converter.TodoListConverter;
 import Growup.spring.todoList.dto.TodoDtoListReq;
 import Growup.spring.todoList.dto.TodoDtoListRes;
+import Growup.spring.todoList.model.Enum.TodoStatus;
 import Growup.spring.todoList.model.TodoList;
 import Growup.spring.todoList.repository.TodoListRepository;
 import Growup.spring.user.model.User;
@@ -52,6 +54,19 @@ public class TodoListImpl implements TodoListService {
 
     }
 
+    //투두리스트 상태 수정
+    @Override
+    public void modifyservice(Long todoListId){
 
+        TodoList todoList = todoListRepository.findById(todoListId).orElseThrow(()->new TodoListHandler(ErrorStatus.TODOLIST_NOT_FOUND));
+
+        if(todoList.getStatus() == TodoStatus.ACTIVE ) {
+            todoList.setStatus(TodoStatus.NONACTIVE);}
+        else{
+            todoList.setStatus(TodoStatus.ACTIVE );
+        }
+
+        todoListRepository.save(todoList);
+    }
 
 }

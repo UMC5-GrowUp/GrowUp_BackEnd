@@ -2,6 +2,7 @@ package Growup.spring.todoList.controller;
 
 
 import Growup.spring.constant.ApiResponse;
+import Growup.spring.constant.status.SuccessStatus;
 import Growup.spring.security.JwtProvider;
 import Growup.spring.todoList.converter.TodoListConverter;
 import Growup.spring.todoList.dto.TodoDtoListReq;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -38,7 +40,11 @@ public class TodoListController {
         return ApiResponse.onSuccess(TodoListConverter.todoResultSearchRes(userId,todoListService.todoListSearch(userId)));
     }
 
-
+    @PatchMapping("/modify-status")
+    public ApiResponse<SuccessStatus> modifyStatus(@RequestParam Long todoListId){
+        todoListService.modifyservice(todoListId);
+        return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
+    }
 
 
 
