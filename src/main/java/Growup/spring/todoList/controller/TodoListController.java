@@ -34,7 +34,7 @@ public class TodoListController {
         return ApiResponse.onSuccess(TodoListConverter.todoListDtoRes(todoList));
     }
 
-    @GetMapping("/search-today")
+    @GetMapping("/today")
     public ApiResponse<TodoDtoListRes.todoResultSearchRes> todoListSearch(){
         Long userId = jwtProvider.getUserID();
         return ApiResponse.onSuccess(TodoListConverter.todoResultSearchRes(userId,todoListService.todoListSearch(userId)));
