@@ -53,6 +53,7 @@ public class GrowRoomService {
         GrowRoom growRoom = request.toEntity();
         growRoom.setUser(user);
 
+        // builder는 컨버터에서
         Post post = Post.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
@@ -97,6 +98,7 @@ public class GrowRoomService {
         GrowRoom growRoom = growRoomRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("not found : " + id));
 
+        // builder는 컨버터에서
         growRoom.update(Recruitment.builder().id(request.getRecruitmentId()).build(),
                 Number.builder().id(request.getNumberId()).build(),
                 Period.builder().id(request.getPeriodId()).build(),
