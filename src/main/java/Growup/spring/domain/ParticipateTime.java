@@ -3,6 +3,7 @@ package Growup.spring.domain;
 
 
 import Growup.spring.constant.entity.BaseEntity;
+import Growup.spring.participate.model.Participate;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;

@@ -4,6 +4,8 @@ package Growup.spring.user.model;
 
 import Growup.spring.domain.*;
 import Growup.spring.growRoom.model.GrowRoom;
+import Growup.spring.liked.model.Liked;
+import Growup.spring.participate.model.Participate;
 import Growup.spring.todoList.model.TodoList;
 import Growup.spring.user.model.Enum.UserRole;
 import Growup.spring.user.model.Enum.UserState;
