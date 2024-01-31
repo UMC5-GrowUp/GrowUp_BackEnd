@@ -41,7 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             config.setAllowedHeaders(Collections.singletonList("*"));
             config.setAllowedMethods(Collections.singletonList("*"));
             config.setAllowedOriginPatterns(new ArrayList<String>() {{
-                add("https://dev.jojoumc.shop");
                 add("http://localhost:3000");
             }});
             config.setAllowCredentials(true);
