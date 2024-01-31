@@ -2,12 +2,10 @@ package Growup.spring.growRoom.model;
 
 
 import Growup.spring.constant.entity.BaseEntity;
-import Growup.spring.growRoom.domain.Pin;
-import Growup.spring.growRoom.domain.Post;
-import Growup.spring.growRoom.domain.component.GrowRoomCategory;
-import Growup.spring.growRoom.domain.component.Number;
-import Growup.spring.growRoom.domain.component.Period;
-import Growup.spring.growRoom.domain.component.Recruitment;
+import Growup.spring.growRoom.model.component.GrowRoomCategory;
+import Growup.spring.growRoom.model.component.Number;
+import Growup.spring.growRoom.model.component.Period;
+import Growup.spring.growRoom.model.component.Recruitment;
 import Growup.spring.liked.model.Liked;
 import Growup.spring.participate.model.Participate;
 import Growup.spring.user.model.User;
@@ -21,6 +19,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @DynamicUpdate
 @DynamicInsert
 @Builder
@@ -32,10 +31,10 @@ public class GrowRoom extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length =40)
+    @Column(nullable = false, length =40, columnDefinition = "Integer DEFAULT '0'")
     private Integer view;
 
-    @Column(nullable = false, length = 40)
+    @Column(nullable = false, length = 40, columnDefinition = "VARCHAR(40) DEFAULT '모집중'")
     private String status;
 
 
@@ -53,7 +52,8 @@ public class GrowRoom extends BaseEntity {
     private List<Pin> pinList = new ArrayList<>();
 
     @OneToMany(mappedBy = "growRoom", cascade = CascadeType.ALL)
-    private List<Liked> likedList = new ArrayList<>();
+    private List<Liked> likeList = new ArrayList<>();
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruitmentId")
@@ -71,25 +71,18 @@ public class GrowRoom extends BaseEntity {
     @JoinColumn(name = "postId")
     private Post post;
 
-    //이거 맞는지 모름 post의 component
-    private String title;
-    private String content;
-
-
     @Builder    // 빌더 패턴으로 객체 생성
-    public GrowRoom(Recruitment recruitment, Number number, Period period, String title, String content) {
+    public GrowRoom(Recruitment recruitment, Number number, Period period, Post post) {
         this.recruitment = recruitment;
         this.number = number;
         this.period = period;
-        this.title = title;
-        this.content = content;
+        this.post = post;
     }
 
-    public void update(Recruitment recruitment, Number number, Period period, String title, String content){
+    public void update(Recruitment recruitment, Number number, Period period, Post post){
         this.recruitment = recruitment;
         this.number = number;
         this.period = period;
-        this.title = title;
-        this.content = content;
+        this.post = post;
     }
 }
