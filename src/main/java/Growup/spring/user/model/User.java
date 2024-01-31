@@ -11,7 +11,7 @@ import Growup.spring.user.model.Enum.UserRole;
 import Growup.spring.user.model.Enum.UserState;
 import Growup.spring.constant.entity.BaseEntity;
 
-import Growup.spring.growRoom.domain.Pin;
+import Growup.spring.growRoom.model.Pin;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;

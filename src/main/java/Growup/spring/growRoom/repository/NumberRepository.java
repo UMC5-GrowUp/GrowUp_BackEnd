@@ -1,13 +1,13 @@
 package Growup.spring.growRoom.repository;
 
-import Growup.spring.growRoom.model.Post;
+import Growup.spring.growRoom.model.component.Number;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Transactional
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface NumberRepository extends JpaRepository<Number, Long> {
     @Override
-    Optional<Post> findById(Long id);
+    Optional<Number> findById(Long id);
 }
