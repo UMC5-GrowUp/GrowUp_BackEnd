@@ -1,8 +1,6 @@
 package Growup.spring.growRoom.dto;
 
 import Growup.spring.growRoom.model.GrowRoom;
-import Growup.spring.growRoom.model.Post;
-import Growup.spring.growRoom.model.component.CategoryDetail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
