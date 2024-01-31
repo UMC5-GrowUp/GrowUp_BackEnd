@@ -1,4 +1,4 @@
-package Growup.spring.growRoom.domain.component;
+package Growup.spring.growRoom.model.component;
 
 import Growup.spring.constant.entity.BaseEntity;
 import Growup.spring.growRoom.model.GrowRoom;
@@ -18,17 +18,15 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-
-public class Number extends BaseEntity {
+public class Period extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 40)
-    private Integer number;
+    private String period;
 
-    @OneToMany(mappedBy = "number", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "period", cascade = CascadeType.ALL)
     private List<GrowRoom> growRoomList = new ArrayList<>();
-
 }
