@@ -1,13 +1,12 @@
-package Growup.spring.growRoom.domain.component;
+package Growup.spring.growRoom.model;
 
+import Growup.spring.user.model.User;
 import Growup.spring.constant.entity.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -16,19 +15,23 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CategoryDetail extends BaseEntity {
+public class PinComment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(nullable = false, length = 40)
+    private String comment;
+
+    @Column(nullable = false, length = 40)
+    private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId")
-    private Category category;
+    @JoinColumn(name = "userId")
+    private User user;
 
-    @OneToMany(mappedBy = "categoryDetail", cascade = CascadeType.ALL)
-    private List<GrowRoomCategory> growRoomCategoryList = new ArrayList<>(3);
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pinId")
+    private Pin pin;
 }

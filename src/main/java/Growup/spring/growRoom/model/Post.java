@@ -1,7 +1,6 @@
-package Growup.spring.growRoom.domain;
+package Growup.spring.growRoom.model;
 
 import Growup.spring.constant.entity.BaseEntity;
-import Growup.spring.growRoom.model.GrowRoom;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -10,6 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @DynamicUpdate
 @DynamicInsert
 @Builder
@@ -27,8 +27,8 @@ public class Post extends BaseEntity {
     @Column(nullable = false, length = 500)
     private String content;
 
-    @Column(nullable = false, length = 40)
-    private String status;
+    @Column(nullable = false, length = 40, columnDefinition = "Integer DEFAULT '0'")
+    private Integer status;
 
     @OneToOne(mappedBy = "post",cascade = CascadeType.ALL)
     private GrowRoom growRoom;
