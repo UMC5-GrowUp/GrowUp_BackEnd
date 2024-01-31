@@ -10,7 +10,6 @@ public class TodoDtoListRes {
 
     //todolist 등록 응답
     @Getter
-    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -20,7 +19,6 @@ public class TodoDtoListRes {
     }
 
     @Getter
-    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -32,7 +30,6 @@ public class TodoDtoListRes {
 
     //today todolist 조회
     @Getter
-    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
