@@ -50,10 +50,17 @@ public enum ErrorStatus implements BaseErrorCode {
 
 
     //growroom error -> 번호 수정하길 또한 https 상태 확인 UNAUTHORIZED 이는 인증에 관한 에러
-    GROWROOM_NOT_FOUND(HttpStatus.UNAUTHORIZED,"GROWROOM4001","GrowRoom이 없습니다."),
+    GROWROOM_NOT_FOUND(HttpStatus.BAD_REQUEST,"GROWROOM4001","GrowRoom이 없습니다."),
     GROWROOM_NOT_HOT(HttpStatus.BAD_REQUEST,"GROWRROM4002","인기글이 아닙니다."),
 
+    // recruitment error
+    RECRUITMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "RECRUITMENT4001", "Recruitment가 없습니다."),
 
+    // number error
+    NUMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "NUMBER4001", "number가 없습니다."),
+
+    // period error
+    PERIOD_NOT_FOUNT(HttpStatus.BAD_REQUEST, "PERIOD4001", "period가 없습니다."),
 
     //participate error error -> 번호 수정하길  또한 https 상태 확인 UNAUTHORIZED 이는 인증에 관한 에러
     PARTICIPATE_NOT_FOUND(HttpStatus.UNAUTHORIZED,"PARTICIPATE4001","Participate가 없습니다."),

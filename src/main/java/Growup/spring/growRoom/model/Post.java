@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -41,10 +42,5 @@ public class Post extends BaseEntity {
 
     public void setGrowRoom(GrowRoom growRoom) {
         this.growRoom = growRoom;
-    }
-
-    public void update(String title, String content) {
-        this.title = title;
-        this.content = content;
     }
 }

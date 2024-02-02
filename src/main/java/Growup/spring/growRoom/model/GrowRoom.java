@@ -14,6 +14,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,5 +85,6 @@ public class GrowRoom extends BaseEntity {
         this.number = number;
         this.period = period;
         this.post = post;
+        this.updatedAt = LocalDateTime.now();
     }
 }
