@@ -13,6 +13,11 @@ public class TodoDtoListReq {
         private String comment;
     }
 
+    @Getter
+    public static class todoCommentModifyReq{
+        private String comment;
+    }
+
 
 
 }

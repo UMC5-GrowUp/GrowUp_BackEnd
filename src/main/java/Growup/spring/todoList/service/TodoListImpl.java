@@ -40,7 +40,7 @@ public class TodoListImpl implements TodoListService {
 
     //todolist 조회 - 오늘 날짜만 조회
     @Override
-    public List<TodoDtoListRes.todoSearchRes> todoListSearch(Long userId){
+    public List<TodoDtoListRes.todoInquiryRes> todoListInquiry(Long userId){
 
         User user = userRepository.findById(userId).orElseThrow(()->new UserHandler(ErrorStatus.USER_NOT_FOUND));
 
@@ -49,9 +49,18 @@ public class TodoListImpl implements TodoListService {
         return todoListRepository.findByUser(user)
                 .stream()
                 .filter(todoList -> todoList.getCreatedAt().toLocalDate().isEqual(today))  // Filtering 오늘날짜만 조회
-                .map(TodoListConverter::todoSearchRes)
+                .map(TodoListConverter::todoInquiryRes)
                 .collect(Collectors.toList());
 
+    }
+
+    //todoList 내용 수정
+    @Override
+    public void todoListCommentModify(Long todoListId,TodoDtoListReq.todoCommentModifyReq request){
+        TodoList todoList = todoListRepository.findById(todoListId).orElseThrow(()-> new TodoListHandler(ErrorStatus.TODOLIST_NOT_FOUND));
+
+        todoList.setComment(request.getComment());
+        todoListRepository.save(todoList);
     }
 
     //투두리스트 상태 수정

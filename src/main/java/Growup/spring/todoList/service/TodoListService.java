@@ -13,7 +13,10 @@ public interface TodoListService {
 
     TodoList todoListEnroll(TodoDtoListReq.todoEnrollReq request,Long userId);
 
-    List<TodoDtoListRes.todoSearchRes>  todoListSearch(Long userId);
+    List<TodoDtoListRes.todoInquiryRes>  todoListInquiry(Long userId);
 
     void modifyservice(Long todoListId);
+
+    public void todoListCommentModify(Long todoListId,TodoDtoListReq.todoCommentModifyReq request);
+
 }
