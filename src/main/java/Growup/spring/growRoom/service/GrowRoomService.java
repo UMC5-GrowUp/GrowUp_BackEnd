@@ -12,6 +12,7 @@ import Growup.spring.growRoom.model.component.Number;
 import Growup.spring.growRoom.model.component.Period;
 import Growup.spring.growRoom.model.component.Recruitment;
 import Growup.spring.growRoom.repository.*;
+import Growup.spring.liked.service.LikedService;
 import Growup.spring.security.JwtProvider;
 import Growup.spring.user.model.User;
 import Growup.spring.user.repository.UserRepository;
@@ -36,11 +37,22 @@ public class GrowRoomService {
     private final PeriodRepository periodRepository;
     public final GrowRoomCategoryService growRoomCategoryService;
     private final CategoryDetailConverter categoryDetailConverter;
+    private final LikedService likedService;
 
 
     // 그로우룸 글 목록 조회
     public List<GrowRoom> findAll(){
-        return growRoomRepository.findAll();
+        List<GrowRoom> growRooms = growRoomRepository.findAll();
+
+        // 좋아요 조회
+        Long userId = jwtProvider.getUserID();
+
+        for(GrowRoom growRoom : growRooms){
+            boolean isLiked = likedService.isGrowRoomLikedByUser(userId, growRoom.getId());
+//            growRoom.(isLiked);
+        }
+
+        return growRooms;
     }
 
     // 그로우룸 글 생성

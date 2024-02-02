@@ -32,6 +32,4 @@ public class LikedConverter {
                 .createdAt(liked.getCreatedAt())
                 .build();
     }
-
-
 }

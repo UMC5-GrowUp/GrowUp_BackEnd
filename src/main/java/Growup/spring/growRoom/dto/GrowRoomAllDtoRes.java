@@ -15,6 +15,7 @@ public class GrowRoomAllDtoRes {
 //    private final String liked;   // 좋아요 여부
 
     public GrowRoomAllDtoRes(GrowRoom growRoom){
+
         // 인기글
         this.recruitment_field = growRoom.getRecruitment().getField();
         this.status = growRoom.getStatus();

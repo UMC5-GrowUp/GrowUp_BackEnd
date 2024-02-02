@@ -42,7 +42,7 @@ public class LikedServiceImpl implements LikedService{
         GrowRoom growRoom = growRoomRepository.findById(growRoomId).orElseThrow(()-> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));//id로 growroom 객체를 찾음
 
 
-        Optional<Liked> existLiked = likedRepository.findByUserAndGrowRoom(user, growRoom ); //user , growRoom 을 찾아서 existLiked에 저장
+        Optional<Liked> existLiked = likedRepository.findByUserAndGrowRoom(user, growRoom); //user , growRoom 을 찾아서 existLiked에 저장
         Liked liked = Liked.builder() // liked 안에 user growroom 저장
                 .user(user)
                 .growRoom(growRoom)
@@ -118,4 +118,9 @@ public class LikedServiceImpl implements LikedService{
         return participate;
     }
 
+    // growroom 좋아요 조회 - 없다면? errorhandler 추가해야함
+    @Override
+    public boolean isGrowRoomLikedByUser(Long userId, Long growRoomId) {
+        return likedRepository.existsLikedByUserAndGrowRoom(userId, growRoomId);
+    }
 }
