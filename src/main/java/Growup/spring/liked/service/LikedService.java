@@ -13,4 +13,6 @@ public interface LikedService {
         boolean likecount(Long growRoomId);
 
         Participate likeToParticipate(Long userId , Long growRoomId , Long participateId);
+
+        boolean isGrowRoomLikedByUser(Long userId, Long growRoomId);
 }

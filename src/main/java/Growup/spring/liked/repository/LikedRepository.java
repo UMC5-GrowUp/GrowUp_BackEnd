@@ -16,6 +16,6 @@ public interface LikedRepository extends JpaRepository<Liked, Long> {
 
     List<Liked> findByGrowRoomId(Long growRoom); //like리스트를 찾는 메서드
 
-
+    boolean existsLikedByUserAndGrowRoom(Long userID, Long growRoomId);
 
 }
