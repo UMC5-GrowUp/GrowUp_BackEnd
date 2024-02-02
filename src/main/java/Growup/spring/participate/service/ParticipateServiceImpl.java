@@ -1,7 +1,6 @@
 package Growup.spring.participate.service;
 
 
-
 import Growup.spring.constant.handler.GrowRoomHandler;
 import Growup.spring.constant.status.ErrorStatus;
 import Growup.spring.growRoom.repository.GrowRoomRepository;
@@ -9,10 +8,12 @@ import Growup.spring.participate.model.Participate;
 import Growup.spring.participate.repository.ParticipateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+
 
 @Slf4j
 @Transactional
@@ -24,19 +25,20 @@ public class ParticipateServiceImpl implements ParticipateService{
     private final GrowRoomRepository growRoomRepository;
 
     @Override
-    public List<Participate> LiveupParticipateList (String filter , Long growRoomId){
+    public Page<Participate> LiveupParticipateList (String filter , Long growRoomId , Integer page ){
+        boolean existgrowroom = growRoomRepository.existsById(growRoomId);
 
-        List<Participate> list = participateRepository.findAllByGrowRoomId(growRoomId);
+        Page<Participate> list;
 
-        if(!list.isEmpty() ) {
+        if(existgrowroom) {
             if (filter.equals("Ranking")) {
-                 list = participateRepository.findAllByGrowRoomIdOrderByParticipateTimeAsc(growRoomId); //많은 시간을 참여한 순서대로 출력
+                list = participateRepository.findAllByGrowRoomIdOrderByParticipateTimeAsc(growRoomId , PageRequest.of(page,20));//많은 시간을 참여한 순서대로 출력
             } else if (filter.equals("Name")) {
-                 list = participateRepository.findAllByGrowRoomIdOrderByUser_nickNameAsc(growRoomId); // 이름 순으로 가져옴
+                list = participateRepository.findAllByGrowRoomIdOrderByUser_nickNameAsc(growRoomId , PageRequest.of(page,20)); // 이름 순으로 가져옴
             } else if (filter.equals("Liked")) {
-                 list =participateRepository.findAllByGrowRoomIdOrderByLikedAsc(growRoomId); // 관심등록이 된것들만 출력
+                list =participateRepository.findAllByGrowRoomIdOrderByLikedAsc(growRoomId , PageRequest.of(page,20)); // 관심등록이 된것들만 출력
             } else {
-                 list= participateRepository.findAllByGrowRoomIdOrderByCreatedAtDesc(growRoomId); //방에 들어온 순서대로 출력
+                list = participateRepository.findAllByGrowRoomIdOrderByCreatedAtDesc(growRoomId , PageRequest.of(page,20)); //방에 들어온 순서대로 출력
             }
         }
         else {

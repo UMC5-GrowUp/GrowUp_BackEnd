@@ -31,15 +31,9 @@ public class Participate extends BaseEntity {
     private  Integer liked;
 
     @Column(nullable = false, length = 40)
-    private  Integer is_bestup;
-
-    @Column(nullable = false, length = 40)
-    private  Integer is_50up;
-
-    @Column(nullable = false, length = 40)
     private  String status;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "participatetimeId")
     private ParticipateTime participateTime;
 

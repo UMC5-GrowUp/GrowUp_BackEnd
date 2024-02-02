@@ -1,9 +1,8 @@
 package Growup.spring.participate.service;
 
 import Growup.spring.participate.model.Participate;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface ParticipateService {
-    public List <Participate> LiveupParticipateList (String filter , Long growRoomId);
+    public Page<Participate> LiveupParticipateList (String filter , Long growRoomId , Integer page );
 }

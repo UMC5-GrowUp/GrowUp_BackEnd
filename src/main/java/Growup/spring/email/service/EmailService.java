@@ -34,13 +34,13 @@ public class EmailService {
         String authNum = getCertificationNumber();
 
         String title = "이메일 인증안내";
-        String DOMAIN_NAME = "https://dev.jojoumc.shop";
+        String DOMAIN_NAME = "http://localhost:3000";
 
         String url;
         if (text.equals("비밀번호 재설정")){
-            url = "password-verify";
+            url = "changepassword";
         }else
-            url = "verify";
+            url = "emailverify";
 
         //html 형식
         String content = generateEmailContent(text, authNum, email, DOMAIN_NAME, url);
@@ -100,12 +100,12 @@ public class EmailService {
                         "	</h1>\n" +
                         "	<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">" +
                         "		%s 님 안녕하세요.<br />" +
-                        "		GROWUP에 가입해 주셔서 진심으로 감사드립니다.<br />" +
+                        "		GROWUP에 방문 해주셔서 진심으로 감사드립니다.<br />" +
                         "		아래 <b style=\"color: #02b875\">'메일 인증'</b> 버튼을 클릭하여 %s을 완료해 주세요.<br />" +
                         "		감사합니다." +
                         "	</p>" +
                         "	<a style=\"color: #FFF; text-decoration: none; text-align: center;\"" +
-                        "	href=\"%s/growup/users/email/%s?certificationNumber=%s&email=%s\" target=\"_blank\">" +
+                        "	href=\"%s/%s?certificationNumber=%s&email=%s\" target=\"_blank\">" +
                         "		<p" +
                         "			style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #02b875; line-height: 45px; vertical-align: middle; font-size: 16px;\">" +
                         "			메일 인증</p>" +

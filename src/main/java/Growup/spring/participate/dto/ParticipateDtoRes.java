@@ -1,6 +1,8 @@
 package Growup.spring.participate.dto;
 
-import Growup.spring.domain.ParticipateTime;
+
+
+
 import lombok.*;
 
 import java.util.List;
@@ -23,12 +25,8 @@ public class ParticipateDtoRes {
     public static class participateRes {
 
         private String nickName;
-
         private Integer liked;
+        private String photoUrl;
 
-        private Integer isBestUp;
-
-        private Integer is50Up;
-        private ParticipateTime participateTime;
     }
 }
