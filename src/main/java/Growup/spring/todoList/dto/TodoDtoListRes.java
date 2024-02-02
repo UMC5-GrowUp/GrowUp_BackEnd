@@ -22,9 +22,9 @@ public class TodoDtoListRes {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class todoResultSearchRes{
+    public static class todoResultInquiryRes{
         private Long userId;
-        private List<todoSearchRes> todoListList;
+        private List<todoInquiryRes> todoListList;
     }
 
 
@@ -33,7 +33,7 @@ public class TodoDtoListRes {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class todoSearchRes{
+    public static class todoInquiryRes{
         private Long todoListId;
         private String comment;
         private TodoStatus status;

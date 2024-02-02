@@ -28,16 +28,22 @@ public class TodoListController {
 
     @ResponseBody
     @PostMapping("/enroll")
-    public ApiResponse<TodoDtoListRes.todoEnrollRes> todoListEnroll(@RequestBody TodoDtoListReq.todoEnrollReq request){
+    public ApiResponse<TodoDtoListRes.todoEnrollRes> todoListEnroll(@RequestBody @Valid TodoDtoListReq.todoEnrollReq request){
         Long userId = jwtProvider.getUserID();
         TodoList todoList = todoListService.todoListEnroll(request,userId);
         return ApiResponse.onSuccess(TodoListConverter.todoListDtoRes(todoList));
     }
 
-    @GetMapping("/today")
-    public ApiResponse<TodoDtoListRes.todoResultSearchRes> todoListSearch(){
+    @GetMapping("/inquiry")
+    public ApiResponse<TodoDtoListRes.todoResultInquiryRes> todoListInquiry(){
         Long userId = jwtProvider.getUserID();
-        return ApiResponse.onSuccess(TodoListConverter.todoResultSearchRes(userId,todoListService.todoListSearch(userId)));
+        return ApiResponse.onSuccess(TodoListConverter.todoResultInquiryRes(userId,todoListService.todoListInquiry(userId)));
+    }
+
+    @PatchMapping("/modify-comment")
+    public ApiResponse<SuccessStatus> todoListCommentModify(@RequestParam Long todoListId,@RequestBody TodoDtoListReq.todoCommentModifyReq request){
+        todoListService.todoListCommentModify(todoListId,request);
+        return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
 
     @PatchMapping("/modify-status")

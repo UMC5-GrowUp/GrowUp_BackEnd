@@ -32,16 +32,16 @@ public class TodoListConverter {
     }
 
     //todolist 조회 리스트
-    public static TodoDtoListRes.todoSearchRes todoSearchRes(TodoList todoList) {
-        return TodoDtoListRes.todoSearchRes.builder()
+    public static TodoDtoListRes.todoInquiryRes todoInquiryRes(TodoList todoList) {
+        return TodoDtoListRes.todoInquiryRes.builder()
                 .todoListId(todoList.getId())
                 .comment(todoList.getComment())
                 .status(todoList.getStatus())
                 .build();
     }
     //todolist 조회 리스트+ Userid 포함
-    public static TodoDtoListRes.todoResultSearchRes todoResultSearchRes(Long userId,List<TodoDtoListRes.todoSearchRes> todoList) {
-        return TodoDtoListRes.todoResultSearchRes.builder()
+    public static TodoDtoListRes.todoResultInquiryRes todoResultInquiryRes(Long userId,List<TodoDtoListRes.todoInquiryRes> todoList) {
+        return TodoDtoListRes.todoResultInquiryRes.builder()
                 .userId(userId)
                 .todoListList(todoList)
                 .build();
