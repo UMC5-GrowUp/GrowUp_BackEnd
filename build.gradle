@@ -44,9 +44,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 	//kurento
-	implementation 'org.kurento:kurento-client:6.18.0'
-	implementation 'org.kurento:kurento-utils-js:6.18.0'
-	testImplementation 'org.kurento:kurento-jsonrpc-server:6.18.0'
+	implementation 'org.kurento:kurento-client:7.0.0'
+	implementation 'org.kurento:kurento-utils-js:7.0.0'
+	testImplementation 'org.kurento:kurento-jsonrpc-server:7.0.0'
 
 	//gson
 	implementation 'com.google.code.gson:gson:2.9.0'
