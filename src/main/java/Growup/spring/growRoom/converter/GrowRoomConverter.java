@@ -4,7 +4,6 @@ import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.Post;
 import Growup.spring.growRoom.model.component.CategoryDetail;
 import Growup.spring.growRoom.model.component.GrowRoomCategory;
-import Growup.spring.growRoom.model.component.Recruitment;
 import Growup.spring.growRoom.repository.CategoryDetailRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +36,7 @@ public class GrowRoomConverter {
         return Post.builder()
                 .title(title)
                 .content(content)
+                .status(0)
                 .build();
     }
 }

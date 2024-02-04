@@ -32,10 +32,10 @@ public class GrowRoom extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length =40, columnDefinition = "Integer DEFAULT '0'")
+    @Column(columnDefinition = "Integer default 0", nullable = false, length =40)
     private Integer view;
 
-    @Column(nullable = false, length = 40, columnDefinition = "VARCHAR(40) DEFAULT '모집중'")
+    @Column(columnDefinition = "VARCHAR(40) DEFAULT '모집중'", nullable = false, length = 40)
     private String status;
 
 
@@ -80,11 +80,17 @@ public class GrowRoom extends BaseEntity {
         this.post = post;
     }
 
-    public void update(Recruitment recruitment, Number number, Period period, Post post){
+    public void update(Recruitment recruitment, Number number, Period period, List<GrowRoomCategory> growRoomCategories){
         this.recruitment = recruitment;
         this.number = number;
         this.period = period;
-        this.post = post;
+        this.growRoomCategoryList = growRoomCategories;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // 삭제 - status 변경
+    public void updateStatus(String status){
+        this.status = status;
         this.updatedAt = LocalDateTime.now();
     }
 }

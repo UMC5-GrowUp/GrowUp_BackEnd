@@ -37,7 +37,7 @@ public class GrowRoomDtoRes {
             this.number = growRoom.getNumber().getNumber();
             this.period = growRoom.getPeriod().getPeriod();
 
-            // GrowRoomCategory를 리스트화 해서 categoryDetail을 출력하는 로직 - null 예외
+            // GrowRoomCategory를 리스트화 해서 categoryDetail을 출력하는 로직
             List<GrowRoomCategory> growRoomCategoryList = growRoom.getGrowRoomCategoryList();
 
             if (!growRoomCategoryList.isEmpty()) {
@@ -59,7 +59,7 @@ public class GrowRoomDtoRes {
             }
 
             this.title = growRoom.getPost().getTitle();
-            this.content = growRoom.getPost().getTitle();
+            this.content = growRoom.getPost().getContent();
         }
     }
 
