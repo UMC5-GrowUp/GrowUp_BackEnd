@@ -73,25 +73,51 @@ public class GrowRoomServiceImpl implements GrowRoomService {
 
     // 그로우룸{id} 조회
     public GrowRoom findById(Long id) {
-        return growRoomRepository.findById(id)
+        GrowRoom growRoom = growRoomRepository.findById(id)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
+
+        // growroom 생성자만 삭제된 growroom에 진입 가능
+        if (growRoom.getStatus().equals("삭제") && !(growRoom.getUser().equals(userRepository.findById(jwtProvider.getUserID())
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND)))))
+            throw new GrowRoomHandler(ErrorStatus.GROWROOM_IS_DELETED);
+
+        return growRoom;
     }
 
     // 그로우룸{id} 삭제
-    public void delete(Long id) {
-        growRoomRepository.deleteById(id);
+
+    @Override
+    @Transactional
+    public void deleteTemp(Long id) {
+        GrowRoom growRoom = growRoomRepository.findById(id)
+                .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
+
+        // growroom.user, request를 보낸 user 동일한지 확인
+        User reqUser = userRepository.findById(jwtProvider.getUserID())
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_PERMITTED));
+
+        if (!growRoom.getUser().equals(reqUser))
+            throw new UserHandler(ErrorStatus.USER_NOT_PERMITTED);
+
+        growRoom.updateStatus("삭제");
     }
 
     // 그로우룸{id} 수정
     @Transactional
     public GrowRoom update(Long id, GrowRoomDtoReq.UpdateGrowRoomDtoReq request) {
+
         GrowRoom growRoom = growRoomRepository.findById(id)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
 
+        // growroom을 생성한 userId와 수정요청한 userId가 다르다면 error
+        if(!jwtProvider.getUserID().equals(growRoom.getUser().getId()))
+            throw new UserHandler(ErrorStatus.USER_NOT_PERMITTED);
+
+
+        // 이후에 growroomCategory의 growroomId와 categroyDetailId가 같다면 수정하지 않는 코드로 fix
         growRoomCategoryRepository.deleteGrowRoomCategoriesByGrowRoomId(growRoom.getId());
 
-        List<CategoryDetail> categoryDetails;
-        categoryDetails = growRoomConverter.convertToCategoryDetails(request.getCategoryDetailIds());
+        List<CategoryDetail> categoryDetails = growRoomConverter.convertToCategoryDetails(request.getCategoryDetailIds());
         List<GrowRoomCategory> growRoomCategories = growRoomCategoryServiceImpl.save(growRoom, categoryDetails);
 
         growRoom.getPost().update(request.getTitle(), request.getContent());

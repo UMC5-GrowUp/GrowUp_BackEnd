@@ -26,6 +26,7 @@ public enum ErrorStatus implements BaseErrorCode {
     USER_PASSWORD_ERROR(HttpStatus.BAD_REQUEST, "USER4006", "패스워드를 확인하세요.(최소8자,최대20자,영문자,숫자,특수문자 모두 포함되어야 합니다."),
     USER_PASSWORD_NONEQULE(HttpStatus.BAD_REQUEST, "USER4007", "비밀번호가 일치하지 않습니다."),
     USER_PASSWORD_EXIST(HttpStatus.BAD_REQUEST, "USER4008", "이전 비밀번호와 일치합니다."),
+    USER_NOT_PERMITTED(HttpStatus.FORBIDDEN, "User4009", "수정/삭제 권한이 없습니다."),
 
 
 
@@ -52,6 +53,8 @@ public enum ErrorStatus implements BaseErrorCode {
     //growroom error -> 번호 수정하길 또한 https 상태 확인 UNAUTHORIZED 이는 인증에 관한 에러
     GROWROOM_NOT_FOUND(HttpStatus.BAD_REQUEST,"GROWROOM4001","GrowRoom이 없습니다."),
     GROWROOM_NOT_HOT(HttpStatus.BAD_REQUEST,"GROWRROM4002","인기글이 아닙니다."),
+    GROWROOM_IS_DELETED(HttpStatus.BAD_REQUEST, "GROWROOM4003", "삭제된 GrowRoom입니다."),
+
 
     // recruitment error
     RECRUITMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "RECRUITMENT4001", "Recruitment가 없습니다."),

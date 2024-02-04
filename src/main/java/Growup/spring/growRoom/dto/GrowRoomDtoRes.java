@@ -59,7 +59,7 @@ public class GrowRoomDtoRes {
             }
 
             this.title = growRoom.getPost().getTitle();
-            this.content = growRoom.getPost().getTitle();
+            this.content = growRoom.getPost().getContent();
         }
     }
 

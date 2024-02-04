@@ -59,12 +59,12 @@ public class GrowRoomController {
     }
 
     /**
-     * 24.01.31 작성자 : 류기현
-     * 그로우룸 {id} 삭제
+     * 24.02.04 작성자 : 류기현
+     * 그로우룸 {id} 삭제 - 수정을 통해 상태변경 후 일정 시간 이후 삭제
      */
     @DeleteMapping("/{id}")
     public ApiResponse<SuccessStatus> deleteGrowRoom(@PathVariable Long id){
-        growRoomService.delete(id);
+        growRoomService.deleteTemp(id);
 
         return ApiResponse.onSuccess(SuccessStatus._OK);
     }

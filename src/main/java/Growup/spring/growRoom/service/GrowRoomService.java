@@ -12,7 +12,7 @@ public interface GrowRoomService {
 
     GrowRoom findById(Long id);
 
-    void delete(Long id);
+    void deleteTemp(Long id);
 
     GrowRoom update(Long id, GrowRoomDtoReq.UpdateGrowRoomDtoReq request);
 
