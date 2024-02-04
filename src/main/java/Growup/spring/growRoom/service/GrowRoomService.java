@@ -15,4 +15,6 @@ public interface GrowRoomService {
     void delete(Long id);
 
     GrowRoom update(Long id, GrowRoomDtoReq.UpdateGrowRoomDtoReq request);
+
+    int updateView(Long id);
 }

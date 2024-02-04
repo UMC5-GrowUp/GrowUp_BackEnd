@@ -28,7 +28,7 @@ public class Post extends BaseEntity {
     @Column(nullable = false, length = 500)
     private String content;
 
-    @Column(nullable = false, length = 40, columnDefinition = "Integer DEFAULT '0'")
+    @Column(columnDefinition = "Integer default '0'", nullable = false, length = 40)
     private Integer status;
 
     @OneToOne(mappedBy = "post",cascade = CascadeType.ALL)
@@ -42,5 +42,11 @@ public class Post extends BaseEntity {
 
     public void setGrowRoom(GrowRoom growRoom) {
         this.growRoom = growRoom;
+    }
+
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
+        this.updatedAt = LocalDateTime.now();
     }
 }

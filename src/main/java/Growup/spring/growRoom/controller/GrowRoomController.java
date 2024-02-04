@@ -25,7 +25,7 @@ public class GrowRoomController {
      * 그로우룸 아래 목록 조회 - 에러핸들러 해야함
      * 그로우룸 Dto res 수정
      */
-    @GetMapping("/home")
+    @GetMapping("")
     public ApiResponse<List<GrowRoomDtoRes.GrowRoomAllDtoRes>> findAllGrowRooms(){
         List<GrowRoomDtoRes.GrowRoomAllDtoRes> growRooms = growRoomService.findAll()
                 .stream()
@@ -39,7 +39,7 @@ public class GrowRoomController {
      * 24.01.31 작성자 : 류기현
      * 그로우룸 생성
      */
-    @PostMapping("/create")    // 생성
+    @PostMapping("")    // 생성
     public ApiResponse<GrowRoomDtoRes.GrowRoomViewDtoRes> addGrowRoom(@RequestBody GrowRoomDtoReq.AddGrowRoomDtoReq request){
         GrowRoom growRoom = growRoomService.save(request);
 
@@ -50,9 +50,10 @@ public class GrowRoomController {
      * 24.01.31 작성자 : 류기현
      * 그로우룸 {id} 조회
      */
-    @GetMapping("/view/{id}")
+    @GetMapping("/{id}")
     public ApiResponse<GrowRoomDtoRes.GrowRoomViewDtoRes> findGrowRoom(@PathVariable Long id){
         GrowRoom growRoom = growRoomService.findById(id);
+        growRoomService.updateView(id); // 그로우룸 조회시 조회수 증가
 
         return ApiResponse.onSuccess(new GrowRoomDtoRes.GrowRoomViewDtoRes(growRoom));
     }
@@ -61,7 +62,7 @@ public class GrowRoomController {
      * 24.01.31 작성자 : 류기현
      * 그로우룸 {id} 삭제
      */
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ApiResponse<SuccessStatus> deleteGrowRoom(@PathVariable Long id){
         growRoomService.delete(id);
 
@@ -69,10 +70,10 @@ public class GrowRoomController {
     }
 
     /**
-     * 24.01.31 작성자 : 류기현
+     * 24.02.04 작성자 : 류기현
      * 그로우룸 {id} 수정
      */
-    @PutMapping("/put/{id}")
+    @PutMapping("/{id}")
     public ApiResponse<GrowRoomDtoRes.GrowRoomViewDtoRes> updateGrowRoom(@PathVariable Long id, @RequestBody GrowRoomDtoReq.UpdateGrowRoomDtoReq request) {
         GrowRoom updatedGrowRoom = growRoomService.update(id, request);
 

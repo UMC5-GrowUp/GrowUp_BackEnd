@@ -8,6 +8,7 @@ import Growup.spring.growRoom.dto.GrowRoomDtoReq;
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.Post;
 import Growup.spring.growRoom.model.component.CategoryDetail;
+import Growup.spring.growRoom.model.component.GrowRoomCategory;
 import Growup.spring.growRoom.repository.*;
 import Growup.spring.security.JwtProvider;
 import Growup.spring.user.model.User;
@@ -16,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -62,7 +62,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         growRoom.setPeriod(periodRepository.findById(request.getPeriodId())
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PERIOD_NOT_FOUNT)));
 
-        List<CategoryDetail> categoryDetails = new ArrayList<>();
+        List<CategoryDetail> categoryDetails;
         categoryDetails = growRoomConverter.convertToCategoryDetails(request.getCategoryDetailIds());
 
         // 카테고리 리스트 저장, growRoom에 지정
@@ -88,6 +88,14 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         GrowRoom growRoom = growRoomRepository.findById(id)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
 
+        growRoomCategoryRepository.deleteGrowRoomCategoriesByGrowRoomId(growRoom.getId());
+
+        List<CategoryDetail> categoryDetails;
+        categoryDetails = growRoomConverter.convertToCategoryDetails(request.getCategoryDetailIds());
+        List<GrowRoomCategory> growRoomCategories = growRoomCategoryServiceImpl.save(growRoom, categoryDetails);
+
+        growRoom.getPost().update(request.getTitle(), request.getContent());
+
         growRoom.update(
                 recruitmentRepository.findById(request.getRecruitmentId())
                         .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.RECRUITMENT_NOT_FOUND)),
@@ -95,10 +103,15 @@ public class GrowRoomServiceImpl implements GrowRoomService {
                         .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.NUMBER_NOT_FOUND)),
                 periodRepository.findById(request.getPeriodId())
                         .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PERIOD_NOT_FOUNT)),
-                growRoomConverter.convertToPost(request.getTitle(), request.getContent())
+                growRoomCategories
         );
 
 
         return growRoom;
+    }
+
+    @Override
+    public int updateView(Long id) {
+        return growRoomRepository.updateView(id);
     }
 }
