@@ -70,8 +70,11 @@ public enum ErrorStatus implements BaseErrorCode {
     PARTICIPATE_NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "PARTICIPATE4100","방장만 좋아요가 가능 합니다."),
 
     //todolist 관련 에러코드(4041~
-    TODOLIST_NOT_FOUND(HttpStatus.BAD_REQUEST, "TODOLIST4041", "등록되지 않은 todolist 입니다.")
+    TODOLIST_NOT_FOUND(HttpStatus.BAD_REQUEST, "TODOLIST4041", "등록되지 않은 TODOLIST 입니다."),
 
+
+    //calender 관련 에러코드(4051~
+    CALENDER_NOT_FOUND(HttpStatus.BAD_REQUEST, "CALENDER4051", "등록되지 않은 CALENDER 글 입니다.")
     ;
 
 

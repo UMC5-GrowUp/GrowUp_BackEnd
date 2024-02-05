@@ -17,6 +17,6 @@ public interface TodoListService {
 
     void modifyservice(Long todoListId);
 
-    public void todoListCommentModify(Long todoListId,TodoDtoListReq.todoCommentModifyReq request);
+    void todoListCommentModify(Long todoListId,TodoDtoListReq.todoCommentModifyReq request);
 
 }
