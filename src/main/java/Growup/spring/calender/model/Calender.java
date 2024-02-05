@@ -30,10 +30,6 @@ public class Calender extends BaseEntity {
     private LocalDate day;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'WHITE'")
-    private CalenderColor color;
-
-    @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
     private CalenderStatus status;
 
