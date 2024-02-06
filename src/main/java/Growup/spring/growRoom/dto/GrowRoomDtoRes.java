@@ -2,7 +2,7 @@ package Growup.spring.growRoom.dto;
 
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.component.GrowRoomCategory;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
@@ -84,5 +84,40 @@ public class GrowRoomDtoRes {
             this.view = growRoom.getView();
             // 좋아요 여부
         }
+    }
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class postinquiryRes {
+
+        private String title;
+        private String content;
+        private String photoUrl;
+        private String category;
+    }
+
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class growRoominquiryRes{
+        private boolean liked;
+        private Integer upliked;
+        private Integer view;
+        private String finaldate;
+        private String title;
+    }
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class orderBy {
+        List<GrowRoomDtoRes.growRoominquiryRes> growRoominquiryResList; //participateRes를 가져옴
+
     }
 }
