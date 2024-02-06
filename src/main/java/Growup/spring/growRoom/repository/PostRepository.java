@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Override
     Optional<Post> findById(Long id);
+
+    Post findByGrowRoomId(Long growRoomId);
 }

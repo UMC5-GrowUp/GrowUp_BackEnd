@@ -10,6 +10,7 @@ import Growup.spring.liked.repository.LikedRepository;
 import Growup.spring.liked.service.LikedService;
 
 import Growup.spring.participate.model.Participate;
+import Growup.spring.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -24,22 +25,22 @@ import org.springframework.web.bind.annotation.*;
 public class LikedController {
         private final LikedService likedService;
         private final LikedRepository likedRepository;
+        private final JwtProvider jwtProvider;
 
 
 
         //그로우룸 & 라이브룸 좋아요 설정
         @PostMapping("/liked")
-        public ApiResponse<LikedDtoRes.LikedRes> doLike(@RequestParam (name = "userId") Long user,
-                                                        @RequestParam (name = "growRoomId")Long growRoom ) {
+        public ApiResponse<LikedDtoRes.LikedRes> doLike(@RequestParam (name = "growRoomId")Long growRoom ) {
+                Long user = jwtProvider.getUserID();
                 Liked liked = likedService.doLike(user , growRoom );
                 return ApiResponse.onSuccess(LikedConverter.tolikedRes(liked));
         }
 
         //그로우룸 & 라이브룸 좋아요 설정 해제
         @PostMapping("/unliked")
-        public ApiResponse<LikedDtoRes.unLikedRes> unLike(@RequestParam (name = "userId") Long user ,
-                                          @RequestParam (name = "growRoomId") Long growRoom ) {
-
+        public ApiResponse<LikedDtoRes.unLikedRes> unLike(@RequestParam (name = "growRoomId") Long growRoom ) {
+                Long user = jwtProvider.getUserID();
                 boolean result = likedService.unLike(user,growRoom );
 
                 if (result){
@@ -65,8 +66,8 @@ public class LikedController {
         //liveRoom내에 (방장만)좋아요 설정
         @PostMapping("/liveRoomliked")
         public ApiResponse<LikedDtoRes.LiveRoomlikeRes> liveRoomLike(@RequestParam (name = "growRoomId") Long growRoomId ,
-                                                                     @RequestParam (name = "userId")Long userId ,
                                                                      @RequestParam (name = "participateId")Long participateId ){
+                Long userId = jwtProvider.getUserID();
                 Participate participate =likedService.likeToParticipate(userId,growRoomId,participateId);
                 return ApiResponse.onSuccess(LikedConverter.toliveRoomlikeRes(participate));
         }

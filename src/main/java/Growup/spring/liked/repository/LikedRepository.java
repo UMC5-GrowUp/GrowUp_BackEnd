@@ -18,4 +18,6 @@ public interface LikedRepository extends JpaRepository<Liked, Long> {
 
     boolean existsLikedByUserAndGrowRoom(Long userID, Long growRoomId);
 
+    List<Liked> findByuserId(Long userId);
+
 }

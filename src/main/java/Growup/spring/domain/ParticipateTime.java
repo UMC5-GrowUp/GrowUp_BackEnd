@@ -10,6 +10,8 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,8 +31,8 @@ public class ParticipateTime extends BaseEntity {
 
     private LocalDateTime endTime;
 
-    @OneToOne(mappedBy = "participateTime")
-    private Participate participate;
+    @OneToMany(mappedBy = "participateTime", cascade = CascadeType.ALL)
+    private List<Participate> participateList = new ArrayList<>();
 
 
 }

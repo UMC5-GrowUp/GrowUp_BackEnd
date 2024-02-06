@@ -46,14 +46,14 @@ public enum ErrorStatus implements BaseErrorCode {
     FILE_CHANGE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ERROR5004", "파일 전환이 실패되었습니다."),
 
 
-    //liked error -> 번호 수정하길 그리고 대문자
-    LIKED_NOT_FOUND(HttpStatus.NOT_FOUND,"Liked4001","liked에 해당 아이디가 없습니다."),
+    //liked error -> 4010~
+    LIKED_NOT_FOUND(HttpStatus.NOT_FOUND,"LIKED4011","liked에 해당 아이디가 없습니다."),
 
 
-    //growroom error -> 번호 수정하길 또한 https 상태 확인 UNAUTHORIZED 이는 인증에 관한 에러
-    GROWROOM_NOT_FOUND(HttpStatus.BAD_REQUEST,"GROWROOM4001","GrowRoom이 없습니다."),
-    GROWROOM_NOT_HOT(HttpStatus.BAD_REQUEST,"GROWRROM4002","인기글이 아닙니다."),
-    GROWROOM_IS_DELETED(HttpStatus.BAD_REQUEST, "GROWROOM4003", "삭제된 GrowRoom입니다."),
+    //growroom error -> 4020~
+    GROWROOM_NOT_FOUND(HttpStatus.BAD_REQUEST,"GROWROOM4021","GrowRoom이 없습니다."),
+    GROWROOM_NOT_HOT(HttpStatus.BAD_REQUEST,"GROWRROM4022","인기글이 아닙니다."),
+    GROWROOM_IS_DELETED(HttpStatus.BAD_REQUEST, "GROWROOM4023", "삭제된 GrowRoom입니다."),
 
 
     // recruitment error
@@ -65,9 +65,9 @@ public enum ErrorStatus implements BaseErrorCode {
     // period error
     PERIOD_NOT_FOUNT(HttpStatus.BAD_REQUEST, "PERIOD4001", "period가 없습니다."),
 
-    //participate error error -> 번호 수정하길  또한 https 상태 확인 UNAUTHORIZED 이는 인증에 관한 에러
-    PARTICIPATE_NOT_FOUND(HttpStatus.UNAUTHORIZED,"PARTICIPATE4001","Participate가 없습니다."),
-    PARTICIPATE_NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "PARTICIPATE4100","방장만 좋아요가 가능 합니다."),
+    //participate error error -> 4030~
+    PARTICIPATE_NOT_FOUND(HttpStatus.BAD_REQUEST,"PARTICIPATE4031","Participate가 없습니다."),
+    PARTICIPATE_NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "PARTICIPATE4032","방장만 좋아요가 가능 합니다."),
 
     //todolist 관련 에러코드(4041~
     TODOLIST_NOT_FOUND(HttpStatus.BAD_REQUEST, "TODOLIST4041", "등록되지 않은 TODOLIST 입니다."),

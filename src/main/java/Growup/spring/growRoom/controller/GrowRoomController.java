@@ -2,11 +2,15 @@ package Growup.spring.growRoom.controller;
 
 import Growup.spring.constant.ApiResponse;
 import Growup.spring.constant.status.SuccessStatus;
+import Growup.spring.growRoom.converter.GrowRoomConverter;
 import Growup.spring.growRoom.dto.GrowRoomDtoReq;
 import Growup.spring.growRoom.dto.GrowRoomDtoRes;
 import Growup.spring.growRoom.model.GrowRoom;
+import Growup.spring.growRoom.model.Post;
 import Growup.spring.growRoom.service.GrowRoomService;
+import Growup.spring.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 public class GrowRoomController {
 
     private final GrowRoomService growRoomService;
+    private final JwtProvider jwtProvider;
 
 
     /**
@@ -78,5 +83,29 @@ public class GrowRoomController {
         GrowRoom updatedGrowRoom = growRoomService.update(id, request);
 
         return ApiResponse.onSuccess(new GrowRoomDtoRes.GrowRoomViewDtoRes(updatedGrowRoom));
+    }
+
+    //조회수 증가
+    @PatchMapping ("/viewincrease")
+    public ApiResponse<SuccessStatus> increaseview(@RequestParam Long growRoomId){
+        growRoomService.viewincrease(growRoomId);
+        return ApiResponse.onSuccess(SuccessStatus._OK);
+    }
+    //소개글 조회
+    @GetMapping("/post")
+    public ApiResponse<GrowRoomDtoRes.postinquiryRes> postinquiry (@RequestParam(name = "growRoomId" ) Long growRoomId){
+        Post post = growRoomService.inquirypost(growRoomId);
+        return ApiResponse.onSuccess(GrowRoomConverter.inquirypost(post));
+    }
+
+
+    //그로우룸 특성별로 조회
+    @GetMapping("/growRoominquiry")
+    public ApiResponse<GrowRoomDtoRes.orderBy> growRoominquiry (@RequestParam(name = "filter",defaultValue = "전체") String filter ,
+                                                                @RequestParam(name = "page") Integer page){
+        Long userId = jwtProvider.getUserID();
+        Page<GrowRoom> growRooms =growRoomService.GrowRoomList(filter,userId,page);
+        return ApiResponse.onSuccess(GrowRoomConverter.orderByDto(growRooms.getContent()));
+
     }
 }

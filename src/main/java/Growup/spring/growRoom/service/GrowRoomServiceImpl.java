@@ -10,14 +10,21 @@ import Growup.spring.growRoom.model.Post;
 import Growup.spring.growRoom.model.component.CategoryDetail;
 import Growup.spring.growRoom.model.component.GrowRoomCategory;
 import Growup.spring.growRoom.repository.*;
+import Growup.spring.liked.model.Liked;
+import Growup.spring.liked.repository.LikedRepository;
+import Growup.spring.participate.model.Participate;
+import Growup.spring.participate.repository.ParticipateRepository;
 import Growup.spring.security.JwtProvider;
 import Growup.spring.user.model.User;
 import Growup.spring.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -32,6 +39,8 @@ public class GrowRoomServiceImpl implements GrowRoomService {
     private final PeriodRepository periodRepository;
     public final GrowRoomCategoryServiceImpl growRoomCategoryServiceImpl;
     public final GrowRoomConverter growRoomConverter;
+    private final ParticipateRepository participateRepository;
+    private final LikedRepository likedRepository;
 
 
     // 그로우룸 글 목록 조회
@@ -139,5 +148,64 @@ public class GrowRoomServiceImpl implements GrowRoomService {
     @Override
     public int updateView(Long id) {
         return growRoomRepository.updateView(id);
+    }
+
+    //조회수 증가
+    @Transactional //트랜잭션이란 데이터베이스의 상태를 변경하는 작업 또는 한번에 수행되어야 하는 연산들을 의미한다.
+    @Override
+    public int viewincrease(Long growRoomId) {
+        return growRoomRepository.increaseViews(growRoomId);
+    }
+
+
+    //라이브룸 선택시 조회 되게 하는것
+    @Override
+    public Post inquirypost(Long growRoomId) {
+        Post post = postRepository.findByGrowRoomId(growRoomId);
+        return post;
+    }
+
+
+    //그로우룸 조회
+    @Override
+    public Page<GrowRoom> GrowRoomList(String filter, Long userId, Integer page) {
+        User existuser = userRepository.findById(userId).get();
+
+
+
+        List<Participate> participateList = participateRepository.findByUserId(userId); //유저 아이디를 통해 참여자 리스트를 가져옴
+        List<Long> growRoomIds1 = participateList.stream() //해당 리스트들을 통해 그로우룸 아이디를 가져옴
+                .map(participate -> participate.getGrowRoom().getId())
+                .collect(Collectors.toList());
+
+        List<Liked> likedList = likedRepository.findByuserId(userId);
+        List<Long> growRoomIds2 = likedList.stream()
+                .map(liked -> liked.getGrowRoom().getId())
+                .collect(Collectors.toList());
+
+
+        Page<GrowRoom> list ;
+
+
+
+        if (existuser != null) {
+            if (filter.equals("내모집글")) {
+                list = growRoomRepository.findAllByUserId(userId, PageRequest.of(page, 16));
+            }
+            else if (filter.equals("참여글")) {
+                list = growRoomRepository.findAllByIdIn(growRoomIds1, PageRequest.of(page, 16)); // //그로우룸 아이디를 통해 객체를 가져옴
+            }
+            else if (filter.equals("관심글")) {
+                list = growRoomRepository.findAllByIdIn(growRoomIds2, PageRequest.of(page, 16)); // //그로우룸 아이디를 통해 객체를 가져옴
+            }
+            else {
+                list = growRoomRepository.findAllBy(PageRequest.of(page, 16));
+            }
+        }
+        else {
+            throw new UserHandler(ErrorStatus.USER_NOT_FOUND);
+        }
+
+        return list;
     }
 }
