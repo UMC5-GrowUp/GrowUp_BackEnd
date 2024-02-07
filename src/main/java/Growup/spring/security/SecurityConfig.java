@@ -47,7 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             return config;
         };
     }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
