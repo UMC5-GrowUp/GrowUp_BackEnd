@@ -4,7 +4,10 @@ import Growup.spring.calender.converter.CalenderConverter;
 import Growup.spring.calender.dto.CalenderDtoReq;
 import Growup.spring.calender.dto.CalenderDtoRes;
 import Growup.spring.calender.model.Calender;
+import Growup.spring.calender.model.CalenderColor;
+import Growup.spring.calender.model.Enum.CalenderColorStatus;
 import Growup.spring.calender.model.Enum.CalenderStatus;
+import Growup.spring.calender.repository.CalenderColorRepository;
 import Growup.spring.calender.repository.CalenderRepository;
 import Growup.spring.constant.handler.CalenderHandler;
 import Growup.spring.constant.handler.UserHandler;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,6 +31,7 @@ import java.util.stream.Collectors;
 public class CalenderServiceimpl implements CalenderService{
     private final UserRepository userRepository;
     private final CalenderRepository calenderRepository;
+    private final CalenderColorRepository calenderColorRepository;
 
     @Override
     //캘린더 등록
@@ -46,7 +51,16 @@ public class CalenderServiceimpl implements CalenderService{
                 .map(CalenderConverter::calenderInquiryRes)
                 .collect(Collectors.toList());
 
-        return CalenderConverter.calenderInquiryResultRes(userId,day,calenderInquiryResList);
+        CalenderColor calenderColor = calenderColorRepository.findByUserAndDay(user,day);
+
+
+        if(calenderColor != null){
+            CalenderColorStatus color = calenderColor.getColor();
+            return CalenderConverter.calenderInquiryResultRes(userId,day,color,calenderInquiryResList);
+        }else{
+            CalenderColorStatus color = CalenderColorStatus.WHITE;
+            return CalenderConverter.calenderInquiryResultRes(userId,day,color,calenderInquiryResList);
+        }
 
     }
 
@@ -62,6 +76,11 @@ public class CalenderServiceimpl implements CalenderService{
         LocalDate startOfMonth = parseDay.withDayOfMonth(1);
         LocalDate endOfMonth = YearMonth.from(parseDay).atEndOfMonth();
 
+        // 해당 유저와 날짜에 해당하는 캘린더 컬러 조회
+        Map<LocalDate, CalenderColorStatus> calenderColors = calenderColorRepository.findByUserAndDayBetween(user, startOfMonth, endOfMonth)
+                .stream()
+                .collect(Collectors.toMap(CalenderColor::getDay, CalenderColor::getColor));
+
         List<CalenderDtoRes.calenderInquiryRes> calenderInquiryResList = calenderRepository.findByUser(user).stream()
                 .filter(calenderList -> !calenderList.getDay().isBefore(startOfMonth) && !calenderList.getDay().isAfter(endOfMonth))
                 .map(CalenderConverter::calenderInquiryRes)
@@ -71,9 +90,12 @@ public class CalenderServiceimpl implements CalenderService{
         Map<LocalDate, List<CalenderDtoRes.calenderInquiryRes>> groupedByDay = calenderInquiryResList.stream()
                 .collect(Collectors.groupingBy(CalenderDtoRes.calenderInquiryRes::getDay));
 
-
-        List<CalenderDtoRes.calenderMonthInquiryRes> calenderMonthInquiryResList =parseDay.datesUntil(parseDay.plusMonths(1))
-                .map(date ->CalenderConverter.calenderMonthInquiryRes(date,groupedByDay))
+        List<CalenderDtoRes.calenderMonthInquiryRes> calenderMonthInquiryResList = parseDay.datesUntil(parseDay.plusMonths(1))
+                .map(date -> {
+                    List<CalenderDtoRes.calenderInquiryRes> inquiryResList = groupedByDay.getOrDefault(date, new ArrayList<>());
+                    CalenderColorStatus color = calenderColors.getOrDefault(date, CalenderColorStatus.WHITE);
+                    return CalenderConverter.calenderMonthInquiryRes(date,color,inquiryResList);
+                })
                 .collect(Collectors.toList());
 
         // 결과 생성
@@ -116,4 +138,27 @@ public class CalenderServiceimpl implements CalenderService{
         calenderRepository.deleteById(calenderId);
     }
 
+    @Override
+    //캘린더 색상 변경
+    public void calenderColorModify(Long userId,CalenderDtoReq.calenderColorModify request){
+        User user = userRepository.findById(userId).orElseThrow(()->new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        CalenderColor calenderColor = calenderColorRepository.findByUserAndDay(user,request.getDay());
+
+
+        if(request.getColor()== CalenderColorStatus.WHITE) {
+            if (calenderColor != null) {
+                calenderColorRepository.delete(calenderColor);
+            }
+        }
+        else{
+            if (calenderColor != null) {
+                calenderColor.setColor(request.getColor());
+                calenderColorRepository.save(calenderColor);
+            }
+            else{
+                calenderColorRepository.save(CalenderConverter.toCalenderColor(user,request));
+            }
+        }
+    }
 }

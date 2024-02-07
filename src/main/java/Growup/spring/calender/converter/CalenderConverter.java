@@ -3,6 +3,8 @@ package Growup.spring.calender.converter;
 import Growup.spring.calender.dto.CalenderDtoReq;
 import Growup.spring.calender.dto.CalenderDtoRes;
 import Growup.spring.calender.model.Calender;
+import Growup.spring.calender.model.CalenderColor;
+import Growup.spring.calender.model.Enum.CalenderColorStatus;
 import Growup.spring.user.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,19 +48,21 @@ public class CalenderConverter {
     }
 
     //캘린더 특정 날짜 조회 응답
-    public static CalenderDtoRes.calenderInquiryResultRes calenderInquiryResultRes(Long userId, LocalDate day, List<CalenderDtoRes.calenderInquiryRes> calenderInquiryRes){
+    public static CalenderDtoRes.calenderInquiryResultRes calenderInquiryResultRes(Long userId, LocalDate day, CalenderColorStatus color, List<CalenderDtoRes.calenderInquiryRes> calenderInquiryRes){
         return CalenderDtoRes.calenderInquiryResultRes.builder()
                 .userId(userId)
                 .day(day)
+                .color(color)
                 .calenderInquiryLists(calenderInquiryRes)
                 .build();
     }
 
     //캘린더 특정 달 조회 - 특정 날짜 리스트화+날짜
-    public static CalenderDtoRes.calenderMonthInquiryRes calenderMonthInquiryRes(LocalDate date, Map<LocalDate, List<CalenderDtoRes.calenderInquiryRes>> groupedByDay){
+    public static CalenderDtoRes.calenderMonthInquiryRes calenderMonthInquiryRes(LocalDate date, CalenderColorStatus color, List<CalenderDtoRes.calenderInquiryRes> inquiryResList){
         return CalenderDtoRes.calenderMonthInquiryRes.builder()
                 .day(date)
-                .calenderInquiryLists(groupedByDay.getOrDefault(date, List.of()))
+                .color(color)
+                .calenderInquiryLists(inquiryResList)
                 .build();
     }
 
@@ -67,6 +71,15 @@ public class CalenderConverter {
         return CalenderDtoRes.calenderMonthInquiryResultRes.builder()
                 .userId(userId)
                 .calenderMonthInquiryLists(calenderMonthInquiryResList)
+                .build();
+    }
+
+    //캘린더 날짜 객체 생성
+    public static CalenderColor toCalenderColor(User user,CalenderDtoReq.calenderColorModify request){
+        return CalenderColor.builder()
+                .user(user)
+                .day(request.getDay())
+                .color(request.getColor())
                 .build();
     }
 

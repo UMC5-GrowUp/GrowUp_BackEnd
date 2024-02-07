@@ -19,4 +19,6 @@ public interface CalenderService {
     void calenderStatusModify(Long calenderId);
 
     void calenderDelete(Long calenderId);
+
+    void calenderColorModify(Long userId,CalenderDtoReq.calenderColorModify request);
 }

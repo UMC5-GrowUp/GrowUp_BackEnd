@@ -1,11 +1,11 @@
 package Growup.spring.calender.dto;
 
+import Growup.spring.calender.model.Enum.CalenderColorStatus;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
 
 public class CalenderDtoReq {
 
@@ -23,6 +23,14 @@ public class CalenderDtoReq {
         private Long calenderId;
         @NotBlank
         private String comment;
+    }
+
+    @Getter
+    public static class calenderColorModify{
+        @NotNull
+        private LocalDate day;
+        @NotNull
+        private CalenderColorStatus color;
     }
 
 

@@ -3,7 +3,7 @@ package Growup.spring.user.model;
 
 
 import Growup.spring.calender.model.Calender;
-import Growup.spring.domain.*;
+import Growup.spring.calender.model.CalenderColor;
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.liked.model.Liked;
 import Growup.spring.participate.model.Participate;
@@ -77,7 +77,10 @@ public class User extends BaseEntity {
     private List<TodoList> todoLists = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Calender> Calender = new ArrayList<>();
+    private List<Calender> calenderList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CalenderColor> calenderColorList = new ArrayList<>();
 
 
     @PreUpdate

@@ -66,15 +66,16 @@ public class CalenderController {
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
 
-/*
+
     //목록 색깔 수정
     @PatchMapping("color-modify")
-    public ApiResponse<SuccessStatus> calenderColorModify(@RequestParam Long calenderId){
-         calenderService.calenderColorModify(calenderId);
+    public ApiResponse<SuccessStatus> calenderColorModify(@RequestBody @Valid CalenderDtoReq.calenderColorModify request){
+        Long userId = jwtProvider.getUserID();
+         calenderService.calenderColorModify(userId,request);
          return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
 
- */
+
 
     //목록 삭제
     @DeleteMapping("/delete")

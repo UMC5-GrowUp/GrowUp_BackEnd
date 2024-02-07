@@ -1,6 +1,6 @@
 package Growup.spring.calender.dto;
 
-import Growup.spring.calender.model.Enum.CalenderColor;
+import Growup.spring.calender.model.Enum.CalenderColorStatus;
 import Growup.spring.calender.model.Enum.CalenderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +32,7 @@ public class CalenderDtoRes {
     public static class calenderInquiryResultRes{
         private Long userId;
         private LocalDate day;
+        private CalenderColorStatus color;
         private List<calenderInquiryRes> calenderInquiryLists;
     }
 
@@ -54,6 +55,7 @@ public class CalenderDtoRes {
     @AllArgsConstructor
     public static class calenderMonthInquiryRes{
         private LocalDate day;
+        private CalenderColorStatus color;
         private List<calenderInquiryRes> calenderInquiryLists;
     }
 
