@@ -1,11 +1,12 @@
 package Growup.spring.calender.model;
 
-import Growup.spring.calender.model.Enum.CalenderStatus;
+import Growup.spring.calender.model.Enum.CalenderColorStatus;
 import Growup.spring.constant.entity.BaseEntity;
 import Growup.spring.user.model.User;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -18,19 +19,16 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Calender extends BaseEntity {
+public class CalenderColor extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
-
-    private String comment;
+    private Long id;
 
     private LocalDate day;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
-    private CalenderStatus status;
+    private CalenderColorStatus color;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="userId")
