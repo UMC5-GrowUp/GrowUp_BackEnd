@@ -4,11 +4,13 @@ import Growup.spring.constant.handler.GrowRoomHandler;
 import Growup.spring.constant.handler.UserHandler;
 import Growup.spring.constant.status.ErrorStatus;
 import Growup.spring.growRoom.converter.GrowRoomConverter;
+import Growup.spring.growRoom.converter.RecruitmentPeriodConverter;
 import Growup.spring.growRoom.dto.GrowRoomDtoReq;
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.Post;
 import Growup.spring.growRoom.model.component.CategoryDetail;
 import Growup.spring.growRoom.model.component.GrowRoomCategory;
+import Growup.spring.growRoom.model.component.RecruitmentPeriod;
 import Growup.spring.growRoom.repository.*;
 import Growup.spring.liked.model.Liked;
 import Growup.spring.liked.repository.LikedRepository;
@@ -41,6 +43,8 @@ public class GrowRoomServiceImpl implements GrowRoomService {
     public final GrowRoomConverter growRoomConverter;
     private final ParticipateRepository participateRepository;
     private final LikedRepository likedRepository;
+    private final RecruitmentPeriodConverter recruitmentPeriodConverter;
+    private final RecruitmentPeriodRepository recruitmentPeriodRepository;
 
 
     // 그로우룸 글 목록 조회
@@ -62,6 +66,10 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         Post post = growRoomConverter.convertToPost(request.getTitle(), request.getContent());
         postRepository.save(post);
         growRoom.setPost(post);
+
+        RecruitmentPeriod recruitmentPeriod = recruitmentPeriodConverter.convertToRecruitmentPeriod(request.getStartDate(), request.getEndDate());
+        recruitmentPeriodRepository.save(recruitmentPeriod);
+        growRoom.setRecruitmentPeriod(recruitmentPeriod);
 
         // errorHandler 만들어야함.
         growRoom.setRecruitment(recruitmentRepository.findById(request.getRecruitmentId())
@@ -130,6 +138,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         List<GrowRoomCategory> growRoomCategories = growRoomCategoryServiceImpl.save(growRoom, categoryDetails);
 
         growRoom.getPost().update(request.getTitle(), request.getContent());
+        growRoom.getRecruitmentPeriod().update(request.getStartDate(), request.getEndDate());
 
         growRoom.update(
                 recruitmentRepository.findById(request.getRecruitmentId())

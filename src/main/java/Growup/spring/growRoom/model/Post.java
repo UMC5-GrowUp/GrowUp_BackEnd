@@ -34,12 +34,6 @@ public class Post extends BaseEntity {
     @OneToOne(mappedBy = "post",cascade = CascadeType.ALL)
     private GrowRoom growRoom;
 
-    @Builder    // 빌더 패턴으로 객체 생성
-    public Post(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
     public void setGrowRoom(GrowRoom growRoom) {
         this.growRoom = growRoom;
     }

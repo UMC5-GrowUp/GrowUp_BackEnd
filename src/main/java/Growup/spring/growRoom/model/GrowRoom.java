@@ -2,10 +2,8 @@ package Growup.spring.growRoom.model;
 
 
 import Growup.spring.constant.entity.BaseEntity;
-import Growup.spring.growRoom.model.component.GrowRoomCategory;
+import Growup.spring.growRoom.model.component.*;
 import Growup.spring.growRoom.model.component.Number;
-import Growup.spring.growRoom.model.component.Period;
-import Growup.spring.growRoom.model.component.Recruitment;
 import Growup.spring.liked.model.Liked;
 import Growup.spring.participate.model.Participate;
 import Growup.spring.user.model.User;
@@ -69,6 +67,10 @@ public class GrowRoom extends BaseEntity {
     private Period period;
 
     @OneToOne
+    @JoinColumn(name = "recruitmentPeriodId")
+    private RecruitmentPeriod recruitmentPeriod;
+
+    @OneToOne
     @JoinColumn(name = "postId")
     private Post post;
 
@@ -77,6 +79,7 @@ public class GrowRoom extends BaseEntity {
         this.recruitment = recruitment;
         this.number = number;
         this.period = period;
+//        this.recruitmentPeriod = recruitmentPeriod;
         this.post = post;
     }
 
@@ -84,6 +87,7 @@ public class GrowRoom extends BaseEntity {
         this.recruitment = recruitment;
         this.number = number;
         this.period = period;
+//        this.recruitmentPeriod = recruitmentPeriod;
         this.growRoomCategoryList = growRoomCategories;
         this.updatedAt = LocalDateTime.now();
     }

@@ -4,6 +4,7 @@ import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.component.GrowRoomCategory;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -20,6 +21,8 @@ public class GrowRoomDtoRes {
         private final String recruitment_field;
         private final Integer number;
         private final String period;
+        private final LocalDate startDate;
+        private final LocalDate endDate;
 
         // category - 최대 3개
         private final String categoryListDetail0;
@@ -36,6 +39,8 @@ public class GrowRoomDtoRes {
             this.recruitment_field = growRoom.getRecruitment().getField();
             this.number = growRoom.getNumber().getNumber();
             this.period = growRoom.getPeriod().getPeriod();
+            this.startDate = growRoom.getRecruitmentPeriod().getStartDate();
+            this.endDate = growRoom.getRecruitmentPeriod().getEndDate();
 
             // GrowRoomCategory를 리스트화 해서 categoryDetail을 출력하는 로직
             List<GrowRoomCategory> growRoomCategoryList = growRoom.getGrowRoomCategoryList();
