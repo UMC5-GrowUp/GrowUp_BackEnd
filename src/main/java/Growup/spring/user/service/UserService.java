@@ -34,6 +34,11 @@ public interface UserService {
     User photoChange(MultipartFile photoImage, Long userId);
     void changeNickname(String nickName,Long userId);
 
+    void checkNickDuplication(String nickName);
+
+    void validatePassword(String password);
+
+    void validateEmail(String email);
 
 
 

@@ -291,23 +291,26 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
     // 비밀번호 정규식 확인 함수
-    private void validatePassword(String password) {
+    public void validatePassword(String password) {
         Pattern pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,20}$");
         Matcher matcher = pattern.matcher(password);
         if (!matcher.matches()) {
             throw new UserHandler(ErrorStatus.USER_PASSWORD_ERROR);
         }
     }
+    @Override
 
     // 이메일 정규식 확인 함수
-    private void validateEmail(String email){
+    public void validateEmail(String email){
         Pattern pattern = Pattern.compile("^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$");
         Matcher matcher = pattern.matcher(email);
         if (!matcher.matches()){
             throw new UserHandler(ErrorStatus.USER_EMAIL_ERROR);
         }
     }
+    @Override
     // 닉네임 중복 확인
     public void checkNickDuplication(String nickName){
         if (userRepository.existsByNickName(nickName)){
