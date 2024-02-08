@@ -30,14 +30,9 @@ public class ApiResponse<T> {
         return new ApiResponse<>(true, SuccessStatus._OK.getCode() , SuccessStatus._OK.getMessage(), null);
     }
 
-//    public static <T> ApiResponse<T> of(BaseCode code, T result){
-    //        return new ApiResponse<>(true, code.getReasonHttpStatus().getCode() , code.getReasonHttpStatus().getMessage(), result);
-//    }
-
-
 
     // 실패한 경우 응답 생성
     public static <T> ApiResponse<T> onFailure(String code, String message, T data){
-        return new ApiResponse<>(false, code, message, data);
+        return new ApiResponse<>(false, SuccessStatus._OK.getCode(), message, data);
     }
 }
