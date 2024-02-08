@@ -20,10 +20,9 @@ import java.util.stream.Collectors;
 @RestController             //http response body에 객체 데이터를 json 반환
 @RequestMapping("/growup/growroom")
 public class GrowRoomController {
-
+    // 그로우룸 GrowRoom
     private final GrowRoomService growRoomService;
     private final JwtProvider jwtProvider;
-
 
     /**
      * 24.02.02 작성자 : 류기현

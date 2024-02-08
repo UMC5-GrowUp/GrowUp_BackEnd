@@ -1,8 +1,8 @@
 spring:
     datasource:
-        url: ${AWS_RDS_URL}
-        username: ${AWS_RDS_USERNAME}
-        password: ${AWS_RDS_PASSWORD}
+        url: jdbc:mysql://growup-db.ctm0qk0u2wwh.ap-northeast-2.rds.amazonaws.com:3306/growup
+        username: root
+        password: growupbe
         driver-class-name: com.mysql.cj.jdbc.Driver
     sql:
         init:
@@ -17,15 +17,14 @@ spring:
                 hbm2ddl:
                     auto: update
                 default_batch_fetch_size: 1000
-
     redis:
-        host: ${REDIS_HOSTNAME}
-        port: ${REDIS_PORT}
+        host: localhost
+        port: 6379
     mail:
         host: smtp.naver.com
         port: 465
-        username: ${MAIL_NAME}
-        password: ${MAIL_PASSWORD}
+        username: wngus000507@naver.com
+        password: wngus1234@
         properties:
             mail:
                 smtp:
@@ -41,8 +40,8 @@ cloud:
         s3:
             bucket: growupbarket
         credentials:
-            access-key: ${ACCESS_KEY}
-            secret-key: ${SECRET_KEY}
+            access-key: AKIAZH5YHGBIW5TCY5HK
+            secret-key: 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
         region:
             static: ap-northeast-2
             auto: false
@@ -58,7 +57,7 @@ logging:
 
 jwt:
     secret:
-        key: ${JWT_KEY}
+        key: 0186a58ec5ee28e0f073d19fded854e58e9ab2410fd2e128e606345b902212f3
 
 kms:
-    url: ${KMS_KEY}
+    url: wss://test-ubuntudb.shop/kurento

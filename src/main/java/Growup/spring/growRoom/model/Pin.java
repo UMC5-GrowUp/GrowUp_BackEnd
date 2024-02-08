@@ -8,11 +8,13 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @DynamicUpdate
 @DynamicInsert
 @Builder
@@ -40,4 +42,9 @@ public class Pin extends BaseEntity {
 
     @OneToMany(mappedBy = "pin", cascade = CascadeType.ALL)
     private List<PinComment> pinCommentList = new ArrayList<>();
+
+    public void update(String comment){
+        this.comment = comment;
+        this.updatedAt = LocalDateTime.now();
+    }
 }
