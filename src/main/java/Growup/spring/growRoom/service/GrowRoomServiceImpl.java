@@ -69,7 +69,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         growRoom.setNumber(numberRepository.findById(request.getNumberId())
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.NUMBER_NOT_FOUND)));
         growRoom.setPeriod(periodRepository.findById(request.getPeriodId())
-                .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PERIOD_NOT_FOUND)));
+                .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PERIOD_NOT_FOUNT)));
 
         List<CategoryDetail> categoryDetails;
         categoryDetails = growRoomConverter.convertToCategoryDetails(request.getCategoryDetailIds());
@@ -137,7 +137,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
                 numberRepository.findById(request.getNumberId())
                         .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.NUMBER_NOT_FOUND)),
                 periodRepository.findById(request.getPeriodId())
-                        .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PERIOD_NOT_FOUND)),
+                        .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PERIOD_NOT_FOUNT)),
                 growRoomCategories
         );
 

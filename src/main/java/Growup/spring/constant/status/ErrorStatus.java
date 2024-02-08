@@ -51,22 +51,19 @@ public enum ErrorStatus implements BaseErrorCode {
 
 
     //growroom error -> 4020~
-    GROWROOM_NOT_FOUND(HttpStatus.NOT_FOUND,"GROWROOM4021","GrowRoom이 없습니다."),
+    GROWROOM_NOT_FOUND(HttpStatus.BAD_REQUEST,"GROWROOM4021","GrowRoom이 없습니다."),
     GROWROOM_NOT_HOT(HttpStatus.BAD_REQUEST,"GROWRROM4022","인기글이 아닙니다."),
     GROWROOM_IS_DELETED(HttpStatus.BAD_REQUEST, "GROWROOM4023", "삭제된 GrowRoom입니다."),
 
 
     // recruitment error
-    RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "RECRUITMENT4001", "Recruitment가 없습니다."),
+    RECRUITMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "RECRUITMENT4001", "Recruitment가 없습니다."),
 
     // number error
-    NUMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "NUMBER4001", "number가 없습니다."),
+    NUMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "NUMBER4001", "number가 없습니다."),
 
     // period error
-    PERIOD_NOT_FOUND(HttpStatus.NOT_FOUND, "PERIOD4001", "period가 없습니다."),
-
-    // pin error
-    PIN_NOT_FOUND(HttpStatus.NOT_FOUND, "PIN4001", "해당 댓글이 없습니다."),
+    PERIOD_NOT_FOUNT(HttpStatus.BAD_REQUEST, "PERIOD4001", "period가 없습니다."),
 
     //participate error error -> 4030~
     PARTICIPATE_NOT_FOUND(HttpStatus.BAD_REQUEST,"PARTICIPATE4031","Participate가 없습니다."),
