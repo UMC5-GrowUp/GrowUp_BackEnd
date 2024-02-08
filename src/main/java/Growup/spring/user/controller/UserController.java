@@ -8,7 +8,7 @@ import Growup.spring.user.converter.UserConverter;
 import Growup.spring.user.model.User;
 import Growup.spring.email.dto.EmailDtoReq;
 import Growup.spring.security.JwtProvider;
-import Growup.spring.user.service.UserServiceImpl;
+import Growup.spring.user.service.UserService;
 import Growup.spring.user.dto.RefreshTokenRes;
 import Growup.spring.user.dto.UserDtoReq;
 import Growup.spring.user.dto.UserDtoRes;
@@ -26,7 +26,7 @@ import javax.validation.Valid;
 @RequestMapping("/growup/users")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
     private final JwtProvider jwtProvider;
 
     /**
@@ -130,6 +130,7 @@ public class UserController {
     @PostMapping("/exist-nickname")
     public ApiResponse<SuccessStatus> checkNickDuplication(@RequestBody @Valid UserDtoReq.nicknameDuplicationReq request){
         userService.checkNickDuplication(request.getNickName());
+        System.out.println("nickName:"+request.getNickName());
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
 
