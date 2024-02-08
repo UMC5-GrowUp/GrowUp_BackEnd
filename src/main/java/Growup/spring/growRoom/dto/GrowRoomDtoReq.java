@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class GrowRoomDtoReq {
@@ -18,6 +19,8 @@ public class GrowRoomDtoReq {
         private Long recruitmentId; //모집 구분
         private Long numberId;  //모집 인원
         private Long periodId;  //진행기간
+        private LocalDate startDate;
+        private LocalDate endDate;
 
         // category
         private List<Long> categoryDetailIds;
@@ -44,6 +47,8 @@ public class GrowRoomDtoReq {
         private Long recruitmentId; //모집 구분
         private Long numberId;  //모집 인원
         private Long periodId;  //진행기간
+        private LocalDate startDate;
+        private LocalDate endDate;
 
         // category
         private List<Long> categoryDetailIds;
