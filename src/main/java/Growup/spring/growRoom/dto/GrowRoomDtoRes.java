@@ -66,6 +66,7 @@ public class GrowRoomDtoRes {
     @Getter
     public static class GrowRoomAllDtoRes {
 
+        private final Long growRoomId;
         //    private final String 인기글
         private final String recruitment_field;    // 모집 구분
         private final String status;    // 상태 (모집중, 모집완료)
@@ -76,6 +77,7 @@ public class GrowRoomDtoRes {
 
         public GrowRoomAllDtoRes(GrowRoom growRoom){
 
+            this.growRoomId = growRoom.getId();
             // 인기글
             this.recruitment_field = growRoom.getRecruitment().getField();
             this.status = growRoom.getStatus();
@@ -117,7 +119,7 @@ public class GrowRoomDtoRes {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class orderBy {
-        List<GrowRoomDtoRes.growRoominquiryRes> growRoominquiryResList; //participateRes를 가져옴
+        List<growRoominquiryRes> growRoominquiryResList; //participateRes를 가져옴
 
     }
 }
