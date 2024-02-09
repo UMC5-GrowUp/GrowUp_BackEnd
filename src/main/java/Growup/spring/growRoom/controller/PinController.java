@@ -18,12 +18,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/growup/growroom")
 public class PinController {
     // 댓글 Pin
-    private final GrowRoomService growRoomService;
     private final PinService pinService;
 
     /**
      * 24.02.06 작성자 : 류기현
-     * 그로우룸 {id} 댓글 조회
+     * 그로우룸 {id} 댓글 조회 + 대댓글 조회
      */
     @GetMapping("/{growRoomId}/pin")
     public ApiResponse<List<PinDtoRes.PinViewDtoRes>> findAllPins(@PathVariable Long growRoomId){
@@ -71,4 +70,6 @@ public class PinController {
 
         return ApiResponse.onSuccess(SuccessStatus._OK);
     }
+
+
 }
