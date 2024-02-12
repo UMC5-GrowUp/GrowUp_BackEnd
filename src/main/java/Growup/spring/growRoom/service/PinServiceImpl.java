@@ -49,6 +49,7 @@ public class PinServiceImpl implements PinService {
 //        return pinConverter.convertToPin(growRoom, user, request.getComment());
     }
 
+    @Override
     @Transactional
     public Pin update(Long id, PinDtoReq.UpdatePinDtoReq request){
         Pin pin = pinRepository.findById(id).orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PIN_NOT_FOUND));

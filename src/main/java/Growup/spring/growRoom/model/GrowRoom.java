@@ -2,8 +2,8 @@ package Growup.spring.growRoom.model;
 
 
 import Growup.spring.constant.entity.BaseEntity;
-import Growup.spring.growRoom.model.component.*;
 import Growup.spring.growRoom.model.component.Number;
+import Growup.spring.growRoom.model.component.*;
 import Growup.spring.liked.model.Liked;
 import Growup.spring.participate.model.Participate;
 import Growup.spring.user.model.User;

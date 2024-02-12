@@ -67,6 +67,9 @@ public enum ErrorStatus implements BaseErrorCode {
     // pin error
     PIN_NOT_FOUND(HttpStatus.NOT_FOUND, "PIN4001", "해당 댓글이 없습니다."),
 
+    // pinComment error
+    PINCOMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "PINCOMMENT4001", "해당 대댓글이 없습니다."),
+
     //participate error error -> 4030~
     PARTICIPATE_NOT_FOUND(HttpStatus.BAD_REQUEST,"PARTICIPATE4031","Participate가 없습니다."),
     PARTICIPATE_NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "PARTICIPATE4032","방장만 좋아요가 가능 합니다."),

@@ -5,7 +5,6 @@ import Growup.spring.constant.status.SuccessStatus;
 import Growup.spring.growRoom.dto.PinDtoReq;
 import Growup.spring.growRoom.dto.PinDtoRes;
 import Growup.spring.growRoom.model.Pin;
-import Growup.spring.growRoom.service.GrowRoomService;
 import Growup.spring.growRoom.service.PinService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +17,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/growup/growroom")
 public class PinController {
     // 댓글 Pin
-    private final GrowRoomService growRoomService;
     private final PinService pinService;
 
     /**
      * 24.02.06 작성자 : 류기현
-     * 그로우룸 {id} 댓글 조회
+     * 그로우룸 {id} 댓글 조회 + 대댓글 조회
      */
     @GetMapping("/{growRoomId}/pin")
     public ApiResponse<List<PinDtoRes.PinViewDtoRes>> findAllPins(@PathVariable Long growRoomId){
