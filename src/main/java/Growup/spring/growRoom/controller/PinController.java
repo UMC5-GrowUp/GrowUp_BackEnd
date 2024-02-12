@@ -2,6 +2,7 @@ package Growup.spring.growRoom.controller;
 
 import Growup.spring.constant.ApiResponse;
 import Growup.spring.constant.status.SuccessStatus;
+import Growup.spring.growRoom.dto.PinCommentDtoRes;
 import Growup.spring.growRoom.dto.PinDtoReq;
 import Growup.spring.growRoom.dto.PinDtoRes;
 import Growup.spring.growRoom.model.Pin;
@@ -70,6 +71,4 @@ public class PinController {
 
         return ApiResponse.onSuccess(SuccessStatus._OK);
     }
-
-
 }

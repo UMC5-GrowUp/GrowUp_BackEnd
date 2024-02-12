@@ -7,9 +7,11 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @DynamicUpdate
 @DynamicInsert
 @Builder
@@ -34,4 +36,9 @@ public class PinComment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pinId")
     private Pin pin;
+
+    public void update(String comment){
+        this.comment = comment;
+        this.updatedAt = LocalDateTime.now();
+    }
 }

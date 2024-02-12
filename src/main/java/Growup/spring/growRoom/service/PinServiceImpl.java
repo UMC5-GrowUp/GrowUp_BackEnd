@@ -7,7 +7,9 @@ import Growup.spring.growRoom.converter.PinConverter;
 import Growup.spring.growRoom.dto.PinDtoReq;
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.Pin;
+import Growup.spring.growRoom.model.PinComment;
 import Growup.spring.growRoom.repository.GrowRoomRepository;
+import Growup.spring.growRoom.repository.PinCommentRepository;
 import Growup.spring.growRoom.repository.PinRepository;
 import Growup.spring.security.JwtProvider;
 import Growup.spring.user.model.User;
@@ -49,6 +51,7 @@ public class PinServiceImpl implements PinService {
 //        return pinConverter.convertToPin(growRoom, user, request.getComment());
     }
 
+    @Override
     @Transactional
     public Pin update(Long id, PinDtoReq.UpdatePinDtoReq request){
         Pin pin = pinRepository.findById(id).orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PIN_NOT_FOUND));

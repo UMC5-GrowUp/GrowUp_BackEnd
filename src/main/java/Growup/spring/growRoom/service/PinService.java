@@ -2,6 +2,7 @@ package Growup.spring.growRoom.service;
 
 import Growup.spring.growRoom.dto.PinDtoReq;
 import Growup.spring.growRoom.model.Pin;
+import Growup.spring.growRoom.model.PinComment;
 
 import java.util.List;
 
