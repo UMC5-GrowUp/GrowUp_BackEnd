@@ -26,7 +26,7 @@ public class GrowRoomController {
 
     /**
      * 24.02.02 작성자 : 류기현
-     * 그로우룸 아래 목록 조회 - 에러핸들러 해야함
+     * 그로우룸 목록 조회
      * 그로우룸 Dto res 수정
      */
     @GetMapping("")
@@ -43,7 +43,7 @@ public class GrowRoomController {
      * 24.01.31 작성자 : 류기현
      * 그로우룸 생성
      */
-    @PostMapping("")    // 생성
+    @PostMapping("")
     public ApiResponse<GrowRoomDtoRes.GrowRoomViewDtoRes> addGrowRoom(@RequestBody GrowRoomDtoReq.AddGrowRoomDtoReq request){
         GrowRoom growRoom = growRoomService.save(request);
 
@@ -103,7 +103,7 @@ public class GrowRoomController {
     public ApiResponse<GrowRoomDtoRes.orderBy> growRoominquiry (@RequestParam(name = "filter",defaultValue = "전체") String filter ,
                                                                 @RequestParam(name = "page") Integer page){
         Long userId = jwtProvider.getUserID();
-        Page<GrowRoom> growRooms =growRoomService.GrowRoomList(filter,userId,page);
+        Page<GrowRoom> growRooms =growRoomService.GrowRoomList(filter, userId, page);
         return ApiResponse.onSuccess(GrowRoomConverter.orderByDto(growRooms.getContent()));
     }
 }
