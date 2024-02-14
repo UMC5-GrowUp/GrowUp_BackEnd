@@ -63,7 +63,7 @@ public class LikedServiceImpl implements LikedService{
 //    }
 
     //좋아요 취소 기능
-    @Override
+//    @Override
 //    public boolean unLike (Long userId ,Long growRoomId){
 //        User user = userRepository.findById(userId)
 //                .orElseThrow(()-> new UserHandler(ErrorStatus.USER_NOT_FOUND));
@@ -84,7 +84,7 @@ public class LikedServiceImpl implements LikedService{
 //        if (existLiked){
 //            likedRepository.delete(existLiked);
 //        }
-    }
+//    }
 
     // 좋아요 생성 or 취소
 //    @Override
