@@ -63,6 +63,60 @@ public class LikedServiceImpl implements LikedService{
 //    }
 
     //좋아요 취소 기능
+    @Override
+//    public boolean unLike (Long userId ,Long growRoomId){
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(()-> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+//        GrowRoom growRoom = growRoomRepository.findById(growRoomId)
+//                .orElseThrow(()-> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
+//
+//        Optional<Liked> existLiked = likedRepository.findByUserAndGrowRoom(user ,growRoom);
+//
+//        if(existLiked.isPresent()){
+//            likedRepository.delete(existLiked.get()); // 여기서 삭제를 할때 삭제가 되지 않는경우가 발생하여 블로그 사용하여 해결
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
+//        Liked existLiked = likedRepository.findByUserAndGrowRoom(user, growRoom)
+//                .orElse;
+//        if (existLiked){
+//            likedRepository.delete(existLiked);
+//        }
+    }
+
+    // 좋아요 생성 or 취소
+//    @Override
+//    public Liked doLike( Long userId ,Long growRoomId){
+//
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(()-> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+//        GrowRoom growRoom = growRoomRepository.findById(growRoomId)
+//                .orElseThrow(()-> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
+//
+
+        // liked가 생성되었는지 확인 후 비어있다면 liked 생성, 이미 존재한다면 null 리턴
+//        if (likedRepository.findByUserAndGrowRoom(user, growRoom).isEmpty())
+//            return Liked.builder()
+//                    .user(user)
+//                    .growRoom(growRoom)
+//                    .build();
+//
+//        else return null;
+//        Optional<Liked> existLiked = likedRepository.findByUserAndGrowRoom(user, growRoom);
+//        Liked liked = Liked.builder() // liked 안에 user growroom 저장
+//                .user(user)
+//                .growRoom(growRoom)
+//                .build();
+//
+//        if(existLiked.isEmpty()) { //비어있다면, liked 저장
+//            likedRepository.save(liked);
+//        }
+//        return liked;
+//    }
+
+    //좋아요 취소 기능
 //    @Override
 //    public boolean unLike (Long userId ,Long growRoomId){
 //        User user = userRepository.findById(userId)
