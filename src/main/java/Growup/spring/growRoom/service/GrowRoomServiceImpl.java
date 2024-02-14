@@ -161,7 +161,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
         if (user == growRoom.getUser())
             return 0;
-        return growRoomRepository.updateView(id);
+        else return growRoomRepository.updateView(id);
     }
 
     //조회수 증가
@@ -185,8 +185,6 @@ public class GrowRoomServiceImpl implements GrowRoomService {
     public Page<GrowRoom> GrowRoomList(String filter, Long userId, Integer page) {
         User existuser = userRepository.findById(userId).get();
 
-
-
         List<Participate> participateList = participateRepository.findByUserId(userId); //유저 아이디를 통해 참여자 리스트를 가져옴
         List<Long> growRoomIds1 = participateList.stream() //해당 리스트들을 통해 그로우룸 아이디를 가져옴
                 .map(participate -> participate.getGrowRoom().getId())
@@ -197,10 +195,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
                 .map(liked -> liked.getGrowRoom().getId())
                 .collect(Collectors.toList());
 
-
         Page<GrowRoom> list ;
-
-
 
         if (existuser != null) {
             if (filter.equals("내모집글")) {
