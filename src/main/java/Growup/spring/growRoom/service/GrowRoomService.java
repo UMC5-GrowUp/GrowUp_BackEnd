@@ -20,7 +20,7 @@ public interface GrowRoomService {
 
     int updateView(Long id);
 
-    int viewincrease (Long growRoomId);
+//    int viewincrease (Long growRoomId);
 
     Post inquirypost(Long growRoomId);
 

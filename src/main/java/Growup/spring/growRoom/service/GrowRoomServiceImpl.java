@@ -49,7 +49,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
 
     // 그로우룸 글 목록 조회
     public List<GrowRoom> findAll(){
-        return growRoomRepository.findAll();
+        return growRoomRepository.findAllByStatusNot("삭제");
     }
 
     // 그로우룸 글 생성
@@ -93,10 +93,11 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         GrowRoom growRoom = growRoomRepository.findById(id)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
 
-        // growroom 생성자만 삭제된 growroom에 진입 가능
+        // growroom 생성자만 삭제된 growroom에 진입 가능(삭제 and 생성자아님)
         if (growRoom.getStatus().equals("삭제") && !(growRoom.getUser().equals(userRepository.findById(jwtProvider.getUserID())
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND)))))
             throw new GrowRoomHandler(ErrorStatus.GROWROOM_IS_DELETED);
+
 
         return growRoom;
     }
@@ -149,22 +150,26 @@ public class GrowRoomServiceImpl implements GrowRoomService {
                         .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PERIOD_NOT_FOUND)),
                 growRoomCategories
         );
-
-
         return growRoom;
     }
 
     @Override
     public int updateView(Long id) {
+        User user = userRepository.findById(jwtProvider.getUserID())
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+        GrowRoom growRoom = growRoomRepository.findById(id)
+                .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
+        if (user == growRoom.getUser())
+            return 0;
         return growRoomRepository.updateView(id);
     }
 
     //조회수 증가
-    @Transactional //트랜잭션이란 데이터베이스의 상태를 변경하는 작업 또는 한번에 수행되어야 하는 연산들을 의미한다.
-    @Override
-    public int viewincrease(Long growRoomId) {
-        return growRoomRepository.increaseViews(growRoomId);
-    }
+//    @Transactional //트랜잭션이란 데이터베이스의 상태를 변경하는 작업 또는 한번에 수행되어야 하는 연산들을 의미한다.
+//    @Override
+//    public int viewincrease(Long growRoomId) {
+//        return growRoomRepository.increaseViews(growRoomId);
+//    }
 
 
     //라이브룸 선택시 조회 되게 하는것
