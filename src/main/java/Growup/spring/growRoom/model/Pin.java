@@ -47,4 +47,10 @@ public class Pin extends BaseEntity {
         this.comment = comment;
         this.updatedAt = LocalDateTime.now();
     }
+
+    // 삭제 - status 변경
+    public void updateStatus(String status){
+        this.status = status;
+        this.updatedAt = LocalDateTime.now();
+    }
 }

@@ -85,18 +85,18 @@ public class GrowRoomController {
     }
 
     //조회수 증가
-    @PatchMapping ("/viewincrease")
-    public ApiResponse<SuccessStatus> increaseview(@RequestParam Long growRoomId){
-        growRoomService.viewincrease(growRoomId);
-        return ApiResponse.onSuccess(SuccessStatus._OK);
-    }
+//    @PatchMapping ("/viewincrease")
+//    public ApiResponse<SuccessStatus> increaseview(@RequestParam Long growRoomId){
+//        growRoomService.viewincrease(growRoomId);
+//        return ApiResponse.onSuccess(SuccessStatus._OK);
+//    }
+
     //소개글 조회
     @GetMapping("/post")
     public ApiResponse<GrowRoomDtoRes.postinquiryRes> postinquiry (@RequestParam(name = "growRoomId" ) Long growRoomId){
         Post post = growRoomService.inquirypost(growRoomId);
         return ApiResponse.onSuccess(GrowRoomConverter.inquirypost(post));
     }
-
 
     //그로우룸 특성별로 조회
     @GetMapping("/growRoominquiry")
@@ -105,6 +105,5 @@ public class GrowRoomController {
         Long userId = jwtProvider.getUserID();
         Page<GrowRoom> growRooms =growRoomService.GrowRoomList(filter,userId,page);
         return ApiResponse.onSuccess(GrowRoomConverter.orderByDto(growRooms.getContent()));
-
     }
 }
