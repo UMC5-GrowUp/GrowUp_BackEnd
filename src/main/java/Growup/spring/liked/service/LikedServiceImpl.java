@@ -7,6 +7,7 @@ import Growup.spring.constant.handler.UserHandler;
 import Growup.spring.constant.status.ErrorStatus;
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.repository.GrowRoomRepository;
+import Growup.spring.liked.converter.LikedConverter;
 import Growup.spring.liked.model.Liked;
 import Growup.spring.liked.repository.LikedRepository;
 import Growup.spring.participate.model.Participate;
@@ -18,9 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Transactional
@@ -94,16 +93,17 @@ public class LikedServiceImpl implements LikedService{
         GrowRoom growRoom = growRoomRepository.findById(growRoomId)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
 
-        Optional<Liked> liked = likedRepository.findByUserAndGrowRoom(user, growRoom);
+        Liked liked = likedRepository.findByUserAndGrowRoom(user, growRoom);
 
-        if (liked.isPresent()) {
-            Liked.builder()
-                    .user(user)
-                    .growRoom(growRoom)
-                    .build();
+        // 없으면 생성, 있으면 삭제
+        if (liked == null){
+            likedRepository.save(LikedConverter.convertToLiked(user, growRoom));
             return true;
         }
-        else return false;
+        else {
+            likedRepository.delete(liked);
+            return false;
+        }
     }
 
     //인기글 확인 api

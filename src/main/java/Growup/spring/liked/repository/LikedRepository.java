@@ -12,7 +12,7 @@ import java.util.Optional;
 @Transactional
 public interface LikedRepository extends JpaRepository<Liked, Long> {
 
-    Optional<Liked> findByUserAndGrowRoom(User user , GrowRoom growRoom); // user와 growRoom찾는 메서드
+    Liked findByUserAndGrowRoom(User user , GrowRoom growRoom); // user와 growroom을 통해 liked를 찾는 메서드
 
     List<Liked> findByGrowRoomId(Long growRoomId); //like리스트를 찾는 메서드
 

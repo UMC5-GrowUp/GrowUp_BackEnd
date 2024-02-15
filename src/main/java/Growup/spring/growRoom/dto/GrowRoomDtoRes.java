@@ -72,24 +72,24 @@ public class GrowRoomDtoRes {
     public static class GrowRoomAllDtoRes {
 
         private final Long growRoomId;
-        //    private final String 인기글
+        private final boolean hot;//인기글
         private final String recruitment_field;    // 모집 구분
         private final String status;    // 상태 (모집중, 모집완료)
-        //    private final String 마감일
+        private final LocalDate endDate;//마감일
         private final String title; // title or content
         private final Integer view;
-//        private final boolean liked;   // 좋아요 여부 true : 좋아요, false : 좋아요 X
+        private final boolean likedByUser;   // 좋아요 여부 true : 좋아요, false : 좋아요 X
 
-        public GrowRoomAllDtoRes(GrowRoom growRoom){
+        public GrowRoomAllDtoRes(GrowRoom growRoom, boolean likedByUser){
 
             this.growRoomId = growRoom.getId();
-            // 인기글
+            this.hot = growRoom.getLikeList().size()>1;
             this.recruitment_field = growRoom.getRecruitment().getField();
             this.status = growRoom.getStatus();
-            // 마감일
+            this.endDate = growRoom.getRecruitmentPeriod().getEndDate();
             this.title = growRoom.getPost().getTitle();
             this.view = growRoom.getView();
-            // 좋아요 여부
+            this.likedByUser = likedByUser;
         }
     }
     @Getter
