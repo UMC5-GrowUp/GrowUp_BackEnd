@@ -51,7 +51,7 @@ public class LikedController {
          * 그로우룸 좋아요 설정 및 해제
          */
         @PostMapping("/liked")
-        public ApiResponse<LikedDtoRes.Liked> like(@RequestParam (name = "growroomId") Long growRoomId){
+        public ApiResponse<LikedDtoRes.Liked> like(@RequestParam (name = "growRoomId") Long growRoomId){
                 Long userId = jwtProvider.getUserID();
                 boolean liked = likedService.doOrUnLiked(userId, growRoomId);
                 return ApiResponse.onSuccess(new LikedDtoRes.Liked(liked));
@@ -59,16 +59,16 @@ public class LikedController {
 
         //좋아요 갯수를 기반으로 100개이상은 인기글로 나타냄
         // 테스트를 위해 좋아요 5개 이상으로 수정
-        @GetMapping("/likecount")
-        public ApiResponse<String> likecount(@RequestParam (name = "growRoomId")Long growRoom ){
-                boolean hot = likedService.likecount(growRoom);
-                if(hot){
-                        return ApiResponse.onSuccess("인기글 입니다.");
-                }
-                else {
-                        return ApiResponse.onFailure(ErrorStatus.GROWROOM_NOT_HOT.getCode(), ErrorStatus.GROWROOM_NOT_HOT.getMessage(),null);
-                }
-        }
+//        @GetMapping("/likecount")
+//        public ApiResponse<String> likecount(@RequestParam (name = "growRoomId")Long growRoom ){
+//                boolean hot = likedService.likecount(growRoom);
+//                if(hot){
+//                        return ApiResponse.onSuccess("인기글 입니다.");
+//                }
+//                else {
+//                        return ApiResponse.onFailure(ErrorStatus.GROWROOM_NOT_HOT.getCode(), ErrorStatus.GROWROOM_NOT_HOT.getMessage(),null);
+//                }
+//        }
 
         //liveRoom내에 (방장만)좋아요 설정
         @PostMapping("/liveRoomliked")

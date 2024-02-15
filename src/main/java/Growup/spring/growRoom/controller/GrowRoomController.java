@@ -8,6 +8,7 @@ import Growup.spring.growRoom.dto.GrowRoomDtoRes;
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.Post;
 import Growup.spring.growRoom.service.GrowRoomService;
+import Growup.spring.liked.service.LikedService;
 import Growup.spring.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ public class GrowRoomController {
     // 그로우룸 GrowRoom
     private final GrowRoomService growRoomService;
     private final JwtProvider jwtProvider;
+    private final LikedService likedService;
 
     /**
      * 24.02.02 작성자 : 류기현
@@ -34,7 +36,7 @@ public class GrowRoomController {
         Long userID = jwtProvider.getUserID();
         List<GrowRoomDtoRes.GrowRoomAllDtoRes> growRooms = growRoomService.findByFilter(filter, userID)
                 .stream()
-                .map(GrowRoomDtoRes.GrowRoomAllDtoRes::new)
+                .map(growRoom -> new GrowRoomDtoRes.GrowRoomAllDtoRes(growRoom, likedService.isGrowRoomLikedByUser(userID, growRoom.getId())))
                 .collect(Collectors.toList());
 
         return ApiResponse.onSuccess(growRooms);
