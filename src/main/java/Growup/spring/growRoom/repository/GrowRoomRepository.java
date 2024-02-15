@@ -25,14 +25,13 @@ public interface GrowRoomRepository extends JpaRepository<GrowRoom, Long> {
     @Query("update GrowRoom g set g.view = g.view + 1 where g.id = :growRoomId")
     int increaseViews (@Param("growRoomId")Long growRoomId);
 
-    //전체
-    Page<GrowRoom> findAllBy (PageRequest pageRequest);
-
     //내모집글
-    Page<GrowRoom> findAllByUserId(Long userId, PageRequest pageRequest);
-
+    List<GrowRoom> findAllByUserId(Long userId);
 
     //ID 목록에 해당하는 엔티티들을 조회하는 메서드 //WHERE 절 내에서 특정값 여러개를 선택하는 SQL 연산자 // 여기서는 growRoomId여러개를 통해 growRoom 객체를 가져옴
-    Page<GrowRoom> findAllByIdIn(List<Long> growRoomId, PageRequest pageRequest);
+    List<GrowRoom> findAllByIdIn(List<Long> growRoomId);
 
+    List<GrowRoom> findAllByRecruitmentId(Long recruitmentId);
+
+//    ㅎList<GrowRoom> findAllByGrowRoomCategoryListContains()
 }

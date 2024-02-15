@@ -8,6 +8,7 @@ import Growup.spring.growRoom.converter.RecruitmentPeriodConverter;
 import Growup.spring.growRoom.dto.GrowRoomDtoReq;
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.Post;
+import Growup.spring.growRoom.model.component.Category;
 import Growup.spring.growRoom.model.component.CategoryDetail;
 import Growup.spring.growRoom.model.component.GrowRoomCategory;
 import Growup.spring.growRoom.model.component.RecruitmentPeriod;
@@ -47,9 +48,58 @@ public class GrowRoomServiceImpl implements GrowRoomService {
     private final RecruitmentPeriodRepository recruitmentPeriodRepository;
 
 
-    // 그로우룸 글 목록 조회
-    public List<GrowRoom> findAll(){
-        return growRoomRepository.findAll();
+    // 그로우룸 글 목록 조회 - 조건
+    @Override
+    public List<GrowRoom> findByFilter(String filter, Long userId) {
+
+        List<GrowRoom> growRooms;
+
+        switch (filter){
+            case "내 모집글" :
+                growRooms = growRoomRepository.findAllByUserId(userId);
+                break;
+            case "관심글" :
+                List<Liked> likedList = likedRepository.findByUserId(userId);
+                List<Long> growRoomIds = likedList.stream()
+                        .map(liked -> liked.getGrowRoom().getId())
+                        .collect(Collectors.toList());
+                growRooms = growRoomRepository.findAllByIdIn(growRoomIds);
+                break;
+            case "프로젝트" :
+                growRooms = growRoomRepository.findAllByRecruitmentId(Long.valueOf("2"));
+                break;
+            case "스터디" :
+                growRooms = growRoomRepository.findAllByRecruitmentId(Long.valueOf("1"));
+                break;
+            case "챌린지" :
+                growRooms = growRoomRepository.findAllByRecruitmentId(Long.valueOf("3"));
+                break;
+
+//            case "cat1" :
+//                List<Category>  categoryList = cate
+//                growRooms = growRoomRepository.findAllBy
+//                        // 카테고리 세부사항 그로우룸식별자 ->
+//                break;
+//            case "cat2" :
+//
+//                break;
+//            case "cat3" :
+//
+//                break;
+//            case "cat4" :
+//
+//                break;
+//            case "cat5" :
+//
+//                break;
+//            case "cat6" :
+//
+//                break;
+            default:
+                growRooms = growRoomRepository.findAll();
+        }
+
+        return growRooms;
     }
 
     // 그로우룸 글 생성
@@ -159,62 +209,11 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         return growRoomRepository.updateView(id);
     }
 
-    //조회수 증가
-    @Transactional //트랜잭션이란 데이터베이스의 상태를 변경하는 작업 또는 한번에 수행되어야 하는 연산들을 의미한다.
-    @Override
-    public int viewincrease(Long growRoomId) {
-        return growRoomRepository.increaseViews(growRoomId);
-    }
-
 
     //라이브룸 선택시 조회 되게 하는것
     @Override
     public Post inquirypost(Long growRoomId) {
         Post post = postRepository.findByGrowRoomId(growRoomId);
         return post;
-    }
-
-
-    //그로우룸 조회
-    @Override
-    public Page<GrowRoom> GrowRoomList(String filter, Long userId, Integer page) {
-        User existuser = userRepository.findById(userId).get();
-
-
-
-        List<Participate> participateList = participateRepository.findByUserId(userId); //유저 아이디를 통해 참여자 리스트를 가져옴
-        List<Long> growRoomIds1 = participateList.stream() //해당 리스트들을 통해 그로우룸 아이디를 가져옴
-                .map(participate -> participate.getGrowRoom().getId())
-                .collect(Collectors.toList());
-
-        List<Liked> likedList = likedRepository.findByuserId(userId);
-        List<Long> growRoomIds2 = likedList.stream()
-                .map(liked -> liked.getGrowRoom().getId())
-                .collect(Collectors.toList());
-
-
-        Page<GrowRoom> list ;
-
-
-
-        if (existuser != null) {
-            if (filter.equals("내모집글")) {
-                list = growRoomRepository.findAllByUserId(userId, PageRequest.of(page, 16));
-            }
-            else if (filter.equals("참여글")) {
-                list = growRoomRepository.findAllByIdIn(growRoomIds1, PageRequest.of(page, 16)); // //그로우룸 아이디를 통해 객체를 가져옴
-            }
-            else if (filter.equals("관심글")) {
-                list = growRoomRepository.findAllByIdIn(growRoomIds2, PageRequest.of(page, 16)); // //그로우룸 아이디를 통해 객체를 가져옴
-            }
-            else {
-                list = growRoomRepository.findAllBy(PageRequest.of(page, 16));
-            }
-        }
-        else {
-            throw new UserHandler(ErrorStatus.USER_NOT_FOUND);
-        }
-
-        return list;
     }
 }

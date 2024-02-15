@@ -30,8 +30,9 @@ public class GrowRoomController {
      * 그로우룸 Dto res 수정
      */
     @GetMapping("")
-    public ApiResponse<List<GrowRoomDtoRes.GrowRoomAllDtoRes>> findAllGrowRooms(){
-        List<GrowRoomDtoRes.GrowRoomAllDtoRes> growRooms = growRoomService.findAll()
+    public ApiResponse<List<GrowRoomDtoRes.GrowRoomAllDtoRes>> findAllGrowRooms(@RequestParam(name = "filter", defaultValue = "전체") String filter){
+        Long userID = jwtProvider.getUserID();
+        List<GrowRoomDtoRes.GrowRoomAllDtoRes> growRooms = growRoomService.findByFilter(filter, userID)
                 .stream()
                 .map(GrowRoomDtoRes.GrowRoomAllDtoRes::new)
                 .collect(Collectors.toList());
@@ -43,7 +44,7 @@ public class GrowRoomController {
      * 24.01.31 작성자 : 류기현
      * 그로우룸 생성
      */
-    @PostMapping("")    // 생성
+    @PostMapping("")
     public ApiResponse<GrowRoomDtoRes.GrowRoomViewDtoRes> addGrowRoom(@RequestBody GrowRoomDtoReq.AddGrowRoomDtoReq request){
         GrowRoom growRoom = growRoomService.save(request);
 
@@ -82,29 +83,5 @@ public class GrowRoomController {
         GrowRoom updatedGrowRoom = growRoomService.update(id, request);
 
         return ApiResponse.onSuccess(new GrowRoomDtoRes.GrowRoomViewDtoRes(updatedGrowRoom));
-    }
-
-    //조회수 증가
-    @PatchMapping ("/viewincrease")
-    public ApiResponse<SuccessStatus> increaseview(@RequestParam Long growRoomId){
-        growRoomService.viewincrease(growRoomId);
-        return ApiResponse.onSuccess(SuccessStatus._OK);
-    }
-    //소개글 조회
-    @GetMapping("/post")
-    public ApiResponse<GrowRoomDtoRes.postinquiryRes> postinquiry (@RequestParam(name = "growRoomId" ) Long growRoomId){
-        Post post = growRoomService.inquirypost(growRoomId);
-        return ApiResponse.onSuccess(GrowRoomConverter.inquirypost(post));
-    }
-
-
-    //그로우룸 특성별로 조회
-    @GetMapping("/growRoominquiry")
-    public ApiResponse<GrowRoomDtoRes.orderBy> growRoominquiry (@RequestParam(name = "filter",defaultValue = "전체") String filter ,
-                                                                @RequestParam(name = "page") Integer page){
-        Long userId = jwtProvider.getUserID();
-        Page<GrowRoom> growRooms =growRoomService.GrowRoomList(filter,userId,page);
-        return ApiResponse.onSuccess(GrowRoomConverter.orderByDto(growRooms.getContent()));
-
     }
 }

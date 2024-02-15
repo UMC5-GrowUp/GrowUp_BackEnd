@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface GrowRoomService {
-    List<GrowRoom> findAll();
+    List<GrowRoom> findByFilter(String filter, Long userId);
 
     GrowRoom save(GrowRoomDtoReq.AddGrowRoomDtoReq request);
 
@@ -20,9 +20,5 @@ public interface GrowRoomService {
 
     int updateView(Long id);
 
-    int viewincrease (Long growRoomId);
-
     Post inquirypost(Long growRoomId);
-
-    Page<GrowRoom> GrowRoomList (String filter , Long userId , Integer page );
 }
