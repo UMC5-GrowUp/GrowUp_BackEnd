@@ -32,9 +32,13 @@ public class GrowRoomController {
      * 그로우룸 Dto res 수정
      */
     @GetMapping("")
-    public ApiResponse<List<GrowRoomDtoRes.GrowRoomAllDtoRes>> findAllGrowRooms(@RequestParam(name = "filter", defaultValue = "전체") String filter){
+    public ApiResponse<List<GrowRoomDtoRes.GrowRoomAllDtoRes>> findAllGrowRooms(@RequestParam(name = "filter", defaultValue = "전체") String filter,
+                                                                                @RequestParam(name = "category", defaultValue = "전체") String category,
+                                                                                @RequestParam(name = "period", defaultValue = "전체") String period,
+                                                                                @RequestParam(name = "recruit", defaultValue = "전체") String recruit,
+                                                                                @RequestParam(name = "search", defaultValue = "null") String search){
         Long userID = jwtProvider.getUserID();
-        List<GrowRoomDtoRes.GrowRoomAllDtoRes> growRooms = growRoomService.findByFilter(filter, userID)
+        List<GrowRoomDtoRes.GrowRoomAllDtoRes> growRooms = growRoomService.findByFilter(filter, category, period, recruit, userID, search)
                 .stream()
                 .map(growRoom -> new GrowRoomDtoRes.GrowRoomAllDtoRes(growRoom, likedService.isGrowRoomLikedByUser(userID, growRoom.getId())))
                 .collect(Collectors.toList());

@@ -1,15 +1,11 @@
 package Growup.spring.growRoom.repository;
 
 import Growup.spring.growRoom.model.GrowRoom;
-import io.lettuce.core.dynamic.annotation.Param;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -36,4 +32,12 @@ public interface GrowRoomRepository extends JpaRepository<GrowRoom, Long> {
 
     List<GrowRoom> findAllByStatusAndUpdatedAtBefore(String status, LocalDateTime updateAt);
 //    List<GrowRoom> findAllByGrowRoomCategoryListContains()
+
+
+//    @Query("SELECT g FROM GrowRoom g WHERE " +
+//            "(:category IS NULL OR g.category = :category) AND " +
+//            "(:period IS NULL OR g.period = :period) AND " +
+//            "(:recruit IS NULL OR g.recruit = :recruit) AND " +
+//            "(:status IS NULL OR g.status = :)")
+//    List<GrowRoom> findByAndPeriodAndRecruitAndStatusNot(String category, String period, String recruit, String status);
 }
