@@ -26,7 +26,7 @@ public class GrowRoomController {
 
     /**
      * 24.02.02 작성자 : 류기현
-     * 그로우룸 아래 목록 조회 - 에러핸들러 해야함
+     * 그로우룸 목록 조회
      * 그로우룸 Dto res 수정
      */
     @GetMapping("")

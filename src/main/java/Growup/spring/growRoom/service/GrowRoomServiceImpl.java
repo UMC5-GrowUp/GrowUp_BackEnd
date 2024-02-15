@@ -201,6 +201,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         return growRoom;
     }
 
+    // 조회수 증가
     @Override
     public int updateView(Long id) {
         User user = userRepository.findById(jwtProvider.getUserID())
@@ -209,11 +210,11 @@ public class GrowRoomServiceImpl implements GrowRoomService {
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
         if (user == growRoom.getUser())
             return 0;
-        return growRoomRepository.updateView(id);
+        else return growRoomRepository.updateView(id);
     }
 
 
-    //라이브룸 선택시 조회 되게 하는것
+    // 라이브룸 선택시 조회 되게 하는것
     @Override
     public Post inquirypost(Long growRoomId) {
         Post post = postRepository.findByGrowRoomId(growRoomId);
