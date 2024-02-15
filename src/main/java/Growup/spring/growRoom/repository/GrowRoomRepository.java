@@ -9,11 +9,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Transactional
 public interface GrowRoomRepository extends JpaRepository<GrowRoom, Long> {
+
+    List<GrowRoom> findAllByStatusNot(String status);
+
     @Override
     Optional<GrowRoom> findById(Long id);
 
@@ -21,11 +26,7 @@ public interface GrowRoomRepository extends JpaRepository<GrowRoom, Long> {
     @Query("update GrowRoom growroom set growroom.view = growroom.view + 1 where growroom.id = :id")
     int updateView(Long id);
 
-    @Modifying
-    @Query("update GrowRoom g set g.view = g.view + 1 where g.id = :growRoomId")
-    int increaseViews (@Param("growRoomId")Long growRoomId);
-
-    //내모집글
+    //내 모집글
     List<GrowRoom> findAllByUserId(Long userId);
 
     //ID 목록에 해당하는 엔티티들을 조회하는 메서드 //WHERE 절 내에서 특정값 여러개를 선택하는 SQL 연산자 // 여기서는 growRoomId여러개를 통해 growRoom 객체를 가져옴
@@ -33,5 +34,6 @@ public interface GrowRoomRepository extends JpaRepository<GrowRoom, Long> {
 
     List<GrowRoom> findAllByRecruitmentId(Long recruitmentId);
 
-//    ㅎList<GrowRoom> findAllByGrowRoomCategoryListContains()
+    List<GrowRoom> findAllByStatusAndUpdatedAtBefore(String status, LocalDateTime updateAt);
+//    List<GrowRoom> findAllByGrowRoomCategoryListContains()
 }

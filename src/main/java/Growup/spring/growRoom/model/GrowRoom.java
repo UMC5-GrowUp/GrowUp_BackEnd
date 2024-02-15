@@ -79,7 +79,6 @@ public class GrowRoom extends BaseEntity {
         this.recruitment = recruitment;
         this.number = number;
         this.period = period;
-//        this.recruitmentPeriod = recruitmentPeriod;
         this.post = post;
     }
 
@@ -87,7 +86,6 @@ public class GrowRoom extends BaseEntity {
         this.recruitment = recruitment;
         this.number = number;
         this.period = period;
-//        this.recruitmentPeriod = recruitmentPeriod;
         this.growRoomCategoryList = growRoomCategories;
         this.updatedAt = LocalDateTime.now();
     }

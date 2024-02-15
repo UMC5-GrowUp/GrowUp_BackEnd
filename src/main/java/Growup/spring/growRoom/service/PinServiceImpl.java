@@ -30,8 +30,8 @@ public class PinServiceImpl implements PinService {
 
     @Override
     public List<Pin> findAllByGrowRoomId(Long growRoomId) {
-
-        return pinRepository.findAllByGrowRoomId(growRoomId);
+        // 삭제(status=1)되지 않은 그로우룸만 조회
+        return pinRepository.findAllByGrowRoomIdAndStatusNot(growRoomId, "1");
     }
 
     @Override
@@ -63,6 +63,6 @@ public class PinServiceImpl implements PinService {
     public void delete(Long id) {
         Pin pin = pinRepository.findById(id)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PIN_NOT_FOUND));
-        pin.setStatus("1");
+        pin.updateStatus("1");
     }
 }

@@ -30,8 +30,8 @@ public class PinCommentServiceImpl implements PinCommentService {
 
     @Override
     public List<PinComment> findAllByPinId(Long pinId) {
-        return pinCommentRepository.findAllByPin(pinRepository.findById(pinId)
-                .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PIN_NOT_FOUND)));
+        return pinCommentRepository.findAllByPinAndStatusNot(pinRepository.findById(pinId)
+                .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PIN_NOT_FOUND)), "1");
     }
 
     @Override
@@ -44,8 +44,8 @@ public class PinCommentServiceImpl implements PinCommentService {
         PinComment pinComment = pinCommentConverter.convertToPinComment(pin, user, request.getComment());
         pinCommentRepository.save(pinComment);
 
-        return pinCommentRepository.findAllByPin(pinRepository.findById(pinId)
-                .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PIN_NOT_FOUND)));
+        return pinCommentRepository.findAllByPinAndStatusNot(pinRepository.findById(pinId)
+                .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PIN_NOT_FOUND)), "1");
     }
 
     @Transactional
@@ -63,6 +63,6 @@ public class PinCommentServiceImpl implements PinCommentService {
     public void delete(Long pinCommentId) {
         PinComment pinComment = pinCommentRepository.findById(pinCommentId)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PINCOMMENT_NOT_FOUND));
-        pinComment.setStatus("1");
+        pinComment.updateStatus("1");
     }
 }

@@ -8,7 +8,6 @@ import Growup.spring.growRoom.converter.RecruitmentPeriodConverter;
 import Growup.spring.growRoom.dto.GrowRoomDtoReq;
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.Post;
-import Growup.spring.growRoom.model.component.Category;
 import Growup.spring.growRoom.model.component.CategoryDetail;
 import Growup.spring.growRoom.model.component.GrowRoomCategory;
 import Growup.spring.growRoom.model.component.RecruitmentPeriod;
@@ -143,7 +142,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         GrowRoom growRoom = growRoomRepository.findById(id)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
 
-        // growroom 생성자만 삭제된 growroom에 진입 가능
+        // growroom 생성자만 삭제된 growroom에 진입 가능(삭제 and 생성자아님)
         if (growRoom.getStatus().equals("삭제") && !(growRoom.getUser().equals(userRepository.findById(jwtProvider.getUserID())
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND)))))
             throw new GrowRoomHandler(ErrorStatus.GROWROOM_IS_DELETED);
@@ -199,13 +198,17 @@ public class GrowRoomServiceImpl implements GrowRoomService {
                         .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PERIOD_NOT_FOUND)),
                 growRoomCategories
         );
-
-
         return growRoom;
     }
 
     @Override
     public int updateView(Long id) {
+        User user = userRepository.findById(jwtProvider.getUserID())
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+        GrowRoom growRoom = growRoomRepository.findById(id)
+                .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
+        if (user == growRoom.getUser())
+            return 0;
         return growRoomRepository.updateView(id);
     }
 
