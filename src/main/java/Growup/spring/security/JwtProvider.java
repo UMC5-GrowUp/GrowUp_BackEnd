@@ -29,7 +29,7 @@ public class JwtProvider {
     private String secretKey;
 
     // 토큰 유효시간 30분
-    public static final long TOKEN_VALID_TIME = 1000L * 60 * 5 * 144; // 5분(밀리초)
+    public static final long TOKEN_VALID_TIME = 1000L * 60 * 5; // 5분(밀리초)
     public static final long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 144; // 일주일(밀리초)
     public static final long REFRESH_TOKEN_VALID_TIME_IN_REDIS = 60 * 60 * 24 * 7; // 일주일 (초)
 
