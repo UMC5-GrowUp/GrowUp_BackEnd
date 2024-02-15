@@ -167,8 +167,8 @@ public class LikedServiceImpl implements LikedService{
                 .orElseThrow(()-> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND)); //growroomid로 찾아서 저장
 
         List<Liked> likeCount = likedRepository.findByGrowRoomId(growRoomId); // growroom를 기준으로 likelist찾아서 likecount에 저장
-        if (likeCount.size()>=5){
-            return true; //100개 이상이면 true 반환, 테스트를 위해 좋아요 5개 이상으로 임시 수정
+        if (likeCount.size()>=2){
+            return true; //100개 이상이면 true 반환, 테스트를 위해 좋아요 2개 이상으로 임시 수정
         }
         else {
             return false;
