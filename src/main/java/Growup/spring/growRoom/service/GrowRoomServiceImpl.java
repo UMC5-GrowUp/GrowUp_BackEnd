@@ -153,6 +153,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         return growRoom;
     }
 
+    // 조회수 증가
     @Override
     public int updateView(Long id) {
         User user = userRepository.findById(jwtProvider.getUserID())
@@ -161,18 +162,10 @@ public class GrowRoomServiceImpl implements GrowRoomService {
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
         if (user == growRoom.getUser())
             return 0;
-        return growRoomRepository.updateView(id);
+        else return growRoomRepository.updateView(id);
     }
 
-    //조회수 증가
-//    @Transactional //트랜잭션이란 데이터베이스의 상태를 변경하는 작업 또는 한번에 수행되어야 하는 연산들을 의미한다.
-//    @Override
-//    public int viewincrease(Long growRoomId) {
-//        return growRoomRepository.increaseViews(growRoomId);
-//    }
-
-
-    //라이브룸 선택시 조회 되게 하는것
+    // 라이브룸 선택시 조회 되게 하는것
     @Override
     public Post inquirypost(Long growRoomId) {
         Post post = postRepository.findByGrowRoomId(growRoomId);
@@ -180,27 +173,22 @@ public class GrowRoomServiceImpl implements GrowRoomService {
     }
 
 
-    //그로우룸 조회
+    // 그로우룸 조회
     @Override
     public Page<GrowRoom> GrowRoomList(String filter, Long userId, Integer page) {
         User existuser = userRepository.findById(userId).get();
-
-
 
         List<Participate> participateList = participateRepository.findByUserId(userId); //유저 아이디를 통해 참여자 리스트를 가져옴
         List<Long> growRoomIds1 = participateList.stream() //해당 리스트들을 통해 그로우룸 아이디를 가져옴
                 .map(participate -> participate.getGrowRoom().getId())
                 .collect(Collectors.toList());
 
-        List<Liked> likedList = likedRepository.findByuserId(userId);
+        List<Liked> likedList = likedRepository.findByUserId(userId);
         List<Long> growRoomIds2 = likedList.stream()
                 .map(liked -> liked.getGrowRoom().getId())
                 .collect(Collectors.toList());
 
-
         Page<GrowRoom> list ;
-
-
 
         if (existuser != null) {
             if (filter.equals("내모집글")) {

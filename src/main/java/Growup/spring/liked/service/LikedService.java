@@ -6,9 +6,11 @@ import Growup.spring.participate.model.Participate;
 
 
 public interface LikedService {
-        Liked doLike(Long userId , Long growRoomId );
+//        Liked doLike(Long userId , Long growRoomId);
+//
+//        boolean unLike(Long userId ,Long growRoomId);
 
-        boolean unLike( Long userId ,Long growRoomId );
+        boolean doOrUnLiked(Long userId, Long growRoomId);
 
         boolean likecount(Long growRoomId);
 
