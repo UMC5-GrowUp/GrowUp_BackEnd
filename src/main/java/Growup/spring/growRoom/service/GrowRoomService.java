@@ -10,6 +10,8 @@ import java.util.List;
 public interface GrowRoomService {
     List<GrowRoom> findByFilter(String filter, String categoryDetail, String period, String status, Long userId, String search);
 
+    List<GrowRoom> findHot();
+
     GrowRoom save(GrowRoomDtoReq.AddGrowRoomDtoReq request);
 
     GrowRoom findById(Long id);

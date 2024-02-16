@@ -16,6 +16,7 @@ import Growup.spring.growRoom.model.component.RecruitmentPeriod;
 import Growup.spring.growRoom.repository.*;
 import Growup.spring.liked.model.Liked;
 import Growup.spring.liked.repository.LikedRepository;
+import Growup.spring.liked.service.LikedService;
 import Growup.spring.security.JwtProvider;
 import Growup.spring.user.model.User;
 import Growup.spring.user.repository.UserRepository;
@@ -45,6 +46,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
     private final LikedRepository likedRepository;
     private final RecruitmentPeriodConverter recruitmentPeriodConverter;
     private final RecruitmentPeriodRepository recruitmentPeriodRepository;
+    private final LikedService likedService;
 
 
     // 그로우룸 글 목록 조회 - 조건
@@ -125,6 +127,18 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         }
 
         return growRooms;
+    }
+
+    @Override
+    public List<GrowRoom> findHot() {
+        List<GrowRoom> growRooms = growRoomRepository.findAll();
+        List<GrowRoom> growRoomRes = new ArrayList<>();
+        for (GrowRoom growRoom : growRooms){
+            if (likedService.likeCount(growRoom.getId())) {
+                growRoomRes.add(growRoom);
+            }
+        }
+        return growRoomRes;
     }
 
     // 그로우룸 글 생성

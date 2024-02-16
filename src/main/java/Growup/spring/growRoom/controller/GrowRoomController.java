@@ -47,6 +47,24 @@ public class GrowRoomController {
     }
 
     /**
+     * 24.02.02 작성자 : 류기현
+     * 그로우룸 목록 조회
+     * 그로우룸 Dto res 수정
+     */
+    @GetMapping("/upper")
+    public ApiResponse<List<GrowRoomDtoRes.GrowRoomAllDtoRes>> findHotGrowRooms(){
+        Long userID = jwtProvider.getUserID();
+        List<GrowRoomDtoRes.GrowRoomAllDtoRes> growRooms = growRoomService.findHot()
+                .stream()
+                .map(growRoom -> new GrowRoomDtoRes.GrowRoomAllDtoRes(growRoom, likedService.isGrowRoomLikedByUser(userID, growRoom.getId())))
+                .collect(Collectors.toList());
+
+        return ApiResponse.onSuccess(growRooms);
+    }
+
+
+
+    /**
      * 24.01.31 작성자 : 류기현
      * 그로우룸 생성
      */
