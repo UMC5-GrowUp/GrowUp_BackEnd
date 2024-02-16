@@ -36,7 +36,7 @@ public class GrowRoomController {
                                                                                 @RequestParam(name = "categoryDetail", defaultValue = "전체") String categoryDetail,
                                                                                 @RequestParam(name = "period", defaultValue = "전체") String period,
                                                                                 @RequestParam(name = "status", defaultValue = "전체") String status,
-                                                                                @RequestParam(name = "search", defaultValue = "null") String search){
+                                                                                @RequestParam(name = "search", defaultValue = "") String search){
         Long userID = jwtProvider.getUserID();
         List<GrowRoomDtoRes.GrowRoomAllDtoRes> growRooms = growRoomService.findByFilter(filter, categoryDetail, period, status, userID, search)
                 .stream()

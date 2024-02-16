@@ -11,6 +11,7 @@ import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.Post;
 import Growup.spring.growRoom.model.component.CategoryDetail;
 import Growup.spring.growRoom.model.component.GrowRoomCategory;
+import Growup.spring.growRoom.model.component.Period;
 import Growup.spring.growRoom.model.component.RecruitmentPeriod;
 import Growup.spring.growRoom.repository.*;
 import Growup.spring.liked.model.Liked;
@@ -50,54 +51,42 @@ public class GrowRoomServiceImpl implements GrowRoomService {
     @Override
     public List<GrowRoom> findByFilter(String filter, String categoryDetail, String period, String status, Long userId, String search) {
 
-        List<GrowRoom> growRooms1;
-//        List<GrowRoom> growRooms2 = null;
-        List<GrowRoom> growRooms3 = null;
-        List<GrowRoom> growRooms4 = null;
-        List<GrowRoom> growRooms5 = null;
+        List<GrowRoom> growRooms;
 
-        int a1 = 0;
-        int a2 = 0;
-        int a3 = 0;
-        int a4 = 0;
-        int a5 = 0;
-
-
-        // 조건 1 : filter
-        // 필수 선택
+        // 조건 1 : filter (필수 선택)
         switch (filter){
             case "내 모집글" :
-                growRooms1 = growRoomRepository.findAllByUserId(userId);
+                growRooms = growRoomRepository.findAllByUserId(userId);
                 break;
             case "관심글" :
                 List<Liked> likedList = likedRepository.findByUserId(userId);
                 List<Long> growRoomIds = likedList.stream()
                         .map(liked -> liked.getGrowRoom().getId())
                         .collect(Collectors.toList());
-                growRooms1 = growRoomRepository.findAllByIdIn(growRoomIds);
+                growRooms = growRoomRepository.findAllByIdIn(growRoomIds);
                 break;
             case "프로젝트" :
-                growRooms1 = growRoomRepository.findAllByRecruitmentId(Long.valueOf("2"));
+                growRooms = growRoomRepository.findAllByRecruitmentId(Long.valueOf("2"));
                 break;
             case "스터디" :
-                growRooms1 = growRoomRepository.findAllByRecruitmentId(Long.valueOf("1"));
+                growRooms = growRoomRepository.findAllByRecruitmentId(Long.valueOf("1"));
                 break;
             case "챌린지" :
-                growRooms1 = growRoomRepository.findAllByRecruitmentId(Long.valueOf("3"));
+                growRooms = growRoomRepository.findAllByRecruitmentId(Long.valueOf("3"));
+                break;
+            case "전체":
+                growRooms = growRoomRepository.findAll();
                 break;
             default :
-                growRooms1 = growRoomRepository.findAll();
-                break;
-////                throw new GrowRoomHandler(ErrorStatus._BAD_REQUEST);
+                throw new GrowRoomHandler(ErrorStatus._BAD_REQUEST);
         }
-
 
         // 조건 2 : categoryDetail
         // 내림차순이 아닌 오름차순으로 정렬되는 문제
         if (!categoryDetail.equals("전체")) {
             Set<GrowRoom> growRoomSet = new HashSet<>();
 
-            for (GrowRoom growRoom : growRooms1) {
+            for (GrowRoom growRoom : growRooms) {
                 List<GrowRoomCategory> growRoomCategories = growRoom.getGrowRoomCategoryList();
                 for (GrowRoomCategory growRoomCategory : growRoomCategories) {
                     String categoryName = growRoomCategory.getCategoryDetail().getName();
@@ -107,48 +96,34 @@ public class GrowRoomServiceImpl implements GrowRoomService {
                     }
                 }
             }
-
-            growRooms1 = new ArrayList<>(growRoomSet);
-        }
-        else{
-            a2 = 1;
+            growRooms = new ArrayList<>(growRoomSet);
         }
 
+        // 조건 3 : period
+        if (!period.equals("전체")) {
+            Period periodUnit = periodRepository.findByPeriod(period);
+            List<GrowRoom> growRooms3 = growRoomRepository.findAllByPeriod(periodUnit);
+            growRooms.retainAll(growRooms3);
+        }
 
-//        // 조건 3 : period
-//        if (!period.equals("전체")) {
-//            // 조건
-//        }
-//        else a3 = 1;
-//
-//
         // 조건 4 : 모집 중만 보기
-        if (!status.equals("전체")) {
-            growRooms4 = growRoomRepository.findAllByStatus(status);
+        if (status.equals("모집중")) {
+            growRooms.retainAll(growRoomRepository.findAllByStatus(status));
         }
-        else a4 = 1;
-//
-//        // 조건 5 : 검색창
-//        if (search != null) {
-//            growRooms5 = new ArrayList<>();
-//            List<Post> posts = postRepository.findAllByTitleContaining(search);
-//            for (Post post : posts){
-//                growRooms5.add(growRoomRepository.findByPost(post));
-//            }
-//            if (growRooms5.isEmpty()){
-//                throw new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND);
-//            }
-//        }
-//        else a5 = 1;
 
-        List<GrowRoom> growRooms = new ArrayList<>(growRooms1);
-//        if (growRooms3 != null)
-//            growRooms.retainAll(growRooms3);
-        if (growRooms4 != null)
-            growRooms.retainAll(growRooms4);
-//        if (growRooms5 != null)
-//            growRooms.retainAll(growRooms5);
-//
+        // 조건 5 : 검색창
+        if (!"".equals(search)) {
+            List<GrowRoom> growRooms5 = new ArrayList<>();
+            List<Post> posts = postRepository.findAllByTitleContaining(search);
+            for (Post post : posts){
+                growRooms5.add(growRoomRepository.findByPost(post));
+            }
+            if (growRooms5.isEmpty()){
+                throw new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND);
+            }
+            growRooms.retainAll(growRooms5);   // 중복 제거
+        }
+
         return growRooms;
     }
 
