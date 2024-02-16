@@ -17,6 +17,8 @@ import Growup.spring.growRoom.repository.*;
 import Growup.spring.liked.model.Liked;
 import Growup.spring.liked.repository.LikedRepository;
 import Growup.spring.liked.service.LikedService;
+import Growup.spring.participate.model.Participate;
+import Growup.spring.participate.repository.ParticipateRepository;
 import Growup.spring.security.JwtProvider;
 import Growup.spring.user.model.User;
 import Growup.spring.user.repository.UserRepository;
@@ -47,13 +49,14 @@ public class GrowRoomServiceImpl implements GrowRoomService {
     private final RecruitmentPeriodConverter recruitmentPeriodConverter;
     private final RecruitmentPeriodRepository recruitmentPeriodRepository;
     private final LikedService likedService;
+    private final ParticipateRepository participateRepository;
 
 
     // 그로우룸 글 목록 조회 - 조건
     @Override
     public List<GrowRoom> findByFilter(String filter, String categoryDetail, String period, String status, Long userId, String search) {
 
-        List<GrowRoom> growRooms;
+        List<GrowRoom> growRooms = new ArrayList<>();
 
         // 조건 1 : filter (필수 선택)
         switch (filter){
@@ -79,15 +82,20 @@ public class GrowRoomServiceImpl implements GrowRoomService {
             case "전체":
                 growRooms = growRoomRepository.findAll();
                 break;
+            case "참여글":
+                List<Participate> participates = participateRepository.findAllByUserId(userId);
+                for (Participate participate : participates) {
+                    growRooms.add(participate.getGrowRoom());
+                }
+                break;
             default :
-                throw new GrowRoomHandler(ErrorStatus._BAD_REQUEST);
+                throw new GrowRoomHandler(ErrorStatus.PARARMS_BAD);
         }
 
         // 조건 2 : categoryDetail
         // 내림차순이 아닌 오름차순으로 정렬되는 문제
         if (!categoryDetail.equals("전체")) {
             Set<GrowRoom> growRoomSet = new HashSet<>();
-
             for (GrowRoom growRoom : growRooms) {
                 List<GrowRoomCategory> growRoomCategories = growRoom.getGrowRoomCategoryList();
                 for (GrowRoomCategory growRoomCategory : growRoomCategories) {
@@ -99,6 +107,9 @@ public class GrowRoomServiceImpl implements GrowRoomService {
                 }
             }
             growRooms = new ArrayList<>(growRoomSet);
+//            if (growRooms.isEmpty()) {
+//             에러핸들러 발생
+//            }
         }
 
         // 조건 3 : period

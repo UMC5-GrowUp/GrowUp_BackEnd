@@ -29,7 +29,6 @@ public class GrowRoomController {
     /**
      * 24.02.02 작성자 : 류기현
      * 그로우룸 목록 조회
-     * 그로우룸 Dto res 수정
      */
     @GetMapping("/under")
     public ApiResponse<List<GrowRoomDtoRes.GrowRoomAllDtoRes>> findAllGrowRooms(@RequestParam(name = "filter", defaultValue = "전체") String filter,
@@ -47,9 +46,8 @@ public class GrowRoomController {
     }
 
     /**
-     * 24.02.02 작성자 : 류기현
-     * 그로우룸 목록 조회
-     * 그로우룸 Dto res 수정
+     * 24.02.16 작성자 : 류기현
+     * 그로우룸 인기글 조회
      */
     @GetMapping("/upper")
     public ApiResponse<List<GrowRoomDtoRes.GrowRoomAllDtoRes>> findHotGrowRooms(){
@@ -62,6 +60,20 @@ public class GrowRoomController {
         return ApiResponse.onSuccess(growRooms);
     }
 
+    /**
+     * 24.02.17 작성자 : 류기현
+     * 라이브룸 목록 조회
+     */
+    @GetMapping("/liveRoom/under")
+    public ApiResponse<List<GrowRoomDtoRes.GrowRoomAllDtoRes>> findAllGrowRooms(@RequestParam(name = "filter", defaultValue = "전체") String filter){
+        Long userID = jwtProvider.getUserID();
+        List<GrowRoomDtoRes.GrowRoomAllDtoRes> growRooms = growRoomService.findByFilter(filter, "전체", "전체", "전체", userID, "")
+                .stream()
+                .map(growRoom -> new GrowRoomDtoRes.GrowRoomAllDtoRes(growRoom, likedService.isGrowRoomLikedByUser(userID, growRoom.getId())))
+                .collect(Collectors.toList());
+
+        return ApiResponse.onSuccess(growRooms);
+    }
 
 
     /**
