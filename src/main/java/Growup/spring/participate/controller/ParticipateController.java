@@ -3,16 +3,18 @@ package Growup.spring.participate.controller;
 
 import Growup.spring.constant.ApiResponse;
 import Growup.spring.constant.status.SuccessStatus;
-import Growup.spring.participate.converter.ParticipateConverter;
+import Growup.spring.growRoom.dto.GrowRoomDtoRes;
+import Growup.spring.growRoom.service.GrowRoomService;
+import Growup.spring.liked.service.LikedService;
 import Growup.spring.participate.dto.ParticipateDtoRes;
-import Growup.spring.participate.model.Participate;
 import Growup.spring.participate.service.ParticipateService;
-import Growup.spring.participate.service.ParticipateServiceImpl;
 import Growup.spring.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 public class ParticipateController {
     private final ParticipateService participateService;
     private final JwtProvider jwtProvider;
+    private final GrowRoomService growRoomService;
+    private final LikedService likedService;
 
     /**
      * 24.02.16 작성자 : 정주현
@@ -45,6 +49,20 @@ public class ParticipateController {
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
 
+    /**
+     * 24.02.17 작성자 : 류기현
+     * 라이브룸 목록 조회
+     */
+    @GetMapping("/under")
+    public ApiResponse<List<GrowRoomDtoRes.GrowRoomAllDtoRes>> findAllGrowRooms(@RequestParam(name = "filter", defaultValue = "전체") String filter){
+        Long userId = jwtProvider.getUserID();
+        List<GrowRoomDtoRes.GrowRoomAllDtoRes> growRooms = growRoomService.findByFilter(filter, "전체", "전체", "전체", userId, "")
+                .stream()
+                .map(growRoom -> new GrowRoomDtoRes.GrowRoomAllDtoRes(growRoom, likedService.isGrowRoomLikedByUser(userId, growRoom.getId())))
+                .collect(Collectors.toList());
+
+        return ApiResponse.onSuccess(growRooms);
+    }
 
     /*
     //순서별로 조회

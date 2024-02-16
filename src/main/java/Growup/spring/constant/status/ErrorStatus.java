@@ -55,23 +55,6 @@ public enum ErrorStatus implements BaseErrorCode {
     GROWROOM_IS_DELETED(HttpStatus.BAD_REQUEST, "GROWROOM4023", "삭제된 GrowRoom입니다."),
 
 
-    // recruitment error
-    RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "RECRUITMENT4001", "Recruitment가 없습니다."),
-
-    // number error
-    NUMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "NUMBER4001", "number가 없습니다."),
-
-    // period error
-    PERIOD_NOT_FOUND(HttpStatus.NOT_FOUND, "PERIOD4001", "period가 없습니다."),
-
-    // pin error
-    PIN_NOT_FOUND(HttpStatus.NOT_FOUND, "PIN4001", "해당 댓글이 없습니다."),
-    PIN_IS_DELETED(HttpStatus.BAD_REQUEST, "Pin4002", "삭제된 댓글입니다."),
-
-    // pinComment error
-    PINCOMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "PINCOMMENT4001", "해당 대댓글이 없습니다."),
-    PINCOMMENT_IS_DELETED(HttpStatus.BAD_REQUEST, "PINCOMMENT4002", "대댓글이 삭제 되었습니다."),
-
     //participate error error -> 4030~
     PARTICIPATE_NOT_FOUND(HttpStatus.BAD_REQUEST,"PARTICIPATE4031","Participate가 없습니다."),
     PARTICIPATE_NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "PARTICIPATE4032","방장만 좋아요가 가능 합니다."),
@@ -81,9 +64,24 @@ public enum ErrorStatus implements BaseErrorCode {
 
 
     //calender 관련 에러코드(4051~
-    CALENDER_NOT_FOUND(HttpStatus.BAD_REQUEST, "CALENDER4051", "등록되지 않은 CALENDER 글 입니다.")
-    ;
+    CALENDER_NOT_FOUND(HttpStatus.BAD_REQUEST, "CALENDER4051", "등록되지 않은 CALENDER 글 입니다."),
 
+    // recruitment, number, period 관련 에러코드(4061~
+    RECRUITMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "RECRUITMENT4061", "Recruitment가 없습니다."),
+    NUMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "NUMBER4062", "number가 없습니다."),
+    PERIOD_NOT_FOUND(HttpStatus.NOT_FOUND, "PERIOD4063", "period가 없습니다."),
+
+    // pin 관련 에러코드(4071~
+    PIN_NOT_FOUND(HttpStatus.NOT_FOUND, "PIN4071", "해당 댓글이 없습니다."),
+    PIN_IS_DELETED(HttpStatus.BAD_REQUEST, "Pin4072", "삭제된 댓글입니다."),
+
+    // pinComment 관련 에러코드(4081~
+    PINCOMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "PINCOMMENT4081", "해당 대댓글이 없습니다."),
+    PINCOMMENT_IS_DELETED(HttpStatus.BAD_REQUEST, "PINCOMMENT4082", "대댓글이 삭제 되었습니다."),
+
+    // parameter 관련 에러코드(4091~
+    PARARMS_BAD(HttpStatus.BAD_REQUEST, "PARARMS4091", "전달 인자가 잘못되었습니다.")
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;
