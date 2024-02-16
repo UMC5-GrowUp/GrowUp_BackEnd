@@ -50,7 +50,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
 
     //growroom error -> 4020~
-    GROWROOM_NOT_FOUND(HttpStatus.NOT_FOUND,"GROWROOM4021","GrowRoom이 없습니다."),
+    GROWROOM_NOT_FOUND(HttpStatus.NOT_FOUND,"GROWROOM4021","해당 GrowRoom이 없습니다."),
     GROWROOM_NOT_HOT(HttpStatus.BAD_REQUEST,"GROWRROM4022","인기글이 아닙니다."),
     GROWROOM_IS_DELETED(HttpStatus.BAD_REQUEST, "GROWROOM4023", "삭제된 GrowRoom입니다."),
 

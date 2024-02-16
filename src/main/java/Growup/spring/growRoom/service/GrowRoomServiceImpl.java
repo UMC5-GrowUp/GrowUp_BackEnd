@@ -1,5 +1,6 @@
 package Growup.spring.growRoom.service;
 
+import Growup.spring.constant.exeption.GeneralException;
 import Growup.spring.constant.handler.GrowRoomHandler;
 import Growup.spring.constant.handler.UserHandler;
 import Growup.spring.constant.status.ErrorStatus;
@@ -47,82 +48,107 @@ public class GrowRoomServiceImpl implements GrowRoomService {
 
     // 그로우룸 글 목록 조회 - 조건
     @Override
-    public List<GrowRoom> findByFilter(String filter, String category, String period, String recruit, Long userId, String search) {
+    public List<GrowRoom> findByFilter(String filter, String categoryDetail, String period, String status, Long userId, String search) {
 
-        List<GrowRoom> growRooms;
+        List<GrowRoom> growRooms1;
+//        List<GrowRoom> growRooms2 = null;
+        List<GrowRoom> growRooms3 = null;
+        List<GrowRoom> growRooms4 = null;
+        List<GrowRoom> growRooms5 = null;
 
+        int a1 = 0;
+        int a2 = 0;
+        int a3 = 0;
+        int a4 = 0;
+        int a5 = 0;
+
+
+        // 조건 1 : filter
+        // 필수 선택
         switch (filter){
             case "내 모집글" :
-                growRooms = growRoomRepository.findAllByUserId(userId);
+                growRooms1 = growRoomRepository.findAllByUserId(userId);
                 break;
             case "관심글" :
                 List<Liked> likedList = likedRepository.findByUserId(userId);
                 List<Long> growRoomIds = likedList.stream()
                         .map(liked -> liked.getGrowRoom().getId())
                         .collect(Collectors.toList());
-                growRooms = growRoomRepository.findAllByIdIn(growRoomIds);
+                growRooms1 = growRoomRepository.findAllByIdIn(growRoomIds);
                 break;
             case "프로젝트" :
-                growRooms = growRoomRepository.findAllByRecruitmentId(Long.valueOf("2"));
+                growRooms1 = growRoomRepository.findAllByRecruitmentId(Long.valueOf("2"));
                 break;
             case "스터디" :
-                growRooms = growRoomRepository.findAllByRecruitmentId(Long.valueOf("1"));
+                growRooms1 = growRoomRepository.findAllByRecruitmentId(Long.valueOf("1"));
                 break;
             case "챌린지" :
-                growRooms = growRoomRepository.findAllByRecruitmentId(Long.valueOf("3"));
+                growRooms1 = growRoomRepository.findAllByRecruitmentId(Long.valueOf("3"));
                 break;
             default :
-                growRooms = growRoomRepository.findAll();
+                growRooms1 = growRoomRepository.findAll();
                 break;
+////                throw new GrowRoomHandler(ErrorStatus._BAD_REQUEST);
         }
 
-        // category 조건
-//        growRooms.removeIf(growRoom -> growRoom.getGrowRoomCategoryList()
-//                .stream()
-//                .anyMatch(growRoomCategory -> growRoomCategory.getCategoryDetail().getCategory().getName().equals(category)));
 
-        // category
-        // 그로우룸 -> List<growRoomCategory> -> growRoomCategory로 나누기 -> name = growRoomCateory.getCategoryDetail.getCategory.getName -> name과 카테고리 비교
-        // 비교결과 일치하는 것이 하나라도 있는 그로우룸은 조회
-//        growRooms = growRooms.stream()
-//                .filter(growRoom -> growRoom.getGrowRoomCategoryList().stream()
-//                        .anyMatch(growRoomCategory -> growRoomCategory.getCategoryDetail().getCategory().getName().equals(category)))
-//                .collect(Collectors.toList());
+        // 조건 2 : categoryDetail
+        // 내림차순이 아닌 오름차순으로 정렬되는 문제
+        if (!categoryDetail.equals("전체")) {
+            Set<GrowRoom> growRoomSet = new HashSet<>();
 
-//        switch (category){
-//            case "IT/미디어":
-//            case "공부/자격증":
-//            case "공모전/프로젝트":
-//            case "스포츠/헬스":
-//            case "미술/디자인":
-//                growRooms.removeIf(growRoom -> growRoom.getGrowRoomCategoryList().stream()
-//                        .noneMatch(growRoomCategory -> growRoomCategory.getCategoryDetail().getCategory().getName().equals(category)));
-//                break;
-//            default:
-//                break;
-//        }
-
-        Set<GrowRoom> growRoomSet = new HashSet<>(growRooms);
-
-        // categoryDetail
-        for (GrowRoom growRoom : growRoomSet){
-            List<GrowRoomCategory> growRoomCategories = growRoom.getGrowRoomCategoryList();
-            for (GrowRoomCategory growRoomCategory : growRoomCategories){
-                String categoryName = growRoomCategory.getCategoryDetail().getName();
-                if (!categoryName.equals(category)) {
-                    continue;
+            for (GrowRoom growRoom : growRooms1) {
+                List<GrowRoomCategory> growRoomCategories = growRoom.getGrowRoomCategoryList();
+                for (GrowRoomCategory growRoomCategory : growRoomCategories) {
+                    String categoryName = growRoomCategory.getCategoryDetail().getName();
+                    if (categoryName.equals(categoryDetail)) {
+                        growRoomSet.add(growRoom);
+                        break;
+                    }
                 }
             }
+
+            growRooms1 = new ArrayList<>(growRoomSet);
+        }
+        else{
+            a2 = 1;
         }
 
-        // period
 
+//        // 조건 3 : period
+//        if (!period.equals("전체")) {
+//            // 조건
+//        }
+//        else a3 = 1;
+//
+//
+        // 조건 4 : 모집 중만 보기
+        if (!status.equals("전체")) {
+            growRooms4 = growRoomRepository.findAllByStatus(status);
+        }
+        else a4 = 1;
+//
+//        // 조건 5 : 검색창
+//        if (search != null) {
+//            growRooms5 = new ArrayList<>();
+//            List<Post> posts = postRepository.findAllByTitleContaining(search);
+//            for (Post post : posts){
+//                growRooms5.add(growRoomRepository.findByPost(post));
+//            }
+//            if (growRooms5.isEmpty()){
+//                throw new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND);
+//            }
+//        }
+//        else a5 = 1;
 
-
-        // HashSet으로 바꿨다가 List로 다시 변환하면 중복 삭제
-//        Set<GrowRoom> growRoomSet1 = new HashSet<>(growRooms)
-        growRooms = new ArrayList<>(growRoomSet);
-
+        List<GrowRoom> growRooms = new ArrayList<>(growRooms1);
+//        if (growRooms3 != null)
+//            growRooms.retainAll(growRooms3);
+        if (growRooms4 != null)
+            growRooms.retainAll(growRooms4);
+//        if (growRooms5 != null)
+//            growRooms.retainAll(growRooms5);
+//
         return growRooms;
     }
 
@@ -171,6 +197,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         if (growRoom.getStatus().equals("삭제") && !(growRoom.getUser().equals(userRepository.findById(jwtProvider.getUserID())
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND)))))
             throw new GrowRoomHandler(ErrorStatus.GROWROOM_IS_DELETED);
+//        else throw new UserHandler(ErrorStatus.USER_NOT_PERMITTED);
 
         return growRoom;
     }

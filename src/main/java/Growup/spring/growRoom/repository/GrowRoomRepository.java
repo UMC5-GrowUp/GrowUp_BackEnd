@@ -1,6 +1,7 @@
 package Growup.spring.growRoom.repository;
 
 import Growup.spring.growRoom.model.GrowRoom;
+import Growup.spring.growRoom.model.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -30,14 +31,11 @@ public interface GrowRoomRepository extends JpaRepository<GrowRoom, Long> {
 
     List<GrowRoom> findAllByRecruitmentId(Long recruitmentId);
 
+    // 일정시간 이후 삭제
     List<GrowRoom> findAllByStatusAndUpdatedAtBefore(String status, LocalDateTime updateAt);
-//    List<GrowRoom> findAllByGrowRoomCategoryListContains()
 
+    // 모집중만 검색
+    List<GrowRoom> findAllByStatus(String status);
 
-//    @Query("SELECT g FROM GrowRoom g WHERE " +
-//            "(:category IS NULL OR g.category = :category) AND " +
-//            "(:period IS NULL OR g.period = :period) AND " +
-//            "(:recruit IS NULL OR g.recruit = :recruit) AND " +
-//            "(:status IS NULL OR g.status = :)")
-//    List<GrowRoom> findByAndPeriodAndRecruitAndStatusNot(String category, String period, String recruit, String status);
+    GrowRoom findByPost(Post post);
 }
