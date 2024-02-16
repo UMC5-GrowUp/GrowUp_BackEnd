@@ -4,10 +4,25 @@ package Growup.spring.participate.dto;
 
 
 import lombok.*;
+import org.checkerframework.checker.units.qual.A;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ParticipateDtoRes {
+
+    //참여자 그로우룸 입장- 응답
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class participateEnterRes{
+        private Long growRoomId;
+        private Long participateId;
+        private LocalDateTime createdAd;
+    }
+
     @Getter
     @Setter
     @Builder
