@@ -31,7 +31,7 @@ public class GrowRoomController {
      * 그로우룸 목록 조회
      * 그로우룸 Dto res 수정
      */
-    @GetMapping("")
+    @GetMapping("/under")
     public ApiResponse<List<GrowRoomDtoRes.GrowRoomAllDtoRes>> findAllGrowRooms(@RequestParam(name = "filter", defaultValue = "전체") String filter,
                                                                                 @RequestParam(name = "categoryDetail", defaultValue = "전체") String categoryDetail,
                                                                                 @RequestParam(name = "period", defaultValue = "전체") String period,
