@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface GrowRoomService {
-    List<GrowRoom> findByFilter(String filter, Long userId);
+    List<GrowRoom> findByFilter(String filter, String categoryDetail, String period, String status, Long userId, String search);
 
     GrowRoom save(GrowRoomDtoReq.AddGrowRoomDtoReq request);
 

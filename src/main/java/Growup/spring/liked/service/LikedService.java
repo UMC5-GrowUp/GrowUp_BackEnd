@@ -12,7 +12,7 @@ public interface LikedService {
 
         boolean doOrUnLiked(Long userId, Long growRoomId);
 
-        boolean likecount(Long growRoomId);
+        boolean likeCount(Long growRoomId);
 
         Participate likeToParticipate(Long userId , Long growRoomId , Long participateId);
 

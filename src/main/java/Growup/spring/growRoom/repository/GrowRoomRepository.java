@@ -1,15 +1,13 @@
 package Growup.spring.growRoom.repository;
 
 import Growup.spring.growRoom.model.GrowRoom;
-import io.lettuce.core.dynamic.annotation.Param;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import Growup.spring.growRoom.model.Post;
+import Growup.spring.growRoom.model.component.Period;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +32,14 @@ public interface GrowRoomRepository extends JpaRepository<GrowRoom, Long> {
 
     List<GrowRoom> findAllByRecruitmentId(Long recruitmentId);
 
+    // 일정시간 이후 삭제
     List<GrowRoom> findAllByStatusAndUpdatedAtBefore(String status, LocalDateTime updateAt);
-//    List<GrowRoom> findAllByGrowRoomCategoryListContains()
+
+    // 진행기간별 검색
+    List<GrowRoom> findAllByPeriod(Period period);
+
+    // 모집중만 검색
+    List<GrowRoom> findAllByStatus(String status);
+
+    GrowRoom findByPost(Post post);
 }

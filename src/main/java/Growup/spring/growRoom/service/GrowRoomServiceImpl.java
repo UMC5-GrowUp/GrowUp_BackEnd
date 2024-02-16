@@ -1,5 +1,6 @@
 package Growup.spring.growRoom.service;
 
+import Growup.spring.constant.exeption.GeneralException;
 import Growup.spring.constant.handler.GrowRoomHandler;
 import Growup.spring.constant.handler.UserHandler;
 import Growup.spring.constant.status.ErrorStatus;
@@ -10,22 +11,22 @@ import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.Post;
 import Growup.spring.growRoom.model.component.CategoryDetail;
 import Growup.spring.growRoom.model.component.GrowRoomCategory;
+import Growup.spring.growRoom.model.component.Period;
 import Growup.spring.growRoom.model.component.RecruitmentPeriod;
 import Growup.spring.growRoom.repository.*;
 import Growup.spring.liked.model.Liked;
 import Growup.spring.liked.repository.LikedRepository;
-import Growup.spring.participate.model.Participate;
-import Growup.spring.participate.repository.ParticipateRepository;
 import Growup.spring.security.JwtProvider;
 import Growup.spring.user.model.User;
 import Growup.spring.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -41,7 +42,6 @@ public class GrowRoomServiceImpl implements GrowRoomService {
     private final PeriodRepository periodRepository;
     public final GrowRoomCategoryServiceImpl growRoomCategoryServiceImpl;
     public final GrowRoomConverter growRoomConverter;
-    private final ParticipateRepository participateRepository;
     private final LikedRepository likedRepository;
     private final RecruitmentPeriodConverter recruitmentPeriodConverter;
     private final RecruitmentPeriodRepository recruitmentPeriodRepository;
@@ -49,10 +49,11 @@ public class GrowRoomServiceImpl implements GrowRoomService {
 
     // 그로우룸 글 목록 조회 - 조건
     @Override
-    public List<GrowRoom> findByFilter(String filter, Long userId) {
+    public List<GrowRoom> findByFilter(String filter, String categoryDetail, String period, String status, Long userId, String search) {
 
         List<GrowRoom> growRooms;
 
+        // 조건 1 : filter (필수 선택)
         switch (filter){
             case "내 모집글" :
                 growRooms = growRoomRepository.findAllByUserId(userId);
@@ -73,29 +74,54 @@ public class GrowRoomServiceImpl implements GrowRoomService {
             case "챌린지" :
                 growRooms = growRoomRepository.findAllByRecruitmentId(Long.valueOf("3"));
                 break;
-
-//            case "cat1" :
-//                List<Category>  categoryList = cate
-//                growRooms = growRoomRepository.findAllBy
-//                        // 카테고리 세부사항 그로우룸식별자 ->
-//                break;
-//            case "cat2" :
-//
-//                break;
-//            case "cat3" :
-//
-//                break;
-//            case "cat4" :
-//
-//                break;
-//            case "cat5" :
-//
-//                break;
-//            case "cat6" :
-//
-//                break;
-            default:
+            case "전체":
                 growRooms = growRoomRepository.findAll();
+                break;
+            default :
+                throw new GrowRoomHandler(ErrorStatus._BAD_REQUEST);
+        }
+
+        // 조건 2 : categoryDetail
+        // 내림차순이 아닌 오름차순으로 정렬되는 문제
+        if (!categoryDetail.equals("전체")) {
+            Set<GrowRoom> growRoomSet = new HashSet<>();
+
+            for (GrowRoom growRoom : growRooms) {
+                List<GrowRoomCategory> growRoomCategories = growRoom.getGrowRoomCategoryList();
+                for (GrowRoomCategory growRoomCategory : growRoomCategories) {
+                    String categoryName = growRoomCategory.getCategoryDetail().getName();
+                    if (categoryName.equals(categoryDetail)) {
+                        growRoomSet.add(growRoom);
+                        break;
+                    }
+                }
+            }
+            growRooms = new ArrayList<>(growRoomSet);
+        }
+
+        // 조건 3 : period
+        if (!period.equals("전체")) {
+            Period periodUnit = periodRepository.findByPeriod(period);
+            List<GrowRoom> growRooms3 = growRoomRepository.findAllByPeriod(periodUnit);
+            growRooms.retainAll(growRooms3);
+        }
+
+        // 조건 4 : 모집 중만 보기
+        if (status.equals("모집중")) {
+            growRooms.retainAll(growRoomRepository.findAllByStatus(status));
+        }
+
+        // 조건 5 : 검색창
+        if (!"".equals(search)) {
+            List<GrowRoom> growRooms5 = new ArrayList<>();
+            List<Post> posts = postRepository.findAllByTitleContaining(search);
+            for (Post post : posts){
+                growRooms5.add(growRoomRepository.findByPost(post));
+            }
+            if (growRooms5.isEmpty()){
+                throw new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND);
+            }
+            growRooms.retainAll(growRooms5);   // 중복 제거
         }
 
         return growRooms;
@@ -146,6 +172,7 @@ public class GrowRoomServiceImpl implements GrowRoomService {
         if (growRoom.getStatus().equals("삭제") && !(growRoom.getUser().equals(userRepository.findById(jwtProvider.getUserID())
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND)))))
             throw new GrowRoomHandler(ErrorStatus.GROWROOM_IS_DELETED);
+//        else throw new UserHandler(ErrorStatus.USER_NOT_PERMITTED);
 
         return growRoom;
     }
@@ -217,7 +244,6 @@ public class GrowRoomServiceImpl implements GrowRoomService {
     // 라이브룸 선택시 조회 되게 하는것
     @Override
     public Post inquirypost(Long growRoomId) {
-        Post post = postRepository.findByGrowRoomId(growRoomId);
-        return post;
+        return postRepository.findByGrowRoomId(growRoomId);
     }
 }
