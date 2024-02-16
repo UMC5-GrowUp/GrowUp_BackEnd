@@ -1,20 +1,19 @@
-package Growup.spring.domain;
+package Growup.spring.participate.model;
 
 
 
 import Growup.spring.constant.entity.BaseEntity;
-import Growup.spring.participate.model.Participate;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @DynamicUpdate
 @DynamicInsert
 @Builder
@@ -27,12 +26,14 @@ public class ParticipateTime extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @CreatedDate
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
 
-    @OneToMany(mappedBy = "participateTime", cascade = CascadeType.ALL)
-    private List<Participate> participateList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "participateId")
+    private Participate participate;
 
 
 }

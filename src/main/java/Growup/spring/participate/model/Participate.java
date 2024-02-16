@@ -2,7 +2,6 @@ package Growup.spring.participate.model;
 
 
 import Growup.spring.constant.entity.BaseEntity;
-import Growup.spring.domain.ParticipateTime;
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.user.model.User;
 import lombok.*;
@@ -10,6 +9,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -27,15 +28,11 @@ public class Participate extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false,  length = 40 ,columnDefinition ="0")
+    @Column(nullable = false, columnDefinition = "int default 0")
     private  Integer liked;
 
-    @Column(nullable = false, length = 40)
-    private  String status;
-
-    @ManyToOne
-    @JoinColumn(name = "participatetimeId")
-    private ParticipateTime participateTime;
+    @Column(nullable = false, length = 40, columnDefinition = "varchar(40) default 'ACTIVE'")
+    private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
@@ -44,6 +41,9 @@ public class Participate extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "growroomId")
     private GrowRoom growRoom;
+
+    @OneToMany(mappedBy = "participate", cascade = CascadeType.ALL)
+    private List<ParticipateTime> participateTimeList = new ArrayList<>();
 
 
 
