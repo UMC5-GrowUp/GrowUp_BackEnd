@@ -34,7 +34,7 @@ public class EmailService {
         String authNum = getCertificationNumber();
 
         String title = "이메일 인증안내";
-        String DOMAIN_NAME = "http://localhost:3000";
+        String DOMAIN_NAME = "https://growup-umc5th.netlify.app";
 
         String url;
         if (text.equals("비밀번호 재설정")){
