@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             config.setAllowedMethods(Collections.singletonList("*"));
             config.setAllowedOriginPatterns(new ArrayList<String>() {{
                 add("http://localhost:3000");
+                add("https://growup-umc5th.netlify.app");
             }});
             config.setAllowCredentials(true);
             return config;
