@@ -65,8 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/growup/users/token-reissue").hasRole("USER")
                 .antMatchers("/growup/users/**").permitAll()
                 .antMatchers("/growup/users/admin/**").hasRole("ADMIN")
-                .antMatchers("/growup/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/growup/upperAbleNoToken").permitAll()
+                .antMatchers("/growup/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().permitAll()
 
                 .and()
