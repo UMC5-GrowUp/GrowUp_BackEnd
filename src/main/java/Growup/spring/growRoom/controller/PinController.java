@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @RestController             //http response body에 객체 데이터를 json 반환
 @RequestMapping("/growup/growroom")
 public class PinController {
+
     // 댓글 Pin
     private final PinService pinService;
 
