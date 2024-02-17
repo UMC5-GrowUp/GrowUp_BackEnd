@@ -154,10 +154,10 @@ public class GrowRoomServiceImpl implements GrowRoomService {
 
     // 그로우룸 글 생성
     @Transactional
-    public GrowRoom save(GrowRoomDtoReq.AddGrowRoomDtoReq request) {
+    public GrowRoom save(Long userID, GrowRoomDtoReq.AddGrowRoomDtoReq request) {
 
         // 그로우룸에 user 설정 - 토큰
-        User user = userRepository.findById(jwtProvider.getUserID())
+        User user = userRepository.findById(userID)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
         GrowRoom growRoom = request.toEntity();
         growRoom.setUser(user);
@@ -206,12 +206,12 @@ public class GrowRoomServiceImpl implements GrowRoomService {
 
     @Override
     @Transactional
-    public void deleteTemp(Long id) {
+    public void deleteTemp(Long userID, Long id) {
         GrowRoom growRoom = growRoomRepository.findById(id)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
 
         // growroom.user, request를 보낸 user 동일한지 확인
-        User reqUser = userRepository.findById(jwtProvider.getUserID())
+        User reqUser = userRepository.findById(userID)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_PERMITTED));
 
         if (!growRoom.getUser().equals(reqUser))
@@ -222,13 +222,13 @@ public class GrowRoomServiceImpl implements GrowRoomService {
 
     // 그로우룸{id} 수정
     @Transactional
-    public GrowRoom update(Long id, GrowRoomDtoReq.UpdateGrowRoomDtoReq request) {
+    public GrowRoom update(Long userID, Long id, GrowRoomDtoReq.UpdateGrowRoomDtoReq request) {
 
         GrowRoom growRoom = growRoomRepository.findById(id)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
 
         // growroom을 생성한 userId와 수정요청한 userId가 다르다면 error
-        if(!jwtProvider.getUserID().equals(growRoom.getUser().getId()))
+        if(!userID.equals(growRoom.getUser().getId()))
             throw new UserHandler(ErrorStatus.USER_NOT_PERMITTED);
 
 
@@ -255,8 +255,8 @@ public class GrowRoomServiceImpl implements GrowRoomService {
 
     // 조회수 증가
     @Override
-    public int updateView(Long id) {
-        User user = userRepository.findById(jwtProvider.getUserID())
+    public int updateView(Long userID, Long id) {
+        User user = userRepository.findById(userID)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
         GrowRoom growRoom = growRoomRepository.findById(id)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
