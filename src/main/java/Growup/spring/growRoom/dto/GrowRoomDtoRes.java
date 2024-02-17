@@ -13,11 +13,15 @@ public class GrowRoomDtoRes {
     @Getter
     public static class GrowRoomViewDtoRes {
 
+        private final Long growRoomId;
+
         // user
         private final String nick_name;
         private final String photo_url;
 
         // growroom
+        private final Integer view;
+        private final Integer LikedNumber;
         private final String recruitment_field;
         private final Integer number;
         private final String period;
@@ -34,8 +38,12 @@ public class GrowRoomDtoRes {
         private final String content;
 
         public GrowRoomViewDtoRes(GrowRoom growRoom) {
+
+            this.growRoomId = growRoom.getId();
             this.nick_name = growRoom.getUser().getNickName();
             this.photo_url = growRoom.getUser().getPhotoUrl();
+            this.view = growRoom.getView();
+            this.LikedNumber = growRoom.getLikeList().size();
             this.recruitment_field = growRoom.getRecruitment().getField();
             this.number = growRoom.getNumber().getNumber();
             this.period = growRoom.getPeriod().getPeriod();
