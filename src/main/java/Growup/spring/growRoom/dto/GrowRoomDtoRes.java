@@ -2,6 +2,7 @@ package Growup.spring.growRoom.dto;
 
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.model.component.GrowRoomCategory;
+import Growup.spring.liked.model.Liked;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -43,7 +44,11 @@ public class GrowRoomDtoRes {
             this.nick_name = growRoom.getUser().getNickName();
             this.photo_url = growRoom.getUser().getPhotoUrl();
             this.view = growRoom.getView();
-            this.LikedNumber = growRoom.getLikeList().size();
+            List<Liked> likedList = growRoom.getLikeList();
+            if (likedList!=null){
+                this.LikedNumber = likedList.size();
+            }
+            else this.LikedNumber = 0;
             this.recruitment_field = growRoom.getRecruitment().getField();
             this.number = growRoom.getNumber().getNumber();
             this.period = growRoom.getPeriod().getPeriod();
