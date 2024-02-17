@@ -25,4 +25,10 @@ public class PinDtoRes {
             this.comment = pin.getComment();
         }
     }
+
+//    @Getter
+//    public static class PinAllDtoRes{
+//
+//        private final L
+//    }
 }

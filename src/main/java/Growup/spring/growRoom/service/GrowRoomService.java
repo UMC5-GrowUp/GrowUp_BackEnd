@@ -12,15 +12,15 @@ public interface GrowRoomService {
 
     List<GrowRoom> findHot();
 
-    GrowRoom save(GrowRoomDtoReq.AddGrowRoomDtoReq request);
+    GrowRoom save(Long userID, GrowRoomDtoReq.AddGrowRoomDtoReq request);
 
     GrowRoom findById(Long id);
 
-    void deleteTemp(Long id);
+    void deleteTemp(Long userID, Long id);
 
-    GrowRoom update(Long id, GrowRoomDtoReq.UpdateGrowRoomDtoReq request);
+    GrowRoom update(Long userID, Long id, GrowRoomDtoReq.UpdateGrowRoomDtoReq request);
 
-    int updateView(Long id);
+    int updateView(Long userID, Long id);
 
     Post inquirypost(Long growRoomId);
 }

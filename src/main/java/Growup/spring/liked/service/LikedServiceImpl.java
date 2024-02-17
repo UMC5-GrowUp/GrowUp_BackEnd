@@ -153,8 +153,8 @@ public class LikedServiceImpl implements LikedService{
 
     // growroom 좋아요 조회
     @Override
-    public boolean isGrowRoomLikedByUser(Long userId, Long growRoomId) {
-        User user = userRepository.findById(userId)
+    public boolean isGrowRoomLikedByUser(Long userID, Long growRoomId) {
+        User user = userRepository.findById(userID)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
         GrowRoom growRoom = growRoomRepository.findById(growRoomId)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
