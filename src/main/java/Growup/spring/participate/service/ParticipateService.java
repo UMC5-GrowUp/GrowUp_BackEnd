@@ -9,5 +9,7 @@ public interface ParticipateService {
 
     void participateOut(Long userId, Long growRoomId);
 
+    Long findOwner(Long growRoomId);
+
     //Page<Participate> LiveupParticipateList (String filter , Long growRoomId , Integer page );
 }

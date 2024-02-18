@@ -7,6 +7,7 @@ import Growup.spring.growRoom.dto.GrowRoomDtoRes;
 import Growup.spring.growRoom.service.GrowRoomService;
 import Growup.spring.liked.service.LikedService;
 import Growup.spring.participate.dto.ParticipateDtoRes;
+import Growup.spring.participate.model.Participate;
 import Growup.spring.participate.service.ParticipateService;
 import Growup.spring.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +64,17 @@ public class ParticipateController {
 
         return ApiResponse.onSuccess(growRooms);
     }
+
+    /**
+     * 24.02.17 작성자 : 류기현
+     * 라이브룸 참여자 조회
+     */
+    @GetMapping("/madeBy")
+    public ApiResponse<ParticipateDtoRes.ownerRes> findOwner(@RequestParam(name = "growRoomId", defaultValue = "") Long growRoomId){
+
+        return ApiResponse.onSuccess(new  ParticipateDtoRes.ownerRes(participateService.findOwner(growRoomId)));
+    }
+
 
     /*
     //순서별로 조회

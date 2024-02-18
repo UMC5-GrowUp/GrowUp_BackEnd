@@ -44,4 +44,14 @@ public class ParticipateDtoRes {
         private String photoUrl;
 
     }
+
+    // 그로우룸의 주인 Id
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ownerRes {
+        private Long userId;
+    }
 }
