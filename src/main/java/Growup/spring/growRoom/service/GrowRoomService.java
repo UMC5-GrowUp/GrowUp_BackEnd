@@ -22,4 +22,6 @@ public interface GrowRoomService {
     int updateView(Long userID, Long id);
 
     Post inquirypost(Long growRoomId);
+
+
 }

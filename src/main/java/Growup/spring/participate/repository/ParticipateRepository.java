@@ -23,4 +23,6 @@ public interface ParticipateRepository extends JpaRepository<Participate, Long> 
     Participate findByUserIdAndGrowRoomId (Long userId, Long growRoomId);
 
     List<Participate> findAllByUserId(Long userId);
+
+    Participate findByGrowRoomId(Long growRoomId);
 }

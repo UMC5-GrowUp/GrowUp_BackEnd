@@ -73,6 +73,13 @@ public class ParticipateServiceImpl implements ParticipateService{
 
     }
 
+    @Override
+    public Long findOwner(Long growRoomId) {
+        GrowRoom growRoom = growRoomRepository.findById(growRoomId)
+                .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
+        return growRoom.getUser().getId();
+    }
+
     /*
     @Override
     public Page<Participate> LiveupParticipateList (String filter , Long growRoomId , Integer page ){
