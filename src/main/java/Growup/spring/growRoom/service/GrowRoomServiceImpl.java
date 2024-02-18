@@ -1,6 +1,5 @@
 package Growup.spring.growRoom.service;
 
-import Growup.spring.constant.exeption.GeneralException;
 import Growup.spring.constant.handler.GrowRoomHandler;
 import Growup.spring.constant.handler.UserHandler;
 import Growup.spring.constant.status.ErrorStatus;

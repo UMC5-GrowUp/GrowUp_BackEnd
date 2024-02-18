@@ -5,6 +5,7 @@ import Growup.spring.constant.handler.UserHandler;
 import Growup.spring.constant.status.ErrorStatus;
 import Growup.spring.growRoom.converter.PinCommentConverter;
 import Growup.spring.growRoom.dto.PinCommentDtoReq;
+import Growup.spring.growRoom.dto.PinCommentDtoRes;
 import Growup.spring.growRoom.model.Pin;
 import Growup.spring.growRoom.model.PinComment;
 import Growup.spring.growRoom.repository.PinCommentRepository;
@@ -64,5 +65,10 @@ public class PinCommentServiceImpl implements PinCommentService {
         PinComment pinComment = pinCommentRepository.findById(pinCommentId)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PINCOMMENT_NOT_FOUND));
         pinComment.updateStatus("1");
+    }
+
+    @Override
+    public List<PinCommentDtoRes.PinCommentViewDtoRes> res(List<PinComment> pinComments) {
+        return pinCommentConverter.convertToPinCommentRes(pinComments);
     }
 }
