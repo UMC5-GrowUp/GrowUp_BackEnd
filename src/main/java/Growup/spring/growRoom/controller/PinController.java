@@ -2,6 +2,7 @@ package Growup.spring.growRoom.controller;
 
 import Growup.spring.constant.ApiResponse;
 import Growup.spring.constant.status.SuccessStatus;
+import Growup.spring.growRoom.converter.PinConverter;
 import Growup.spring.growRoom.dto.PinDtoReq;
 import Growup.spring.growRoom.dto.PinDtoRes;
 import Growup.spring.growRoom.model.Pin;
@@ -24,12 +25,9 @@ public class PinController {
      * 24.02.06 작성자 : 류기현
      * 그로우룸 {id} 댓글 조회 + 대댓글 조회로 만들어야함
      */
-    @GetMapping("/{growRoomId}")
+    @GetMapping("/{growRoomId}/pin")
     public ApiResponse<List<PinDtoRes.PinViewDtoRes>> findAllPins(@PathVariable Long growRoomId){
-        List<PinDtoRes.PinViewDtoRes> pinList = pinService.findAllByGrowRoomId(growRoomId)
-                .stream()
-                .map(PinDtoRes.PinViewDtoRes::new)
-                .collect(Collectors.toList());
+        List<PinDtoRes.PinViewDtoRes> pinList = pinService.pinRes(growRoomId);
 
         return ApiResponse.onSuccess(pinList);
     }
@@ -41,10 +39,7 @@ public class PinController {
     @PostMapping("/{growRoomId}")
     public ApiResponse<List<PinDtoRes.PinViewDtoRes>> addPin(@PathVariable Long growRoomId, @RequestBody PinDtoReq.AddPinDtoReq request){
         pinService.save(growRoomId, request);
-        List<PinDtoRes.PinViewDtoRes> pinList = pinService.findAllByGrowRoomId(growRoomId)
-                .stream()
-                .map(PinDtoRes.PinViewDtoRes::new)
-                .collect(Collectors.toList());
+        List<PinDtoRes.PinViewDtoRes> pinList = pinService.pinRes(growRoomId);
 
         return ApiResponse.onSuccess(pinList);
     }
@@ -54,10 +49,11 @@ public class PinController {
      * 그로우룸 {id} 댓글 수정
      */
     @PutMapping("/{growRoomId}/{pinId}")
-    public ApiResponse<PinDtoRes.PinViewDtoRes> updatePin(@PathVariable Long growRoomId, @PathVariable long pinId, @RequestBody PinDtoReq.UpdatePinDtoReq request) {
-        Pin updatedPin = pinService.update(pinId, request);
+    public ApiResponse<List <PinDtoRes.PinViewDtoRes>> updatePin(@PathVariable Long growRoomId, @PathVariable long pinId, @RequestBody PinDtoReq.UpdatePinDtoReq request) {
+        pinService.update(pinId, request);
+        List<PinDtoRes.PinViewDtoRes> pinList = pinService.pinRes(growRoomId);
 
-        return ApiResponse.onSuccess(new PinDtoRes.PinViewDtoRes(updatedPin));
+        return ApiResponse.onSuccess(pinList);
     }
 
     /**
@@ -65,9 +61,10 @@ public class PinController {
      * 그로우룸 {id} 삭제 - 수정을 통해 상태변경 후 일정 시간 이후 삭제
      */
     @DeleteMapping("/{growRoomId}/{pinId}")
-    public ApiResponse<SuccessStatus> deletePin(@PathVariable Long growRoomId, @PathVariable Long pinId){
+    public ApiResponse<List <PinDtoRes.PinViewDtoRes>> deletePin(@PathVariable Long growRoomId, @PathVariable Long pinId){
         pinService.delete(pinId);
+        List<PinDtoRes.PinViewDtoRes> pinList = pinService.pinRes(growRoomId);
 
-        return ApiResponse.onSuccess(SuccessStatus._OK);
+        return ApiResponse.onSuccess(pinList);
     }
 }

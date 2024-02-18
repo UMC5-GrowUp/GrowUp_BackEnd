@@ -1,6 +1,7 @@
 package Growup.spring.growRoom.service;
 
 import Growup.spring.growRoom.dto.PinCommentDtoReq;
+import Growup.spring.growRoom.dto.PinCommentDtoRes;
 import Growup.spring.growRoom.model.PinComment;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface PinCommentService {
     PinComment update(Long pinId, Long pinCommentId, PinCommentDtoReq.UpdatePinCommentDtoReq request);
 
     void delete(Long pinCommentId);
+
+    List<PinCommentDtoRes.PinCommentViewDtoRes> res(List<PinComment> pinComments);
 }

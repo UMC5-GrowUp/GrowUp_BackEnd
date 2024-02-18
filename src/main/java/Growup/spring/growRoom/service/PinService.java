@@ -1,6 +1,7 @@
 package Growup.spring.growRoom.service;
 
 import Growup.spring.growRoom.dto.PinDtoReq;
+import Growup.spring.growRoom.dto.PinDtoRes;
 import Growup.spring.growRoom.model.Pin;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface PinService {
     Pin update(Long id, PinDtoReq.UpdatePinDtoReq request);
 
     void delete(Long id);
+
+    List<PinDtoRes.PinViewDtoRes> pinRes(Long growRoomId);
 }

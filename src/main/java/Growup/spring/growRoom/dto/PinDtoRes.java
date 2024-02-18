@@ -5,6 +5,7 @@ import Growup.spring.growRoom.model.Pin;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PinDtoRes {
 
@@ -16,19 +17,16 @@ public class PinDtoRes {
         private final String nickName;
         private final LocalDateTime createdAt;
         private final String comment;
+        private final List<PinCommentDtoRes.PinCommentViewDtoRes> pinComments;
 
-        public PinViewDtoRes(Pin pin){
+        public PinViewDtoRes(Pin pin, List<PinCommentDtoRes.PinCommentViewDtoRes> pinComments){
             this.pinId = pin.getId();
             this.profilePic = pin.getUser().getPhotoUrl();
             this.nickName = pin.getUser().getNickName();
             this.createdAt = pin.getCreatedAt();
             this.comment = pin.getComment();
+
+            this.pinComments = pinComments;
         }
     }
-
-//    @Getter
-//    public static class PinAllDtoRes{
-//
-//        private final L
-//    }
 }
