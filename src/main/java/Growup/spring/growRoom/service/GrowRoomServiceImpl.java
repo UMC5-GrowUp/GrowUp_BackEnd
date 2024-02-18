@@ -136,12 +136,15 @@ public class GrowRoomServiceImpl implements GrowRoomService {
             growRooms.retainAll(growRooms5);   // 중복 제거
         }
 
+        // status = "삭제" 조회 X
+        growRooms.retainAll(growRoomRepository.findAllByStatusNot("삭제"));
+
         return growRooms;
     }
 
     @Override
     public List<GrowRoom> findHot() {
-        List<GrowRoom> growRooms = growRoomRepository.findAll();
+        List<GrowRoom> growRooms = growRoomRepository.findAllByStatusNot("삭제");
         List<GrowRoom> growRoomRes = new ArrayList<>();
         for (GrowRoom growRoom : growRooms){
             if (likedService.likeCount(growRoom.getId())) {
