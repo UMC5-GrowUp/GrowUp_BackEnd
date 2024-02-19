@@ -7,6 +7,7 @@ import Growup.spring.growRoom.dto.PinDtoReq;
 import Growup.spring.growRoom.dto.PinDtoRes;
 import Growup.spring.growRoom.model.Pin;
 import Growup.spring.growRoom.service.PinService;
+import Growup.spring.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ public class PinController {
 
     // 댓글 Pin
     private final PinService pinService;
+    private final JwtProvider jwtProvider;
 
     /**
      * 24.02.06 작성자 : 류기현
@@ -38,7 +40,8 @@ public class PinController {
      */
     @PostMapping("/{growRoomId}")
     public ApiResponse<List<PinDtoRes.PinViewDtoRes>> addPin(@PathVariable Long growRoomId, @RequestBody PinDtoReq.AddPinDtoReq request){
-        pinService.save(growRoomId, request);
+        Long userId = jwtProvider.getUserID();
+        pinService.save(userId, growRoomId, request);
         List<PinDtoRes.PinViewDtoRes> pinList = pinService.pinRes(growRoomId);
 
         return ApiResponse.onSuccess(pinList);
@@ -50,7 +53,8 @@ public class PinController {
      */
     @PutMapping("/{growRoomId}/{pinId}")
     public ApiResponse<List <PinDtoRes.PinViewDtoRes>> updatePin(@PathVariable Long growRoomId, @PathVariable long pinId, @RequestBody PinDtoReq.UpdatePinDtoReq request) {
-        pinService.update(pinId, request);
+        Long userId = jwtProvider.getUserID();
+        pinService.update(userId, pinId, request);
         List<PinDtoRes.PinViewDtoRes> pinList = pinService.pinRes(growRoomId);
 
         return ApiResponse.onSuccess(pinList);
@@ -62,7 +66,8 @@ public class PinController {
      */
     @DeleteMapping("/{growRoomId}/{pinId}")
     public ApiResponse<List <PinDtoRes.PinViewDtoRes>> deletePin(@PathVariable Long growRoomId, @PathVariable Long pinId){
-        pinService.delete(pinId);
+        Long userId = jwtProvider.getUserID();
+        pinService.delete(userId, pinId);
         List<PinDtoRes.PinViewDtoRes> pinList = pinService.pinRes(growRoomId);
 
         return ApiResponse.onSuccess(pinList);
