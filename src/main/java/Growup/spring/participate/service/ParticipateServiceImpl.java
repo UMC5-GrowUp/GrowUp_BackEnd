@@ -124,7 +124,7 @@ public class ParticipateServiceImpl implements ParticipateService{
                 totalTimeMap.put(participate.getId(), totalDuration);
             }
 
-            if (filter.equals("전체순")) {
+            if (filter.equals("랭킹순")) {
                 // 참여 시간을 기준으로 참여자 리스트 정렬 (총 시간이 큰 순서대로)
                 participateList.sort((p1, p2) -> totalTimeMap.get(p2.getId()).compareTo(totalTimeMap.get(p1.getId())));
             }
