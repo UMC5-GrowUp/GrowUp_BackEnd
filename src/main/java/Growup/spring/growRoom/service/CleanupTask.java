@@ -47,7 +47,7 @@ public class CleanupTask {
 //        }
 //    }
 
-    @Scheduled(cron = "0 0 0 * *")  // 매일 00시 00분마다 실행
+    @Scheduled(cron = "0 0 0 * * *")  // 매일 00시 00분마다 실행
     public void endRecruitmentDate() {
         List<GrowRoom> growRooms = growRoomRepository.findAll();
         // 기간이 지나면 모집마감
