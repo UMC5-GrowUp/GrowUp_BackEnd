@@ -60,7 +60,7 @@ public class ParticipateConverter {
     //참여자 조회
     public static ParticipateDtoRes.participateInquiry participateInquiry(Participate participate,String formattedDuration){
         return ParticipateDtoRes.participateInquiry.builder()
-                .participateId(participate.getUser().getId())
+                .participateId(participate.getId())
                 .nickName(participate.getUser().getNickName())
                 .photoUrl(participate.getUser().getPhotoUrl())
                 .totalTime(formattedDuration)
