@@ -36,16 +36,16 @@ public class CleanupTask {
     }
 
 
-    @Scheduled(fixedRate = 10000)    // 10초마다 갱신
-    public void endRecruitment(){
-        List<GrowRoom> growRooms = growRoomRepository.findAll();
-        for (GrowRoom growRoom : growRooms) {
+//    @Scheduled(fixedRate = 60000)    // 10초마다 갱신
+//    public void endRecruitment(){
+//        List<GrowRoom> growRooms = growRoomRepository.findAll();
+//        for (GrowRoom growRoom : growRooms) {
             // 나가는 것 까지 고려한 로직
-            if (growRoom.getParticipateList().size() >= growRoom.getNumber().getNumber()) {
-                growRoom.setStatus("모집마감");
-            }
-        }
-    }
+//            if (growRoom.getParticipateList().size() >= growRoom.getNumber().getNumber()) {
+//                growRoom.setStatus("모집마감");
+//            }
+//        }
+//    }
 
     @Scheduled(cron = "0 0 0 * *")  // 매일 00시 00분마다 실행
     public void endRecruitmentDate() {
