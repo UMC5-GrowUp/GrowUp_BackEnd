@@ -46,6 +46,12 @@ public class ParticipateServiceImpl implements ParticipateService{
         //해당 그로우룸 존재 확인
         GrowRoom growRoom = growRoomRepository.findById(growRoomId).orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
 
+        // 참여자가 기준에 다다르거나 더 많으면 모집마감으로
+        if (growRoom.getNumber().getNumber() >= growRoom.getParticipateList().size()) {
+            growRoom.setStatus("모집마감");
+            throw new GrowRoomHandler(ErrorStatus.PARTICIPATE_IS_FULL);
+        }
+
         Participate participate = participateRepository.findByUserIdAndGrowRoomId(userId, growRoomId);
 
         //참여자 테이블에 참여자 생성(처음 입장시)
