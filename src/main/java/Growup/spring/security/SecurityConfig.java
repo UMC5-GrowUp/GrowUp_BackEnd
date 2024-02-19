@@ -43,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             config.setAllowedOriginPatterns(new ArrayList<String>() {{
                 add("http://localhost:3000");
                 add("https://growup-umc5th.netlify.app");
+                add("https://192.168.232.225:3000");
+                add("http://https://192.168.232.225:3000");
             }});
             config.setAllowCredentials(true);
             return config;
