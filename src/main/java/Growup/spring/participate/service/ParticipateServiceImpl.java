@@ -175,7 +175,6 @@ public class ParticipateServiceImpl implements ParticipateService{
             }
             return ParticipateConverter.liveRoomYesterdayTime(growRoomId, formatDuration(totalDuration));
         }
-
         return ParticipateConverter.liveRoomYesterdayTime(growRoomId, "00:00:00");
     }
 
@@ -224,8 +223,10 @@ public class ParticipateServiceImpl implements ParticipateService{
                     totalDuration = totalDuration.plus(Duration.between(startTime, endTime));
                 }
             }
-
-            totalTimeMap.put(participate.getGrowRoom(), totalDuration);
+            // totalDuration이 0이 아닐 때에만 put을 수행
+            if (!totalDuration.isZero()) {
+                totalTimeMap.put(participate.getGrowRoom(), totalDuration);
+            }
         }
 
         // 누적 시간을 기준으로 내림차순으로 정렬
@@ -266,7 +267,10 @@ public class ParticipateServiceImpl implements ParticipateService{
                     totalDuration = totalDuration.plus(Duration.between(startTime, endTime));
                 }
             }
-            totalTimeMap.put(participate.getGrowRoom(), totalDuration);
+            // totalDuration이 0이 아닐 때에만 put을 수행
+            if (!totalDuration.isZero()) {
+                totalTimeMap.put(participate.getGrowRoom(), totalDuration);
+            }
         }
 
         // 누적 시간을 기준으로 내림차순으로 정렬
@@ -304,7 +308,10 @@ public class ParticipateServiceImpl implements ParticipateService{
                         totalDuration = totalDuration.plus(Duration.between(startTime, endTime));
                     }
                 }
-                totalTimeMap.put(participate.getGrowRoom(), totalDuration);
+                // totalDuration이 0이 아닐 때에만 put을 수행
+                if (!totalDuration.isZero()) {
+                    totalTimeMap.put(participate.getGrowRoom(), totalDuration);
+                }
             }
         }else {
             // 현재 달의 누적 시간을 계산
@@ -321,7 +328,10 @@ public class ParticipateServiceImpl implements ParticipateService{
                     }
                 }
 
-                totalTimeMap.put(participate.getGrowRoom(), totalDuration);
+                // totalDuration이 0이 아닐 때에만 put을 수행
+                if (!totalDuration.isZero()) {
+                    totalTimeMap.put(participate.getGrowRoom(), totalDuration);
+                }
             }
         }
 
