@@ -83,17 +83,6 @@ public class ParticipateController {
     }
 
     /**
-     * 24.02.19 작성자 : 정주현
-     * 개인 누적 시간 계산(월별)
-     */
-    @GetMapping("inquiry-myTime")
-    public ApiResponse<ParticipateDtoRes.myTotalTime> liveRoomMyTotalTime(){
-        Long userId = jwtProvider.getUserID();
-        Duration duration = participateService.liveRoomMyTotalTime(userId);
-        return ApiResponse.onSuccess(ParticipateConverter.myTotalTime(userId, duration));
-    }
-
-    /**
      * 24.02.17 작성자 : 류기현
      * 라이브룸 목록 조회
      */
