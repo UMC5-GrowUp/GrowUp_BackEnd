@@ -4,6 +4,9 @@ import Growup.spring.constant.ApiResponse;
 import Growup.spring.constant.status.SuccessStatus;
 import Growup.spring.email.converter.EmailConverter;
 import Growup.spring.email.dto.EmailDtoRes;
+import Growup.spring.participate.converter.ParticipateConverter;
+import Growup.spring.participate.dto.ParticipateDtoRes;
+import Growup.spring.participate.service.ParticipateService;
 import Growup.spring.user.converter.UserConverter;
 import Growup.spring.user.model.User;
 import Growup.spring.email.dto.EmailDtoReq;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.time.Duration;
 
 
 @Slf4j
@@ -28,6 +32,7 @@ public class UserController {
 
     private final UserService userService;
     private final JwtProvider jwtProvider;
+    private final ParticipateService participateService;
 
     /**
      * 24.01.19 작성자 : 정주현
@@ -199,6 +204,17 @@ public class UserController {
         Long userId = jwtProvider.getUserID();
         userService.withdraw(userId,request.getCurrentPwd());
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
+    }
+
+    /**
+     * 24.02.19 작성자 : 정주현
+     * 개인 누적 시간 계산(월별)
+     */
+    @GetMapping("inquiry-myTime")
+    public ApiResponse<ParticipateDtoRes.myTotalTime> liveRoomMyTotalTime(){
+        Long userId = jwtProvider.getUserID();
+        Duration duration = participateService.liveRoomMyTotalTime(userId);
+        return ApiResponse.onSuccess(ParticipateConverter.myTotalTime(userId, duration));
     }
 }
 
