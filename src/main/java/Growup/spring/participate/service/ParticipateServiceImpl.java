@@ -396,9 +396,6 @@ public class ParticipateServiceImpl implements ParticipateService{
 
 
 
-
-
-
     //자정이 되면 모든 그로우룸 참여자 퇴실처리및 자동 입장처리
     @Scheduled(cron = "0 0 0 * * *") // 매일 새벽 2시 20분에 실행
     public void participateModifyToday(){

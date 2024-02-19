@@ -61,6 +61,7 @@ public class ParticipateConverter {
     public static ParticipateDtoRes.participateInquiry participateInquiry(Participate participate,String formattedDuration){
         return ParticipateDtoRes.participateInquiry.builder()
                 .userId(participate.getUser().getId())
+                .nickName(participate.getUser().getNickName())
                 .photoUrl(participate.getUser().getPhotoUrl())
                 .totalTime(formattedDuration)
                 .liked(participate.getLiked())
@@ -89,6 +90,7 @@ public class ParticipateConverter {
                 .stream()
                 .map(entry -> ParticipateDtoRes.liveRoomDateTimeRes.builder()
                         .growRoomId(entry.getKey().getId())
+                        .photoUrl(entry.getKey().getUser().getPhotoUrl())
                         .nickName(entry.getKey().getUser().getNickName())
                         .totalTime(formatDuration(entry.getValue()))
                         .build())

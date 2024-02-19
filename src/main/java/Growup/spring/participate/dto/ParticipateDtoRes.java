@@ -31,6 +31,7 @@ public class ParticipateDtoRes {
     public static class participateInquiry{
         private Long userId;
         private String photoUrl;
+        private String nickName;
         private Integer liked;
         private String totalTime;
 
@@ -64,6 +65,7 @@ public class ParticipateDtoRes {
     @AllArgsConstructor
     public static class liveRoomDateTimeRes{
         private Long growRoomId;
+        private String photoUrl;
         private String nickName;
         private String totalTime;
     }
