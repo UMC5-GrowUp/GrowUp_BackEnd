@@ -45,26 +45,27 @@ public class ParticipateServiceImpl implements ParticipateService{
         User user = userRepository.findById(userId).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
         //해당 그로우룸 존재 확인
         GrowRoom growRoom = growRoomRepository.findById(growRoomId).orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
-
-        // 참여자가 기준에 다다르거나 더 많으면 모집마감으로
-        if (growRoom.getNumber().getNumber() <= growRoom.getParticipateList().size()) {
-            growRoom.setStatus("모집마감");
-            throw new GrowRoomHandler(ErrorStatus.PARTICIPATE_IS_FULL);
-        }
-
+        //참여자 조회
         Participate participate = participateRepository.findByUserIdAndGrowRoomId(userId, growRoomId);
 
-        //참여자 테이블에 참여자 생성(처음 입장시)
-        if (participate == null) {
+        //그로우룸 참여자가 아닐때 - 참여자 테이블에 참여자 생성(처음 입장시)
+        if(participate==null){
+
+            // 참여자가 기준에 다다르거나 더 많으면 모집마감으로
+            if (growRoom.getNumber().getNumber() <= growRoom.getParticipateList().size()) {
+                growRoom.setStatus("모집마감");
+                throw new GrowRoomHandler(ErrorStatus.PARTICIPATE_IS_FULL);
+            }
             participate = ParticipateConverter.toParticipate(user, growRoom);
             participateRepository.save(participate);
         }
 
-        //입장시 입장시간 등록
-        ParticipateTime participateTime = ParticipateConverter.toParticipateTime(participate);
+        if(!participate.getUser().getId().equals(growRoom.getUser().getId())) {
+            //입장시 입장시간 등록
+            ParticipateTime participateTime = ParticipateConverter.toParticipateTime(participate);
 
-        participateTimeRepository.save(participateTime);
-
+            participateTimeRepository.save(participateTime);
+        }
         return ParticipateConverter.participateEnterRes(growRoomId, participate.getId());
     }
 
@@ -73,15 +74,16 @@ public class ParticipateServiceImpl implements ParticipateService{
     public void participateOut(Long userId, Long growRoomId) {
         //유저 조회
         User user = userRepository.findById(userId).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
-        //해당 그로우룸 존재 확인
-        //GrowRoom growRoom = growRoomRepository.findById(growRoomId).orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
 
         Participate participate = participateRepository.findByUserIdAndGrowRoomId(userId, growRoomId);
 
         ParticipateTime participateTime = participateTimeRepository.findFirstByParticipateOrderByCreatedAtDesc(participate);
 
         LocalDateTime endTime = LocalDateTime.now().withNano(0);
-        participateTime.setEndTime(endTime);
+
+        if(participateTime.getEndTime() ==null) {
+            participateTime.setEndTime(endTime);
+        }
 
         participateTimeRepository.save(participateTime);
 
