@@ -34,6 +34,7 @@ public class PinCommentServiceImpl implements PinCommentService {
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PIN_NOT_FOUND)), "1");
     }
 
+    @Transactional
     @Override
     public List<PinComment> save(Long userId, Long pinId, PinCommentDtoReq.AddPinCommentDtoReq request) {
         User user = userRepository.findById(userId)
