@@ -26,7 +26,6 @@ public class PinCommentServiceImpl implements PinCommentService {
     private final PinCommentRepository pinCommentRepository;
     private final PinRepository pinRepository;
     private final UserRepository userRepository;
-    private final JwtProvider jwtProvider;
     private final PinCommentConverter pinCommentConverter;
 
     @Override
@@ -36,8 +35,8 @@ public class PinCommentServiceImpl implements PinCommentService {
     }
 
     @Override
-    public List<PinComment> save(Long pinId, PinCommentDtoReq.AddPinCommentDtoReq request) {
-        User user = userRepository.findById(jwtProvider.getUserID())
+    public List<PinComment> save(Long userId, Long pinId, PinCommentDtoReq.AddPinCommentDtoReq request) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
         Pin pin = pinRepository.findById(pinId)
                         .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PIN_NOT_FOUND));
@@ -51,9 +50,13 @@ public class PinCommentServiceImpl implements PinCommentService {
 
     @Transactional
     @Override
-    public PinComment update(Long pinId, Long pinCommentId, PinCommentDtoReq.UpdatePinCommentDtoReq request) {
+    public PinComment update(Long userId ,Long pinId, Long pinCommentId, PinCommentDtoReq.UpdatePinCommentDtoReq request) {
         PinComment pinComment = pinCommentRepository.findById(pinCommentId)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PINCOMMENT_NOT_FOUND));
+        // pinComment를 생성한 userId와 수정요청한 userId가 다르다면 error
+        if(!userId.equals(pinComment.getUser().getId()))
+            throw new UserHandler(ErrorStatus.USER_NOT_PERMITTED);
+
         pinComment.update(request.getComment());
 
         return pinComment;
@@ -61,9 +64,13 @@ public class PinCommentServiceImpl implements PinCommentService {
 
     @Transactional
     @Override
-    public void delete(Long pinCommentId) {
+    public void delete(Long userId, Long pinCommentId) {
         PinComment pinComment = pinCommentRepository.findById(pinCommentId)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PINCOMMENT_NOT_FOUND));
+        // pinComment를 생성한 userId와 수정요청한 userId가 다르다면 error
+        if(!userId.equals(pinComment.getUser().getId()))
+            throw new UserHandler(ErrorStatus.USER_NOT_PERMITTED);
+
         pinComment.updateStatus("1");
     }
 

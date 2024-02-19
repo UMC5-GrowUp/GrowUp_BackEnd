@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class GrowRoomCategoryServiceImpl implements GrowRoomCategoryService {
+
     private final GrowRoomCategoryRepository growRoomCategoryRepository;
     private final GrowRoomConverter growRoomConverter;
 

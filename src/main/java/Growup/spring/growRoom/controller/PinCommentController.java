@@ -8,6 +8,7 @@ import Growup.spring.growRoom.dto.PinDtoRes;
 import Growup.spring.growRoom.model.PinComment;
 import Growup.spring.growRoom.service.PinCommentService;
 import Growup.spring.growRoom.service.PinService;
+import Growup.spring.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class PinCommentController {
     // 대댓글
     private final PinCommentService pinCommentService;
     private final PinService pinService;
+    private final JwtProvider jwtProvider;
 
     /**
      * 24.02.13 작성자 : 류기현
@@ -40,7 +42,8 @@ public class PinCommentController {
      */
     @PostMapping("/{growRoomId}/{pinId}")
     public ApiResponse<List<PinDtoRes.PinViewDtoRes>> addPinComment(@PathVariable Long growRoomId, @PathVariable Long pinId, @RequestBody PinCommentDtoReq.AddPinCommentDtoReq request){
-        pinCommentService.save(pinId, request);
+        Long userId = jwtProvider.getUserID();
+        pinCommentService.save(userId, pinId, request);
         List<PinDtoRes.PinViewDtoRes> pinList = pinService.pinRes(growRoomId);
 
         return ApiResponse.onSuccess(pinList);
@@ -52,7 +55,8 @@ public class PinCommentController {
      */
     @PutMapping("/{growRoomId}/{pinId}/{pinCommentId}")
     public ApiResponse<List<PinDtoRes.PinViewDtoRes>> updatePin(@PathVariable Long growRoomId, @PathVariable Long pinId, @PathVariable Long pinCommentId, @RequestBody PinCommentDtoReq.UpdatePinCommentDtoReq request) {
-        pinCommentService.update(pinId, pinCommentId, request);
+        Long userId = jwtProvider.getUserID();
+        pinCommentService.update(userId, pinId, pinCommentId, request);
         List<PinDtoRes.PinViewDtoRes> pinList = pinService.pinRes(growRoomId);
 
         return ApiResponse.onSuccess(pinList);
@@ -64,7 +68,8 @@ public class PinCommentController {
      */
     @DeleteMapping("/{growRoomId}/{pinId}/{pinCommentId}")
     public ApiResponse<List<PinDtoRes.PinViewDtoRes>> deletePin(@PathVariable Long growRoomId, @PathVariable Long pinId, @PathVariable Long pinCommentId){
-        pinCommentService.delete(pinCommentId);
+        Long userId = jwtProvider.getUserID();
+        pinCommentService.delete(userId, pinCommentId);
         List<PinDtoRes.PinViewDtoRes> pinList = pinService.pinRes(growRoomId);
 
         return ApiResponse.onSuccess(pinList);

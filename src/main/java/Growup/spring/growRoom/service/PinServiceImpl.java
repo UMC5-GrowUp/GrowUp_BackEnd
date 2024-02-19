@@ -31,7 +31,6 @@ public class PinServiceImpl implements PinService {
     private final PinConverter pinConverter;
     private final GrowRoomRepository growRoomRepository;
     private final UserRepository userRepository;
-    private final JwtProvider jwtProvider;
     private final PinCommentService pinCommentService;
 
     @Override
@@ -42,23 +41,26 @@ public class PinServiceImpl implements PinService {
 
     @Override
     @Transactional
-    public Pin save(Long id,PinDtoReq.AddPinDtoReq request) {
+    public Pin save(Long userId, Long id,PinDtoReq.AddPinDtoReq request) {
         GrowRoom growRoom = growRoomRepository.findById(id)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
-        User user = userRepository.findById(jwtProvider.getUserID())
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
 
         Pin pin = pinConverter.convertToPin(growRoom, user, request.getComment());
         pinRepository.save(pin);
 
         return pin;
-//        return pinConverter.convertToPin(growRoom, user, request.getComment());
     }
 
     @Override
     @Transactional
-    public Pin update(Long id, PinDtoReq.UpdatePinDtoReq request){
+    public Pin update(Long userId, Long id, PinDtoReq.UpdatePinDtoReq request){
         Pin pin = pinRepository.findById(id).orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PIN_NOT_FOUND));
+        // pin을 생성한 userId와 수정요청한 userId가 다르다면 error
+        if(!userId.equals(pin.getUser().getId()))
+            throw new UserHandler(ErrorStatus.USER_NOT_PERMITTED);
+
         pin.update(request.getComment());
 
         return pin;
@@ -66,9 +68,12 @@ public class PinServiceImpl implements PinService {
 
     @Transactional
     @Override
-    public void delete(Long id) {
+    public void delete(Long userId, Long id) {
         Pin pin = pinRepository.findById(id)
                 .orElseThrow(() -> new GrowRoomHandler(ErrorStatus.PIN_NOT_FOUND));
+        // pin을 생성한 userId와 수정요청한 userId가 다르다면 error
+        if(!userId.equals(pin.getUser().getId()))
+            throw new UserHandler(ErrorStatus.USER_NOT_PERMITTED);
         pin.updateStatus("1");
     }
 

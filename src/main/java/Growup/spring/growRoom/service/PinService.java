@@ -9,11 +9,11 @@ import java.util.List;
 public interface PinService {
     List<Pin> findAllByGrowRoomId(Long id);
 
-    Pin save(Long id, PinDtoReq.AddPinDtoReq request);
+    Pin save(Long userId, Long id, PinDtoReq.AddPinDtoReq request);
 
-    Pin update(Long id, PinDtoReq.UpdatePinDtoReq request);
+    Pin update(Long userId, Long id, PinDtoReq.UpdatePinDtoReq request);
 
-    void delete(Long id);
+    void delete(Long userId, Long id);
 
     List<PinDtoRes.PinViewDtoRes> pinRes(Long growRoomId);
 }

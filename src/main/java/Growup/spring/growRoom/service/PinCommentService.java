@@ -9,11 +9,11 @@ import java.util.List;
 public interface PinCommentService {
     List<PinComment> findAllByPinId(Long pinId);
 
-    List<PinComment> save(Long pinId, PinCommentDtoReq.AddPinCommentDtoReq request);
+    List<PinComment> save(Long userId, Long pinId, PinCommentDtoReq.AddPinCommentDtoReq request);
 
-    PinComment update(Long pinId, Long pinCommentId, PinCommentDtoReq.UpdatePinCommentDtoReq request);
+    PinComment update(Long userId, Long pinId, Long pinCommentId, PinCommentDtoReq.UpdatePinCommentDtoReq request);
 
-    void delete(Long pinCommentId);
+    void delete(Long userId, Long pinCommentId);
 
     List<PinCommentDtoRes.PinCommentViewDtoRes> res(List<PinComment> pinComments);
 }
