@@ -13,16 +13,17 @@ import java.util.List;
 
 @Transactional
 public interface ParticipateRepository extends JpaRepository<Participate, Long> {
-    Page<Participate> findAllByGrowRoomIdOrderByUser_nickNameAsc(Long growRoomId , PageRequest pageRequest);
-    Page<Participate> findAllByGrowRoomIdOrderByCreatedAtDesc (Long growRoomId , PageRequest pageRequest);
-    Page<Participate> findAllByGrowRoomIdOrderByLikedAsc(Long growRoomId , PageRequest pageRequest);
-    //Page<Participate> findAllByGrowRoomIdOrderByParticipateTimeAsc(Long growRoomId , PageRequest pageRequest);
-    boolean existsById(Long growRoomId);
 
-    //그로우룸 관련
+
+    //그로우룸(참여) 관련
     Participate findByUserIdAndGrowRoomId (Long userId, Long growRoomId);
 
-    List<Participate> findAllByUserId(Long userId);
+    List<Participate> findByGrowRoomId(Long growroomId);
 
-    Participate findByGrowRoomId(Long growRoomId);
+    List<Participate> findByGrowRoomIdOrderByUser_NameAsc(Long growRoomId);
+
+    List<Participate> findByGrowRoomIdAndLiked(Long growRoomId,int like);
+
+
+    List<Participate> findAllByUserId(Long userId);
 }

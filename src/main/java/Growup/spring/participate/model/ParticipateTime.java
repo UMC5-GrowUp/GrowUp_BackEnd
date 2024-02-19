@@ -26,7 +26,6 @@ public class ParticipateTime extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreatedDate
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;

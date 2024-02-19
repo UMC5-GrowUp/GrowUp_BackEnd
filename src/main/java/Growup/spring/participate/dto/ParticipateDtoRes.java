@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ParticipateDtoRes {
-
     //참여자 그로우룸 입장- 응답
     @Getter
     @Setter
@@ -23,27 +22,74 @@ public class ParticipateDtoRes {
         private LocalDateTime createdAd;
     }
 
+    // 라이브룸 참여자 조회
     @Getter
     @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class orderByAsc {
-        List<participateRes> participateResList; //participateRes를 가져옴
-
-    }
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class participateRes {
-
-        private String nickName;
-        private Integer liked;
+    public static class participateInquiry{
+        private Long userId;
         private String photoUrl;
+        private Integer liked;
+        private String totalTime;
 
     }
+    // 라이브룸 참여자 조회 리스트
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class participateInquiryList{
+        List<participateInquiry> participateInquiryList;
+    }
+
+    // 라이브룸 총 누적 시간 조회(참여자)-어제
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class liveRoomYesterdayTime{
+        private Long growRoomId;
+        private String totalTime;
+    }
+
+    // 라이브룸 랭킹 - 총 누적시간
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class liveRoomDateTimeRes{
+        private Long growRoomId;
+        private String nickName;
+        private String totalTime;
+    }
+
+
+    // 라이브룸 랭킹 - 총 리스트
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class liveRoomDateTimeList{
+        List<liveRoomDateTimeRes> liveRoomDateTimeResList;
+    }
+
+    //개인 누적시간 - 월간
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class myTotalTime{
+        private Long userId;
+        private String TotalTime;
+    }
+
 
     // 그로우룸의 주인 Id
     @Getter

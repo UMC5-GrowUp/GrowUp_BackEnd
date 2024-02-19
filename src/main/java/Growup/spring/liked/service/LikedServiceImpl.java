@@ -134,22 +134,26 @@ public class LikedServiceImpl implements LikedService{
 
 
         //방장이라면 좋아요 및 취소 기능
-        if(user.getId() == growRoom.getId()){
-            if(liked ==0){
-                liked = 1;
+        if(user.getId().equals(growRoom.getUser().getId())){
+            if(growRoomId.equals(participate.getGrowRoom().getId()))
+                if(liked ==0){
+                    liked = 1;
+                }
+                else {
+                    liked = 0;
+                }
+            else{
+                throw new ParticipateHandler(ErrorStatus.PARTICIPATE_NOT_FOUNDINGROWROOM);
             }
-            else {
-                liked = 0;
-            }
-
         }
         //방장이아니라면 error
         else {
-             throw new LikedHandler(ErrorStatus.PARTICIPATE_NO_AUTHORIZATION);
+            throw new LikedHandler(ErrorStatus.PARTICIPATE_NO_AUTHORIZATION);
         }
         participate.setLiked(liked);
         return participate;
     }
+
 
     // growroom 좋아요 조회
     @Override

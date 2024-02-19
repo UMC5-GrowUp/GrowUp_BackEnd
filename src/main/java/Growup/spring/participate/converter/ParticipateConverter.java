@@ -10,8 +10,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,7 +33,17 @@ public class ParticipateConverter {
 
     //참여자 생성시 참여시간 생성
     public static ParticipateTime toParticipateTime(Participate participate){
+        LocalDateTime time = LocalDateTime.now().withNano(0);
         return ParticipateTime.builder()
+                .startTime(time)
+                .participate(participate)
+                .build();
+    }
+    // 자정시 참여시간 재생성
+    public static ParticipateTime toReParticipateTime(Participate participate){
+        LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+        return ParticipateTime.builder()
+                .startTime(midnight)
                 .participate(participate)
                 .build();
     }
@@ -43,28 +57,70 @@ public class ParticipateConverter {
                 .build();
     }
 
-
-
-    public static ParticipateDtoRes.participateRes participateDto (Participate participate){
-        return ParticipateDtoRes.participateRes.builder()
-                .nickName(participate.getUser().getNickName()) // user를 가져와 다시 nickname을 가져옴
-                .liked(participate.getLiked())
+    //참여자 조회
+    public static ParticipateDtoRes.participateInquiry participateInquiry(Participate participate,String formattedDuration){
+        return ParticipateDtoRes.participateInquiry.builder()
+                .userId(participate.getUser().getId())
                 .photoUrl(participate.getUser().getPhotoUrl())
+                .totalTime(formattedDuration)
+                .liked(participate.getLiked())
                 .build();
     }
 
-    public static ParticipateDtoRes.orderByAsc orderByAscDto (List<Participate> participateList){
+    //참여자 조회 리스트
+    public static ParticipateDtoRes.participateInquiryList participateInquiryList(List<ParticipateDtoRes.participateInquiry> list){
+        return ParticipateDtoRes.participateInquiryList.builder()
+                .participateInquiryList(list)
+                .build();
+    }
 
-        // 다른 converter를 가져오는 법
-        List<ParticipateDtoRes.participateRes> participateResList = participateList.stream()
-                .map(ParticipateConverter::participateDto)
+    // 라이브룸 총 누적 시간(일간)-어제
+    public static ParticipateDtoRes.liveRoomYesterdayTime liveRoomYesterdayTime(Long growroomId,String time){
+        return ParticipateDtoRes.liveRoomYesterdayTime.builder()
+                .growRoomId(growroomId)
+                .totalTime(time)
+                .build();
+    }
+
+
+    //일간 누적시간 상위 10개
+    public static List<ParticipateDtoRes.liveRoomDateTimeRes> liveRoomDateTimeList(List<Map.Entry<GrowRoom, Duration>> sortedList){
+        return sortedList.subList(0, Math.min(sortedList.size(), 10))
+                .stream()
+                .map(entry -> ParticipateDtoRes.liveRoomDateTimeRes.builder()
+                        .growRoomId(entry.getKey().getId())
+                        .nickName(entry.getKey().getUser().getNickName())
+                        .totalTime(formatDuration(entry.getValue()))
+                        .build())
                 .collect(Collectors.toList());
-
-        //다른 converter 참조해서 참여자 리스트를 가져옴
-        return ParticipateDtoRes.orderByAsc.builder()
-                .participateResList(participateResList)
+    }
+    //일간 누적 시간 상위 10개 리스트
+    public static ParticipateDtoRes.liveRoomDateTimeList liveRoomDateTimeResList(List<ParticipateDtoRes.liveRoomDateTimeRes> list){
+        return ParticipateDtoRes.liveRoomDateTimeList.builder()
+                .liveRoomDateTimeResList(list)
                 .build();
     }
+
+    //개인 누적시간
+    public static ParticipateDtoRes.myTotalTime myTotalTime(Long userId,Duration duration){
+        return ParticipateDtoRes.myTotalTime.builder()
+                .userId(userId)
+                .TotalTime(formatDuration(duration))
+                .build();
+    }
+
+
+    private static String formatDuration(Duration duration) {
+        long hours = duration.toHours();
+        duration = duration.minusHours(hours);
+        long minutes = duration.toMinutes();
+        duration = duration.minusMinutes(minutes);
+        long seconds = duration.getSeconds();
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+
+
 
 
 

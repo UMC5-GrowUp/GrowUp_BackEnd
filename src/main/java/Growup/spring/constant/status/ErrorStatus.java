@@ -58,6 +58,7 @@ public enum ErrorStatus implements BaseErrorCode {
     //participate error error -> 4030~
     PARTICIPATE_NOT_FOUND(HttpStatus.BAD_REQUEST,"PARTICIPATE4031","Participate가 없습니다."),
     PARTICIPATE_NO_AUTHORIZATION(HttpStatus.BAD_REQUEST, "PARTICIPATE4032","방장만 좋아요가 가능 합니다."),
+    PARTICIPATE_NOT_FOUNDINGROWROOM(HttpStatus.BAD_REQUEST,"PARTICIPATE4033","해당 그로우룸 참여자가 아닙니다."),
 
     //todolist 관련 에러코드(4041~
     TODOLIST_NOT_FOUND(HttpStatus.BAD_REQUEST, "TODOLIST4041", "등록되지 않은 TODOLIST 입니다."),
