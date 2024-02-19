@@ -231,10 +231,6 @@ public class UserServiceImpl implements UserService {
             throw new UserHandler(ErrorStatus.USER_PASSWORD_NONEQULE);
         }
 
-        String email = user.getEmail();
-        String text = "인증";
-        sendEmailAuth(email,text);
-
     }
 
     //회원탈퇴

@@ -6,6 +6,7 @@ import Growup.spring.constant.status.SuccessStatus;
 import Growup.spring.growRoom.dto.GrowRoomDtoRes;
 import Growup.spring.growRoom.service.GrowRoomService;
 import Growup.spring.liked.service.LikedService;
+import Growup.spring.participate.converter.ParticipateConverter;
 import Growup.spring.participate.dto.ParticipateDtoRes;
 import Growup.spring.participate.model.Participate;
 import Growup.spring.participate.service.ParticipateService;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +40,6 @@ public class ParticipateController {
 
     }
 
-
     /**
      * 24.02.16 작성자 : 정주현
      * 참여자 그로우룸 나가기
@@ -48,6 +49,48 @@ public class ParticipateController {
         Long userId = jwtProvider.getUserID();
         participateService.participateOut(userId,growRoomId);
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
+    }
+
+    /**
+     * 24.02.18 작성자 : 정주현
+     * 라이브룸 - 참여자 목록 조회
+     */
+
+    @GetMapping("/inquiry")
+    public ApiResponse<ParticipateDtoRes.participateInquiryList> participateInquiry(@RequestParam(name = "filter", defaultValue = "전체순") String filter
+            ,@RequestParam Long growRoomId){
+        Long userId = jwtProvider.getUserID();
+        return ApiResponse.onSuccess(participateService.participateInquiry(userId,growRoomId,filter));
+    }
+
+    /**
+     * 24.02.19 작성자 : 정주현
+     * 해당 방의 전 날 누적 시간 - 모든 참여자
+     */
+    @GetMapping("inquiry-yesterdayTime")
+    public ApiResponse<ParticipateDtoRes.liveRoomYesterdayTime> liveRoomYesterdayTime(@RequestParam Long growRoomId){
+        return ApiResponse.onSuccess(participateService.liveRoomYesterdayTimeInquiry(growRoomId));
+    }
+
+    /**
+     * 24.02.19 작성자 : 정주현
+     * 총 누적시간 랭킹 - 일/주/월 별로
+     */
+    @GetMapping("inquiry-DateTime")
+    public ApiResponse<ParticipateDtoRes.liveRoomDateTimeList> liveRoomDateTimeRank(@RequestParam(name = "filter", defaultValue = "일간") String filter){
+        List<ParticipateDtoRes.liveRoomDateTimeRes> list = participateService.liveRoomDateTimeRank(filter);
+        return ApiResponse.onSuccess(ParticipateConverter.liveRoomDateTimeResList(list));
+    }
+
+    /**
+     * 24.02.19 작성자 : 정주현
+     * 개인 누적 시간 계산(월별)
+     */
+    @GetMapping("inquiry-myTime")
+    public ApiResponse<ParticipateDtoRes.myTotalTime> liveRoomMyTotalTime(){
+        Long userId = jwtProvider.getUserID();
+        Duration duration = participateService.liveRoomMyTotalTime(userId);
+        return ApiResponse.onSuccess(ParticipateConverter.myTotalTime(userId, duration));
     }
 
     /**
@@ -67,29 +110,13 @@ public class ParticipateController {
 
     /**
      * 24.02.17 작성자 : 류기현
-     * 라이브룸 참여자 조회
+     * 라이브룸 방장 조회
      */
     @GetMapping("/madeBy")
     public ApiResponse<ParticipateDtoRes.ownerRes> findOwner(@RequestParam(name = "growRoomId", defaultValue = "") Long growRoomId){
 
         return ApiResponse.onSuccess(new  ParticipateDtoRes.ownerRes(participateService.findOwner(growRoomId)));
     }
-
-
-    /*
-    //순서별로 조회
-    @GetMapping("/orderBy")
-    //filter를 사용 하여 구분 지음 filter를 사용 하여 각각의 순서대로 조회 되게 설정 , 기본값(null)으로 날짜순
-    public ApiResponse <ParticipateDtoRes.orderByAsc> orderBy(@RequestParam(name = "filter",defaultValue = "createdate") String filter ,
-                                                              @RequestParam(name = "growRoomId" ) Long growRoomId ,
-                                                              @RequestParam(name = "page") Integer page) {
-
-        Page<Participate> participateList = participateService.LiveupParticipateList(filter, growRoomId, page);
-
-        return ApiResponse.onSuccess(ParticipateConverter.orderByAscDto(participateList.getContent())); //getcontent 를 통해 리스트로 변환
-    }
-
-     */
 
 
 
