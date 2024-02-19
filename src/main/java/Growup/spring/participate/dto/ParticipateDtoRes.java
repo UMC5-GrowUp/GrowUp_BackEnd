@@ -29,7 +29,7 @@ public class ParticipateDtoRes {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class participateInquiry{
-        private Long userId;
+        private Long participateId;
         private String photoUrl;
         private String nickName;
         private Integer liked;
