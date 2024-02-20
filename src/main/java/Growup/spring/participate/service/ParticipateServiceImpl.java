@@ -103,7 +103,7 @@ public class ParticipateServiceImpl implements ParticipateService{
         String text;
 
         //방장이 없으면 재생성
-        if(!(participate == null)) {
+        if(participate == null) {
             participate = ParticipateConverter.toParticipate(user, growRoom);
             participateRepository.save(participate);
 
