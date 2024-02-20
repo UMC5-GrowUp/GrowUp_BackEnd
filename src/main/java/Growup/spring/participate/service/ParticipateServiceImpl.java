@@ -82,12 +82,12 @@ public class ParticipateServiceImpl implements ParticipateService{
 
         LocalDateTime endTime = LocalDateTime.now().withNano(0);
 
-        if(participateTime.getEndTime() ==null) {
-            participateTime.setEndTime(endTime);
+        if(participateTime != null){
+            if (participateTime.getEndTime() == null) {
+                participateTime.setEndTime(endTime);
+            }
+            participateTimeRepository.save(participateTime);
         }
-
-        participateTimeRepository.save(participateTime);
-
     }
 
     //방장 타이머 눌렸을때
@@ -482,7 +482,7 @@ public class ParticipateServiceImpl implements ParticipateService{
                     // endtime을 24:00:00으로 설정
                     participateTime.setEndTime(LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(23, 59, 59)));
 
-                    participateTimeRepository.save(ParticipateConverter.toParticipateTime(participate));
+                    participateTimeRepository.save(ParticipateConverter.toReParticipateTime(participate));
 
                 }
 
