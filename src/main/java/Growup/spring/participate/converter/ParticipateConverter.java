@@ -49,10 +49,9 @@ public class ParticipateConverter {
     }
 
     //참여자 입장시 응답
-    public static ParticipateDtoRes.participateEnterRes participateEnterRes(Long growRoomId, Long participateId){
+    public static ParticipateDtoRes.participateEnterRes participateEnterRes(Long growRoomId){
         return ParticipateDtoRes.participateEnterRes.builder()
                 .growRoomId(growRoomId)
-                .participateId(participateId)
                 .createdAd(LocalDateTime.now())
                 .build();
     }
@@ -120,9 +119,6 @@ public class ParticipateConverter {
         long seconds = duration.getSeconds();
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
-
-
-
 
 
 

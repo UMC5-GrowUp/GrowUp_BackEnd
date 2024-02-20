@@ -18,7 +18,6 @@ public class ParticipateDtoRes {
     @AllArgsConstructor
     public static class participateEnterRes{
         private Long growRoomId;
-        private Long participateId;
         private LocalDateTime createdAd;
     }
 

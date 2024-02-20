@@ -8,6 +8,7 @@ import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.growRoom.repository.GrowRoomRepository;
 import Growup.spring.participate.converter.ParticipateConverter;
 import Growup.spring.participate.dto.ParticipateDtoRes;
+import Growup.spring.participate.model.Enum.ParticipateStatus;
 import Growup.spring.participate.model.Participate;
 import Growup.spring.participate.model.ParticipateTime;
 import Growup.spring.participate.repository.ParticipateRepository;
@@ -16,8 +17,6 @@ import Growup.spring.user.model.User;
 import Growup.spring.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,14 +44,16 @@ public class ParticipateServiceImpl implements ParticipateService{
         User user = userRepository.findById(userId).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
         //해당 그로우룸 존재 확인
         GrowRoom growRoom = growRoomRepository.findById(growRoomId).orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
-        //참여자 조회
+        //참여자 조회 (나 자신)
         Participate participate = participateRepository.findByUserIdAndGrowRoomId(userId, growRoomId);
+        //그로우룸 참여자 목록 리스트로 조회
+        List<Participate> participateList =growRoom.getParticipateList().stream().filter(list -> list.getStatus().equals(ParticipateStatus.NONHEAD)).collect(Collectors.toList());
 
         //그로우룸 참여자가 아닐때 - 참여자 테이블에 참여자 생성(처음 입장시)
-        if(participate==null){
+        if(participate==null && !(growRoom.getUser().getId().equals(userId))){
 
-            // 참여자가 기준에 다다르거나 더 많으면 모집마감으로
-            if (growRoom.getNumber().getNumber() <= growRoom.getParticipateList().size()) {
+            // 참여자가 기준에 다다르거나 더 많으면 모집마감으로 //방장을 카운팅에서 빼기위해서 -1함.
+            if ((growRoom.getNumber().getNumber()-1) <= participateList.size()){
                 growRoom.setStatus("모집마감");
                 throw new GrowRoomHandler(ErrorStatus.PARTICIPATE_IS_FULL);
             }
@@ -60,13 +61,13 @@ public class ParticipateServiceImpl implements ParticipateService{
             participateRepository.save(participate);
         }
 
-        if(!participate.getUser().getId().equals(growRoom.getUser().getId())) {
+        if(!(growRoom.getUser().getId().equals(userId))) {
             //입장시 입장시간 등록
             ParticipateTime participateTime = ParticipateConverter.toParticipateTime(participate);
 
             participateTimeRepository.save(participateTime);
         }
-        return ParticipateConverter.participateEnterRes(growRoomId, participate.getId());
+        return ParticipateConverter.participateEnterRes(growRoomId);
     }
 
     //참여자 퇴장
@@ -89,6 +90,53 @@ public class ParticipateServiceImpl implements ParticipateService{
 
     }
 
+    //방장 타이머 눌렸을때
+    @Override
+    public String HeaderEnter(Long userId,Long growRoomId){
+        //유저 조회
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+        //해당 그로우룸 존재 확인
+        GrowRoom growRoom = growRoomRepository.findById(growRoomId).orElseThrow(() -> new GrowRoomHandler(ErrorStatus.GROWROOM_NOT_FOUND));
+
+        Participate participate = participateRepository.findByUserIdAndGrowRoomId(userId, growRoomId);
+
+        String text;
+
+        //방장이 없으면 재생성
+        if(!(participate == null)) {
+            participate = ParticipateConverter.toParticipate(user, growRoom);
+            participateRepository.save(participate);
+
+            ParticipateTime participateTime = ParticipateConverter.toParticipateTime(participate);
+
+            participateTimeRepository.save(participateTime);
+
+            text = "타이머 시작";
+        }else{
+            ParticipateTime participateTime = participateTimeRepository.findTopByParticipateOrderByCreatedAtDesc(participate);
+            if (participateTime == null) {
+                // participateTime이 null이면 새로 생성하고 시작 시간 설정
+                participateTime = ParticipateConverter.toParticipateTime(participate);
+                text = "타이머 시작";
+            } else {
+                // participateTime이 null이 아니면 이미 존재하므로 종료 시간을 설정합니다.
+                if (participateTime.getEndTime() == null) {
+                    participateTime.setEndTime(LocalDateTime.now().withNano(0));
+                    text = "타이머 정지";
+                }
+                else {
+                    participateTime = ParticipateConverter.toParticipateTime(participate);
+                    text = "타이머 시작";
+                }
+            }
+            participateTimeRepository.save(participateTime);
+
+        }
+
+        return text;
+
+    }
+
 
     //라이브룸 참여자 조회
     @Override
@@ -99,13 +147,13 @@ public class ParticipateServiceImpl implements ParticipateService{
         // 필터
         List<Participate> participateList = null;
         if (filter.equals("랭킹순"))
-            participateList = participateRepository.findByGrowRoomId(growRoomId);
+            participateList = participateRepository.findByGrowRoomIdAndStatus(growRoomId,ParticipateStatus.NONHEAD);
         else if (filter.equals("이름순"))
-            participateList = participateRepository.findByGrowRoomIdOrderByUser_NameAsc(growRoomId);
+            participateList = participateRepository.findByGrowRoomIdAndStatusOrderByUser_NameAsc(growRoomId, ParticipateStatus.NONHEAD);
         else if (filter.equals("관심등록순"))
-            participateList = participateRepository.findByGrowRoomIdAndLiked(growRoomId, 1); // like가 1인 것만 가져옴
+            participateList = participateRepository.findByGrowRoomIdAndStatusAndLiked(growRoomId,ParticipateStatus.NONHEAD, 1); // like가 1인 것만 가져옴
         else {//전체순
-            participateList = participateRepository.findByGrowRoomId(growRoomId);
+            participateList = participateRepository.findByGrowRoomIdAndStatus(growRoomId,ParticipateStatus.NONHEAD);
         }
         // 오늘 날짜
         LocalDate today = LocalDate.now();
@@ -117,18 +165,25 @@ public class ParticipateServiceImpl implements ParticipateService{
             // 각 참가자별로 총 참여 시간 계산하여 Map에 저장
             for (Participate participate : participateList) {
                 Duration totalDuration = Duration.ZERO;
+
                 for (ParticipateTime participateTime : participate.getParticipateTimeList()) {
                     // 퇴실 시간이 null이 아니라면 참여 시간 계산
                     if (participateTime.getEndTime() != null && participateTime.getStartTime().toLocalDate().isEqual(today)) {
                         totalDuration = totalDuration.plus(Duration.between(participateTime.getStartTime(), participateTime.getEndTime()));
                     }
+
                 }
                 totalTimeMap.put(participate.getId(), totalDuration);
+
             }
 
             if (filter.equals("랭킹순")) {
                 // 참여 시간을 기준으로 참여자 리스트 정렬 (총 시간이 큰 순서대로)
-                participateList.sort((p1, p2) -> totalTimeMap.get(p2.getId()).compareTo(totalTimeMap.get(p1.getId())));
+                participateList.sort((p1, p2) -> {
+                    Duration duration1 = totalTimeMap.getOrDefault(p1.getId(), Duration.ZERO);
+                    Duration duration2 = totalTimeMap.getOrDefault(p2.getId(), Duration.ZERO);
+                    return duration2.compareTo(duration1);
+                });
             }
             // 각 참가자의 총 참여 시간을 응답에 추가
             List<ParticipateDtoRes.participateInquiry> participateInquiryList = participateList.stream()
