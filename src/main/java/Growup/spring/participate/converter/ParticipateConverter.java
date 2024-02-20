@@ -3,6 +3,7 @@ package Growup.spring.participate.converter;
 
 import Growup.spring.growRoom.model.GrowRoom;
 import Growup.spring.participate.dto.ParticipateDtoRes;
+import Growup.spring.participate.model.Enum.ParticipateStatus;
 import Growup.spring.participate.model.Participate;
 import Growup.spring.participate.model.ParticipateTime;
 import Growup.spring.user.model.User;
@@ -27,6 +28,14 @@ public class ParticipateConverter {
     public static Participate toParticipate(User user, GrowRoom growroom) {
         return Participate.builder()
                 .user(user)
+                .growRoom(growroom)
+                .build();
+    }
+    //방장(참여자)생성
+    public static Participate toHeadParticipate(User user, GrowRoom growroom) {
+        return Participate.builder()
+                .user(user)
+                .status(ParticipateStatus.HEAD)
                 .growRoom(growroom)
                 .build();
     }
