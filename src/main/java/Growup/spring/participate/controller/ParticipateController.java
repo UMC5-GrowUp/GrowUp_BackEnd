@@ -33,7 +33,7 @@ public class ParticipateController {
      * 24.02.16 작성자 : 정주현
      * 참여자 그로우룸 입장
      */
-    @PostMapping("/enter")
+    @PatchMapping("/enter")
     public ApiResponse<ParticipateDtoRes.participateEnterRes> participateEnter(@RequestParam Long growRoomId){
         Long userId = jwtProvider.getUserID();
         return ApiResponse.onSuccess(participateService.participateEnter(userId,growRoomId));
