@@ -104,7 +104,7 @@ public class ParticipateServiceImpl implements ParticipateService{
 
         //방장이 없으면 재생성
         if(participate == null) {
-            participate = ParticipateConverter.toParticipate(user, growRoom);
+            participate = ParticipateConverter.toHeadParticipate(user, growRoom);
             participateRepository.save(participate);
 
             ParticipateTime participateTime = ParticipateConverter.toParticipateTime(participate);
