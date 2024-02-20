@@ -42,7 +42,7 @@ public class ParticipateConverter {
 
     //참여자 생성시 참여시간 생성
     public static ParticipateTime toParticipateTime(Participate participate){
-        LocalDateTime time = LocalDateTime.now().withNano(0);
+        LocalDateTime time = LocalDateTime.of(LocalDate.now(), LocalTime.of(00, 00, 00));
         return ParticipateTime.builder()
                 .startTime(time)
                 .participate(participate)

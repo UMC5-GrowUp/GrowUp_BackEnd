@@ -464,9 +464,9 @@ public class ParticipateServiceImpl implements ParticipateService{
 
 
     //자정이 되면 모든 그로우룸 참여자 퇴실처리및 자동 입장처리
-    @Scheduled(cron = "0 0 0 * * *") // 매일 새벽 2시 20분에 실행
+    @Scheduled(cron = "0 20 0 * * *") // 매일 자정에 실행
     public void participateModifyToday(){
-        LocalDate today = LocalDate.now();
+        LocalDate yesterday = LocalDate.now().minusDays(1); // 어제 날짜
 
         List<GrowRoom> growRoomList = growRoomRepository.findAllByStatus("모집중");
 
@@ -476,11 +476,11 @@ public class ParticipateServiceImpl implements ParticipateService{
             for (Participate participate : participateList) {
                 // 퇴실하지 않은 참여자의 participateTime을 처리
                 List<ParticipateTime> participateTimes = participate.getParticipateTimeList().stream()
-                        .filter(participateTime -> participateTime.getEndTime() == null ||!participateTime.getStartTime().toLocalDate().isEqual(today)) // endtime이 null인 것만 필터링
+                        .filter(participateTime -> participateTime.getEndTime() == null && participateTime.getStartTime().toLocalDate().isEqual(yesterday)) // endtime이 null인 것만 필터링
                         .collect(Collectors.toList());
                 for (ParticipateTime participateTime : participateTimes) {
                     // endtime을 24:00:00으로 설정
-                    participateTime.setEndTime(LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59)));
+                    participateTime.setEndTime(LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(23, 59, 59)));
 
                     participateTimeRepository.save(ParticipateConverter.toParticipateTime(participate));
 
