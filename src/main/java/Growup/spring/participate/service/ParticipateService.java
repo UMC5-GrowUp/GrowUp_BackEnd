@@ -21,5 +21,6 @@ public interface ParticipateService {
     Duration liveRoomMyTotalTime(Long userId);
 
     Long findOwner(Long growRoomId);
+    String HeaderEnter(Long userId,Long growRoomId);
 
 }

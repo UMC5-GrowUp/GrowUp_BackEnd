@@ -1,6 +1,7 @@
 package Growup.spring.participate.repository;
 
 import Growup.spring.growRoom.model.GrowRoom;
+import Growup.spring.participate.model.Enum.ParticipateStatus;
 import Growup.spring.participate.model.Participate;
 import Growup.spring.participate.model.ParticipateTime;
 import org.springframework.data.domain.Page;
@@ -16,14 +17,17 @@ public interface ParticipateRepository extends JpaRepository<Participate, Long> 
 
 
     //그로우룸(참여) 관련
-    Participate findByUserIdAndGrowRoomId (Long userId, Long growRoomId);
+    Participate findByUserIdAndGrowRoomIdAndStatus (Long userId, Long growRoomId,ParticipateStatus status);
+
+    List<Participate> findByGrowRoomIdAndStatus(Long growroomId, ParticipateStatus status);
 
     List<Participate> findByGrowRoomId(Long growroomId);
 
-    List<Participate> findByGrowRoomIdOrderByUser_NameAsc(Long growRoomId);
+    List<Participate> findByGrowRoomIdAndStatusOrderByUser_NameAsc(Long growRoomId,ParticipateStatus status);
 
-    List<Participate> findByGrowRoomIdAndLiked(Long growRoomId,int like);
+    List<Participate> findByGrowRoomIdAndStatusAndLiked(Long growRoomId,ParticipateStatus status,int like);
 
+    Participate findByUserIdAndGrowRoomId(Long userId, Long growRoomId);
 
     List<Participate> findAllByUserId(Long userId);
 }

@@ -51,6 +51,21 @@ public class ParticipateController {
         return ApiResponse.onSuccessWithoutResult(SuccessStatus._OK);
     }
 
+
+    /**
+     * 24.02.20 작성자 : 정주현
+     * 방장 그로우룸 타이머 누를시- 시간 저장
+     */
+    @PostMapping("/enter-Head")
+    public ApiResponse<String> HeaderEnter(@RequestParam Long growRoomId){
+        Long userId = jwtProvider.getUserID();
+        String text = participateService.HeaderEnter(userId,growRoomId);
+        return ApiResponse.onSuccess(text);
+    }
+
+
+
+
     /**
      * 24.02.18 작성자 : 정주현
      * 라이브룸 - 참여자 목록 조회
