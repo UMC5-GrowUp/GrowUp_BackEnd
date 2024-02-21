@@ -186,7 +186,8 @@ public class GrowRoomServiceImpl implements GrowRoomService {
 
         // 카테고리 리스트 저장, growRoom에 지정
         growRoom.setGrowRoomCategoryList(growRoomCategoryServiceImpl.save(growRoom, categoryDetails));
-        
+
+
         return growRoom;
     }
 
