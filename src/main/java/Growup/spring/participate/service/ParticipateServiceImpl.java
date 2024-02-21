@@ -62,17 +62,21 @@ public class ParticipateServiceImpl implements ParticipateService{
         }
 
         if(!(growRoom.getUser().getId().equals(userId))) {
-
             ParticipateTime participateTime = participateTimeRepository.findTopByParticipateOrderByCreatedAtDesc(participate);
-            //입장시 입장시간 등록
-            if(participateTime !=null){
-                if(!(participateTime.getEndTime() ==null)){
+            if(participateTime == null) {
+                participateTime = ParticipateConverter.toParticipateTime(participate);
+                participateTimeRepository.save(participateTime);
+            }
+            else{
+                if(participateTime.getEndTime() !=null){
+                    participateTime = ParticipateConverter.toParticipateTime(participate);
                     participateTimeRepository.save(participateTime);
 
                 }
             }
         }
         return ParticipateConverter.participateEnterRes(growRoomId);
+
     }
 
     //참여자 퇴장
