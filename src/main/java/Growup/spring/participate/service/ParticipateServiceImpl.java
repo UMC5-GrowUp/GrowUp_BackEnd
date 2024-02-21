@@ -65,7 +65,7 @@ public class ParticipateServiceImpl implements ParticipateService{
 
             ParticipateTime participateTime = participateTimeRepository.findTopByParticipateOrderByCreatedAtDesc(participate);
             //입장시 입장시간 등록
-            if(!(participateTime ==null)){
+            if(participateTime !=null){
                 if(!(participateTime.getEndTime() ==null)){
                     participateTimeRepository.save(participateTime);
 
