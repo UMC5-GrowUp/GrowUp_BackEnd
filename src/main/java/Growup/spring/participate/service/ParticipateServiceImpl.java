@@ -62,9 +62,18 @@ public class ParticipateServiceImpl implements ParticipateService{
         }
 
         if(!(growRoom.getUser().getId().equals(userId))) {
-            ParticipateTime participateTime = ParticipateConverter.toParticipateTime(participate);
-            participateTimeRepository.save(participateTime);
+            ParticipateTime participateTime = participateTimeRepository.findTopByParticipateOrderByCreatedAtDesc(participate);
+            if(participateTime == null) {
+                participateTime = ParticipateConverter.toParticipateTime(participate);
+                participateTimeRepository.save(participateTime);
+            }
+            else{
+                if(participateTime.getEndTime() !=null){
+                    participateTime = ParticipateConverter.toParticipateTime(participate);
+                    participateTimeRepository.save(participateTime);
 
+                }
+            }
         }
         return ParticipateConverter.participateEnterRes(growRoomId);
 
