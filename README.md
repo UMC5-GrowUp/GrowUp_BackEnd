@@ -31,8 +31,6 @@
 
 ## 🍠서버 구조도
 
-### 1) CICD 흐름도
-<img width="420" alt="image" src="https://github.com/yuntasha/replyRecoommend/assets/131857282/346c7eb6-f8fd-4b17-b214-019b972f6237">
 
 
 >- AWS EC2 : FreeTier t2.micro
